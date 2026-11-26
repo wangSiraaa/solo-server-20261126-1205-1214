@@ -1,0 +1,16 @@
+{
+  "name": "go-club-referee",
+  "version": "1.0.0",
+  "description": "零依赖的小方盘网络对局裁判、异议处置与联赛记账服务",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "demo": "node demo/e2e.mjs",
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
