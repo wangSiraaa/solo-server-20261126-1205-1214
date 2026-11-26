@@ -1,0 +1,11 @@
+{
+  "name": "sofa-delivery-grid-service",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zero-dependency Python grid simulation and delivery order service",
+  "scripts": {
+    "start": "python3 server.py",
+    "demo": "python3 -m sofa_service.demo",
+    "test": "python3 -m unittest discover -s tests"
+  }
+}
