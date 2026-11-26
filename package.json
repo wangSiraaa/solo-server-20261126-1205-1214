@@ -1,0 +1,16 @@
+{
+  "name": "community-hotline-handover",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local call-desk service for accompanied transfers, audible topology and durable responsibility handover.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "cli": "node cli.js",
+    "test": "node scripts/acceptance.js",
+    "acceptance": "node scripts/acceptance.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
