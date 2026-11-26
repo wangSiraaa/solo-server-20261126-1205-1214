@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>街坊街讯 · 三乡轮市</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>街坊街讯</h1>
+    <p>查整数日序、公历跨月、今日去哪乡赶集，以及各摊是否真实报开。</p>
+    <nav>
+      <a href="/">总览</a>
+      <a href="/street.html" class="active">街坊看街讯</a>
+      <a href="/vendor.html">摊主摆位</a>
+      <a href="/committee.html">村委/联席会</a>
+    </nav>
+  </header>
+  <main>
+    <div class="card">
+      <div class="row">
+        <button class="btn primary" onclick="loadToday()">今天</button>
+        <button class="btn" onclick="loadDay(1)">日序 1</button>
+        <button class="btn" onclick="loadDay(2)">日序 2</button>
+        <button class="btn" onclick="loadDay(3)">日序 3</button>
+        <button class="btn" onclick="loadDay(4)">补集日 4</button>
+        <button class="btn" onclick="loadMonth('2026-11')">2026-11</button>
+        <button class="btn" onclick="loadMonth('2026-12')">2026-12</button>
+        <label style="min-width:180px;margin:0">自定义日序
+          <input id="dayInput" type="number" value="1" min="1" />
+        </label>
+        <button class="btn good" onclick="loadDay(Number(document.getElementById('dayInput').value))">查询</button>
+      </div>
+    </div>
+    <section id="news" style="margin-top:18px" class="grid"></section>
+  </main>
+  <script src="/api.js"></script>
+  <script>
+    function sessionCard(s) {
+      const progress = (s.round_progress || []).map(p => {
+        const missing = p.missing.length
+          ? `<span class="badge bad">缺 ${p.missing.map(catLabel).join("、")}</span>`
+          : `<span class="badge ok">办成条件已齐</span>`;
+        return `<div class="row" style="margin-top:6px">
+                  <span class="muted">${escapeHtml(p.convention_id)}</span>${missing}
+                </div>`;
+      }).join("");
+      const cats = (s.open_receipt_categories || [])
+        .map(x => `<span class="badge ok">${catLabel(x.category)} ×${x.n}</span>`).join(" ") ||
+        '<span class="muted">尚无真实报开</span>';
+      return `
+        <article class="card">
+          <div class="row" style="justify-content:space-between">
+            <h2 style="margin:0">${escapeHtml(s.township_name)} · 第${s.day_no}日第${s.slot_no}时段</h2>
+            ${s.fair_open ? '<span class="badge ok">照常开集</span>' : '<span class="badge bad">撤场/停集</span>'}
+          </div>
+          <p><b>${escapeHtml(s.title || "")}</b></p>
+          <p class="muted">公历 ${escapeHtml(s.iso_date || "未注明")}；有效摆位单 ${s.valid_permit_count} 张</p>
+          <p>${cats}</p>
+          ${progress}
+          ${s.note ? `<p class="placement">备注：${escapeHtml(s.note)}</p>` : ""}
+        </article>`;
+    }
+
+    function render(data) {
+      const root = document.getElementById("news");
+      if (!data.days?.length) {
+        root.innerHTML = '<div class="card"><p class="muted">没有查到集期。</p></div>';
+        return;
+      }
+      root.innerHTML = data.days.map(d => `
+        <section style="grid-column:1/-1">
+          <h2>第 ${d.day_no} 日 <span class="muted">${escapeHtml(d.iso_date || "")}</span></h2>
+          <div class="grid">${d.sessions.map(sessionCard).join("")}</div>
+        </section>`).join("");
+    }
+
+    async function loadToday() {
+      try { render(await api("/api/street/today")); }
+      catch (e) { toast(e.message, true); }
+    }
+    async function loadDay(n) {
+      try { render(await api(`/api/street?day_no=${encodeURIComponent(n)}`)); }
+      catch (e) { toast(e.message, true); }
+    }
+    async function loadMonth(m) {
+      try { render(await api(`/api/street?month=${encodeURIComponent(m)}`)); }
+      catch (e) { toast(e.message, true); }
+    }
+    loadToday();
+  </script>
+</body>
+</html>

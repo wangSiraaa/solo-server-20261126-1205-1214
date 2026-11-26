@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>三乡轮市服务</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>流动集 · 三乡轮庄</h1>
+    <p>落雨散场、欠轮补集、连摊摆位、借地转场，都以真实开张回单和轮次账为准。</p>
+    <nav>
+      <a href="/" class="active">总览</a>
+      <a href="/street.html">街坊看街讯</a>
+      <a href="/vendor.html">摊主摆位</a>
+      <a href="/committee.html">村委/联席会</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="card">
+        <h2>今天去哪赶集？</h2>
+        <p>街坊只看街讯：哪一乡开、公历日期、是否因雨撤场、书摊和修伞摊是否已真实开张。</p>
+        <p><a class="btn primary" href="/street.html">打开街讯</a></p>
+        <h3>摊主拿到的摆位单</h3>
+        <p>写明乡场、日序时段、格位、借地来源和相邻摊号；到场后用回单号报开。重复回单不会计两次。</p>
+        <p><a class="btn good" href="/vendor.html">进入摊主台</a></p>
+        <h3>村委与联席会</h3>
+        <p>申报日子、摊类、相邻格，召集下一乡，处理雨撤、欠轮、补集、墙隔和借地。</p>
+        <p><a class="btn warn" href="/committee.html">进入村委台</a></p>
+      </div>
+      <div class="card">
+        <h2>当前轮次账</h2>
+        <div id="ledger"><p class="muted">读取中…</p></div>
+        <p class="muted">轮市采用“现场召集＋同一轮欠轮优先补集”办法。一轮只有一条 effective usage；冲正、挂起和历史记录均保留。</p>
+      </div>
+    </section>
+    <section class="grid" style="margin-top:18px">
+      <div class="card">
+        <h2>本地演示</h2>
+        <pre class="json">python3 demo.py
+python3 selftest.py
+python3 -m lunshi.server --db data/lunshi.sqlite3 --port 8765</pre>
+      </div>
+      <div class="card">
+        <h2>关键规矩</h2>
+        <ul>
+          <li>甲乙丙依次轮流，首轮甲；甲真实办成后，第 2 轮乙优先。</li>
+          <li>书摊、修伞摊必须分别有真实 open 回单；撤摊后原成功记录会被冲正。</li>
+          <li>同一摊主同一日序同一时段只能有一个 live 报开。</li>
+          <li>借地许诺唯一；场地借出不等于该乡完成自己的一轮。</li>
+          <li>SQLite 持久化，跨月查询和重启后仍可审计。</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <script src="/api.js"></script>
+  <script>
+    api("/api/ledger?convention_id=LUN-SANXIANG")
+      .then(data => {
+        const el = document.getElementById("ledger");
+        if (!data.effective_rounds.length) {
+          el.innerHTML = '<p class="muted">还没有有效轮次。可先运行 <code>python3 demo.py</code>。</p>' + jsonBlock(data.owed_rounds);
+          return;
+        }
+        el.innerHTML = `<table><thead><tr><th>轮次</th><th>实际用掉的乡</th><th>usage</th></tr></thead><tbody>` +
+          data.effective_rounds.map(r => `<tr><td>第 ${r.round_no} 轮</td><td><b>${escapeHtml(r.township_id)}</b></td><td class="muted">${escapeHtml(r.usage_id)}</td></tr>`).join("") +
+          `</tbody></table>`;
+      })
+      .catch(err => {
+        document.getElementById("ledger").innerHTML = `<p class="badge bad">${escapeHtml(err.message)}</p><p class="muted">如果是空数据库，可在村委页点“写入标准世界”。</p>`;
+      });
+  </script>
+</body>
+</html>

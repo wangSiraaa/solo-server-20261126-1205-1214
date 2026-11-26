@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>摊主摆位 · 三乡轮市</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>摊主台</h1>
+    <p>查登记、领写明地点和邻摊的摆位单，到场报开；重复回单安全，同时段不能赶两个场。</p>
+    <nav>
+      <a href="/">总览</a>
+      <a href="/street.html">街坊看街讯</a>
+      <a href="/vendor.html" class="active">摊主摆位</a>
+      <a href="/committee.html">村委/联席会</a>
+    </nav>
+  </header>
+  <main>
+    <div class="card">
+      <div class="row">
+        <label style="flex:1;min-width:240px;margin:0">摊主编号
+          <input id="vendorId" value="V-WEN" />
+        </label>
+        <button class="btn primary" onclick="loadVendor()">查我的摆位/回单</button>
+        <button class="btn" onclick="document.getElementById('register').scrollIntoView()">新摊主登记</button>
+      </div>
+      <p class="muted">演示编号：V-WEN 文墨书摊、V-GU 骨青修伞、V-LAN、V-JIANG。先运行 <code>python3 demo.py</code> 会有完整数据。</p>
+    </div>
+
+    <section id="dashboard" style="margin-top:18px"></section>
+
+    <section class="grid" style="margin-top:18px">
+      <form class="card" id="register" onsubmit="registerVendor(event)">
+        <h2>摊主登记</h2>
+        <label>编号<input name="id" required placeholder="V-LI" /></label>
+        <label>名号<input name="name" required placeholder="老李刻字摊" /></label>
+        <label>摊类代码（逗号分隔）<input name="categories" value="book" /></label>
+        <label>登记乡（逗号分隔 A,B,C）<input name="townships" value="A,B" /></label>
+        <button class="btn good" type="submit">登记</button>
+      </form>
+
+      <form class="card" onsubmit="apply(event)">
+        <h2>报名单摊</h2>
+        <label>申请编号<input name="id" required placeholder="APP-WEB-1" /></label>
+        <label>摊主编号<input name="vendor_id" required value="V-WEN" /></label>
+        <div class="row">
+          <label style="flex:1">乡
+            <select name="township_id"><option>A</option><option>B</option><option>C</option></select>
+          </label>
+          <label style="flex:1">日序<input name="day_no" type="number" value="2" /></label>
+          <label style="flex:1">摊类
+            <select name="category"><option value="book">书摊</option><option value="umbrella">修伞摊</option><option value="tea">茶摊</option><option value="herb">草药摊</option></select>
+          </label>
+        </div>
+        <label>指定格位（可空，由村委签发时分配）<input name="spot_id" placeholder="B1" /></label>
+        <button class="btn primary" type="submit">受理并在填格位时签发</button>
+      </form>
+
+      <form class="card" onsubmit="pair(event)">
+        <h2>受理相邻双摊</h2>
+        <label>连摊组编号<input name="group_id" required value="GRP-WEB-PAIR" /></label>
+        <div class="row">
+          <label style="flex:1">乡
+            <select name="township_id"><option>B</option><option>A</option><option>C</option></select>
+          </label>
+          <label style="flex:1">日序<input name="day_no" type="number" value="2" /></label>
+          <label style="flex:1">格位 1<input name="spot1" value="B1" /></label>
+          <label style="flex:1">格位 2<input name="spot2" value="B2" /></label>
+        </div>
+        <label>摊 1：摊主:类别<input name="stall1" value="V-WEN:book" /></label>
+        <label>摊 2：摊主:类别<input name="stall2" value="V-GU:umbrella" /></label>
+        <button class="btn warn" type="submit">受理、校验相邻并开连摊单</button>
+        <p class="muted">若两格已被墙隔开，接口会返回 ADJACENCY_REQUIRED，且不会产生半张单。</p>
+      </form>
+    </section>
+  </main>
+  <script src="/api.js"></script>
+  <script>
+    let current = null;
+
+    async function loadVendor() {
+      const id = document.getElementById("vendorId").value.trim();
+      try {
+        current = await api(`/api/vendors/${encodeURIComponent(id)}`);
+        render();
+      } catch (e) { toast(e.message, true); }
+    }
+
+    function render() {
+      if (!current) return;
+      const v = current.vendor;
+      const regs = current.registrations.map(r => `<span class="badge info">${escapeHtml(r.township_id)} 已登记</span>`).join(" ");
+      const permits = current.permits.map(p => {
+        const receipt = current.receipts.find(r => r.permit_id === p.id && r.status === "open");
+        const withdrawn = current.receipts.find(r => r.permit_id === p.id && r.status === "withdrawn");
+        const neighbors = (p.neighbors || []).map(n =>
+          `${escapeHtml(n.spot_code)}:${escapeHtml(n.stall_name || n.vendor_name || "空邻格")}`).join("；");
+        return `<div class="card" style="box-shadow:none">
+          <div class="row" style="justify-content:space-between">
+            <b>${escapeHtml(p.permit_no)}</b>${statusBadge(p.status)}
+          </div>
+          <div class="placement">${escapeHtml(p.placement_text || "")}</div>
+          <p class="muted">邻摊数据：${neighbors || "暂无已排邻摊"}</p>
+          ${p.status === "valid" ? `
+            <div class="row">
+              <input id="rc-${p.id}" value="R-WEB-${escapeHtml(p.application_id)}" style="max-width:260px" />
+              <button class="btn good" onclick="openReceipt('${p.id}','${escapeHtml(p.permit_no)}')">到场报开</button>
+              ${receipt ? `<span class="badge ok">已报开 ${escapeHtml(receipt.receipt_no)}</span>` : ""}
+            </div>` : ""}
+          ${receipt ? `<div class="row" style="margin-top:8px">
+              <button class="btn danger" onclick="withdraw('${receipt.receipt_no}')">改为撤摊</button>
+            </div>` : ""}
+          ${withdrawn ? `<div class="row" style="margin-top:8px">
+              <span class="badge bad">${escapeHtml(withdrawn.receipt_no)} 已撤</span>
+              <button class="btn" onclick="restore('${withdrawn.receipt_no}')">恢复真实开成</button>
+            </div>` : ""}
+        </div>`;
+      }).join("") || '<p class="muted">暂无摆位单。</p>';
+
+      document.getElementById("dashboard").innerHTML = `
+        <div class="card" style="margin-bottom:18px">
+          <h2>${escapeHtml(v.name)} <span class="muted">${escapeHtml(v.id)}</span></h2>
+          <p>${(v.categories || []).map(catLabel).join("、")}；${regs}</p>
+        </div>
+        <div class="grid">${permits}</div>`;
+    }
+
+    async function openReceipt(permitId, permitNo) {
+      const receipt_no = document.getElementById(`rc-${permitId}`).value.trim();
+      try {
+        const data = await api("/api/receipts", { method: "POST", body: { receipt_no, permit_no: permitNo } });
+        toast(data.duplicate ? "重复回单：返回原单，未重复计数" : "报开成功：" + receipt_no);
+        await loadVendor();
+        if (data.settlement) console.log("settlement", data.settlement);
+      } catch (e) { toast(e.message, true); }
+    }
+    async function withdraw(no) {
+      try { await api(`/api/receipts/${encodeURIComponent(no)}/withdraw`, { method: "POST", body: { reason: "摊主在网页改为撤摊" } }); toast("回执已改为撤摊，轮次账已重算"); loadVendor(); }
+      catch (e) { toast(e.message, true); }
+    }
+    async function restore(no) {
+      try { await api(`/api/receipts/${encodeURIComponent(no)}/restore`, { method: "POST", body: {} }); toast("已恢复并重新核算轮次"); loadVendor(); }
+      catch (e) { toast(e.message, true); }
+    }
+    async function registerVendor(e) {
+      e.preventDefault();
+      const f = Object.fromEntries(new FormData(e.target).entries());
+      f.categories = f.categories.split(",").map(x => x.trim()).filter(Boolean);
+      f.township_ids = f.townships.split(",").map(x => x.trim()).filter(Boolean);
+      delete f.townships;
+      try { await api("/api/vendors", { method: "POST", body: f }); document.getElementById("vendorId").value = f.id; toast("登记完成"); loadVendor(); }
+      catch (err) { toast(err.message, true); }
+    }
+    async function apply(e) {
+      e.preventDefault();
+      const f = Object.fromEntries(new FormData(e.target).entries());
+      f.day_no = Number(f.day_no); f.convention_id = "LUN-SANXIANG";
+      const spot = f.spot_id; delete f.spot_id;
+      try {
+        const app = await api("/api/applications", { method: "POST", body: f });
+        if (spot) await api("/api/permits/issue", { method: "POST", body: { application_id: app.id, spot_id: spot } });
+        document.getElementById("vendorId").value = f.vendor_id;
+        toast(spot ? "申请已受理，摆位单已签发" : "申请已受理");
+        loadVendor();
+      } catch (err) { toast(err.message, true); }
+    }
+    async function pair(e) {
+      e.preventDefault();
+      const f = Object.fromEntries(new FormData(e.target).entries());
+      const parse = x => { const [vendor_id, category] = x.split(":"); return { vendor_id, category }; };
+      const body = {
+        group_id: f.group_id, township_id: f.township_id, day_no: Number(f.day_no),
+        convention_id: "LUN-SANXIANG", stalls: [parse(f.stall1), parse(f.stall2)]
+      };
+      try {
+        await api("/api/groups/adjacent-pair", { method: "POST", body });
+        const issued = await api(`/api/groups/${f.group_id}/issue`, { method: "POST", body: { spot_ids: [f.spot1, f.spot2] } });
+        toast("连摊单已开：" + issued.permits.map(p => p.permit_no).join(" / "));
+      } catch (err) { toast(err.message, true); }
+    }
+    loadVendor();
+  </script>
+</body>
+</html>

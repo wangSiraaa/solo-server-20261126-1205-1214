@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>村委/联席会 · 三乡轮市</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>村委 / 联席会台</h1>
+    <p>申报集期与格位、现场召集下一乡、核算欠轮补集、处理雨撤墙隔和借地。</p>
+    <nav>
+      <a href="/">总览</a>
+      <a href="/street.html">街坊看街讯</a>
+      <a href="/vendor.html">摊主摆位</a>
+      <a href="/committee.html" class="active">村委/联席会</a>
+    </nav>
+  </header>
+  <main>
+    <div class="grid">
+      <section class="card">
+        <h2>轮次总账</h2>
+        <div class="row">
+          <button class="btn primary" onclick="seed()">写入/补齐标准世界</button>
+          <button class="btn" onclick="loadAll()">刷新</button>
+        </div>
+        <div id="ledger" style="margin-top:12px">读取中…</div>
+      </section>
+
+      <section class="card">
+        <h2>现场召集 / 结算</h2>
+        <form onsubmit="callNext(event)">
+          <label>开局约编号<input name="convention_id" value="LUN-SANXIANG" /></label>
+          <div class="row">
+            <label style="flex:1">从哪日找合用场<input name="from_day" type="number" value="1" /></label>
+            <label style="flex:1">或指定日（可空）<input name="day_no" type="number" placeholder="2" /></label>
+          </div>
+          <button class="btn good" type="submit">召集下一轮（欠轮优先）</button>
+        </form>
+        <form onsubmit="settle(event)" style="margin-top:12px">
+          <label>call_id<input name="call_id" placeholder="CALL-..." required /></label>
+          <label><input type="checkbox" name="finalize" style="width:auto" /> 散集定稿：未达标则记欠轮</label>
+          <button class="btn primary" type="submit">按真实回单核算</button>
+        </form>
+        <div id="calls"></div>
+      </section>
+
+      <section class="card">
+        <h2>申报集期与格位</h2>
+        <form onsubmit="declareSession(event)">
+          <div class="row">
+            <label style="flex:1">乡
+              <select name="township_id"><option>A</option><option>B</option><option>C</option></select>
+            </label>
+            <label style="flex:1">整数日序<input name="day_no" type="number" value="6" /></label>
+            <label style="flex:1">时段<input name="slot_no" type="number" value="1" /></label>
+          </div>
+          <div class="row">
+            <label style="flex:1">公历日期<input name="iso_date" placeholder="2026-12-05" /></label>
+            <label style="flex:2">集名<input name="title" placeholder="乡集/补集" /></label>
+          </div>
+          <button class="btn good" type="submit">申报可办集日子</button>
+        </form>
+        <form onsubmit="addSpot(event)" style="margin-top:12px">
+          <div class="row">
+            <label style="flex:1">格位 ID<input name="id" value="B4" /></label>
+            <label style="flex:1">乡
+              <select name="township_id"><option>B</option><option>A</option><option>C</option></select>
+            </label>
+            <label style="flex:1">格号<input name="code" value="乙四" /></label>
+          </div>
+          <label>位置说明<input name="label" placeholder="廊下第四格" /></label>
+          <label>允许摊类（逗号分隔 book,umbrella,tea,herb）<input name="categories" value="book,umbrella" /></label>
+          <button class="btn primary" type="submit">申报格位与允许摊类</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>雨撤 / 墙隔 / 当前日</h2>
+        <form onsubmit="rain(event)">
+          <div class="row">
+            <label style="flex:1">乡<select name="township_id"><option>A</option><option>B</option><option>C</option></select></label>
+            <label style="flex:1">日序<input name="day_no" type="number" value="1" /></label>
+          </div>
+          <label>原因<input name="reason" value="落雨撤场" /></label>
+          <button class="btn danger" type="submit">报雨撤并记欠轮</button>
+        </form>
+        <form onsubmit="wall(event)" style="margin-top:12px">
+          <div class="row">
+            <label style="flex:1">格 A<input name="spot_a" value="B1" /></label>
+            <label style="flex:1">格 B<input name="spot_b" value="B2" /></label>
+          </div>
+          <button class="btn warn" type="submit">把这两格改为墙隔开</button>
+          <button class="btn" type="button" onclick="linkSpots()">设为可相邻成组</button>
+        </form>
+        <form onsubmit="today(event)" style="margin-top:12px">
+          <label>街坊“今天”的整数日序<input name="day_no" type="number" value="1" /></label>
+          <button class="btn" type="submit">设置街讯今日</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>借地与转场</h2>
+        <form onsubmit="loan(event)">
+          <label>借地编号<input name="id" value="LOAN-WEB-1" /></label>
+          <div class="row">
+            <label style="flex:1">地皮格位<input name="spot_id" value="B9" /></label>
+            <label style="flex:1">借地乡<select name="borrower_township_id"><option>A</option><option>C</option></select></label>
+            <label style="flex:1">日序<input name="day_no" type="number" value="4" /></label>
+          </div>
+          <button class="btn warn" type="submit">许诺借地（同一格/日不可两次）</button>
+        </form>
+        <form onsubmit="transfer(event)" style="margin-top:12px">
+          <label>报名编号<input name="application_id" value="APP-A4-UMB" /></label>
+          <label>迁到格位（可为邻乡借地格）<input name="to_spot_id" value="B9" /></label>
+          <button class="btn primary" type="submit">转场并迁移原回单</button>
+        </form>
+        <div id="loans" style="margin-top:10px"></div>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:18px">
+      <h2>审计事件（最近 30 条）</h2>
+      <div id="audit"></div>
+    </section>
+    <section class="card" style="margin-top:18px">
+      <h2>原始接口结果</h2>
+      <pre id="result" class="json">操作结果会显示在这里。</pre>
+    </section>
+  </main>
+  <script src="/api.js"></script>
+  <script>
+    function show(data) { document.getElementById("result").textContent = JSON.stringify(data, null, 2); }
+    async function act(path, body, method = "POST") {
+      try { const data = await api(path, { method, body }); show(data); toast("操作完成"); loadAll(); return data; }
+      catch (e) { show({ error: e.message }); toast(e.message, true); }
+    }
+    async function seed() { await act("/api/admin/seed-standard", {}); }
+    async function callNext(e) {
+      e.preventDefault(); const f = Object.fromEntries(new FormData(e.target).entries());
+      f.from_day = Number(f.from_day || 1); if (f.day_no) f.day_no = Number(f.day_no); else delete f.day_no;
+      await act("/api/calls/next", f);
+    }
+    async function settle(e) {
+      e.preventDefault(); const f = Object.fromEntries(new FormData(e.target).entries());
+      f.finalize = !!f.finalize;
+      await act(`/api/calls/${encodeURIComponent(f.call_id)}/settle`, { finalize: f.finalize });
+    }
+    async function rain(e) {
+      e.preventDefault(); const f = Object.fromEntries(new FormData(e.target).entries()); f.day_no = Number(f.day_no);
+      await act("/api/sessions/rain-out", f);
+    }
+    async function wall(e) { e.preventDefault(); await act("/api/spots/separate", Object.fromEntries(new FormData(e.target).entries())); }
+    async function linkSpots() {
+      const inputs = [...document.querySelectorAll("input[name=spot_a],input[name=spot_b]")];
+      const body = { spot_a: inputs[0].value, spot_b: inputs[1].value };
+      await act("/api/spots/link", body);
+    }
+    async function declareSession(e) {
+      e.preventDefault();
+      const f = Object.fromEntries(new FormData(e.target).entries());
+      f.day_no = Number(f.day_no); f.slot_no = Number(f.slot_no);
+      await act("/api/sessions", f);
+    }
+    async function addSpot(e) {
+      e.preventDefault();
+      const f = Object.fromEntries(new FormData(e.target).entries());
+      f.categories = f.categories.split(",").map(x => x.trim()).filter(Boolean);
+      await act("/api/spots", f);
+    }
+    async function today(e) { e.preventDefault(); const f = Object.fromEntries(new FormData(e.target).entries()); f.day_no = Number(f.day_no); await act("/api/today", f); }
+    async function loan(e) {
+      e.preventDefault(); const f = Object.fromEntries(new FormData(e.target).entries()); f.day_no = Number(f.day_no);
+      await act("/api/loans", f);
+    }
+    async function transfer(e) { e.preventDefault(); await act("/api/transfers", Object.fromEntries(new FormData(e.target).entries())); }
+
+    async function loadAll() {
+      try {
+        const ledger = await api("/api/ledger?convention_id=LUN-SANXIANG");
+        document.getElementById("ledger").innerHTML = `
+          <p class="stat">${ledger.effective_rounds.length} / 3 轮有效</p>
+          <table><thead><tr><th>轮</th><th>乡</th><th>状态/历史</th></tr></thead><tbody>
+          ${ledger.usages.map(u => `<tr><td>R${u.round_no}</td><td><b>${escapeHtml(u.township_id)}</b></td><td>${statusBadge(u.status)}<div class="muted">${escapeHtml(u.id)}${u.reversal_reason ? " · " + escapeHtml(u.reversal_reason) : ""}</div></td></tr>`).join("")}
+          </tbody></table>
+          <h3>欠轮</h3><p>${ledger.owed_rounds.map(o => `R${o.round_no}/${escapeHtml(o.township_id)} ${statusBadge(o.status)}`).join("<br>") || "无"}</p>`;
+        document.getElementById("calls").innerHTML = `<h3>召集记录</h3>` + ledger.calls.slice(-8).reverse().map(c =>
+          `<p>R${c.round_no} · ${escapeHtml(c.township_id)} · 第${c.day_no}日 · ${statusBadge(c.status)} <span class="muted" style="cursor:pointer;text-decoration:underline" onclick="navigator.clipboard.writeText('${c.id}');toast('call_id 已复制')">${escapeHtml(c.id)}</span></p>`).join("");
+        const loans = await api("/api/loans");
+        document.getElementById("loans").innerHTML = `<h3>借地</h3>` + loans.map(l => `<p>${escapeHtml(l.spot_id)} → 借 ${escapeHtml(l.borrower_township_id)} · D${l.day_no} ${statusBadge(l.status)}</p>`).join("") || '<p class="muted">暂无借地</p>';
+        const audit = await api("/api/audit?limit=30");
+        document.getElementById("audit").innerHTML = `<div class="timeline">` + audit.map(a =>
+          `<div class="item"><b>${escapeHtml(a.action)}</b> <span class="muted">${escapeHtml(a.actor_role)} · ${escapeHtml(a.entity_type)} ${escapeHtml(a.entity_id || "")} · ${escapeHtml(a.at)}</span></div>`).join("") + `</div>`;
+      } catch (e) {
+        document.getElementById("ledger").innerHTML = `<p class="badge bad">${escapeHtml(e.message)}</p><p class="muted">空库请先点“写入/补齐标准世界”。</p>`;
+      }
+    }
+    loadAll();
+  </script>
+</body>
+</html>
