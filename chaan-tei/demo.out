@@ -1,0 +1,1048 @@
+================ 0. 空店重置 ================
+──────────────────────────────────────────────
+▸ 清场
+  POST /admin/reset  body={}
+{
+  "ok": true,
+  "data": {
+    "reset": true
+  }
+}
+[HTTP 200]
+================ 1. 普通小单：一次三份，只改其中一份 ================
+  三份独立菜单：M0001 M0002 M0003
+──────────────────────────────────────────────
+▸ 只把第二份 M0002 改成免葱（另两份不动）
+  POST /slips/modify  body={"slip_id":"M0002","new_prep":"干炒牛河-免葱"}
+{
+  "ok": true,
+  "data": {
+    "slip_id": "M0002",
+    "prep": "干炒牛河-免葱"
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 撤掉第三份 M0003（未喊炒，直接作废）
+  POST /slips/cancel  body={"slip_id":"M0003"}
+{
+  "ok": true,
+  "data": {
+    "slip_id": "M0003",
+    "status": "CANCELLED",
+    "leftover_plates": 0
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 炒档拉队列看剩余待炒
+  GET /queue?prep=%E5%B9%B2%E7%82%92%E7%89%9B%E6%B2%B3-%E6%A0%87%E5%87%86 
+{
+  "ok": true,
+  "data": {
+    "queue": [
+      {
+        "id": "M0001",
+        "diner_id": "D001",
+        "prep": "干炒牛河-标准",
+        "status": "ENTERED",
+        "qty": 1,
+        "note": null,
+        "revised_from": null,
+        "created_at": "2026-11-26T03:37:31+00:00",
+        "table_name": "己桌",
+        "diner_name": "己"
+      }
+    ]
+  }
+}
+[HTTP 200]
+================ 2. 食客换桌：锅里已喊的份不能少 ================
+──────────────────────────────────────────────
+▸ 喊炒 -> 锅 W0001 钉住这份菜单 M0004
+──────────────────────────────────────────────
+▸ 庚换到辛桌（菜还在锅里，份跟着人走）
+  POST /diners/move  body={"diner_id":"D002","to_table":"辛桌"}
+{
+  "ok": true,
+  "data": {
+    "diner_id": "D002",
+    "table": "辛桌"
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 这锅报熟
+  POST /wok/finish  body={"wok_id":"W0001"}
+{
+  "ok": true,
+  "data": {
+    "wok_id": "W0001",
+    "plates": [
+      {
+        "plate_id": "P0001",
+        "slip_id": "M0004",
+        "status": "READY"
+      }
+    ],
+    "shorted": []
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 按辛桌派盘（旧庚桌派不出去）
+  POST /plates/deliver  body={"plate_id":"P0001","table":"辛桌"}
+{
+  "ok": true,
+  "data": {
+    "delivery_id": "V0001",
+    "plate_id": "P0001",
+    "table": "辛桌",
+    "diner_id": "D002",
+    "slip_id": "M0004",
+    "prep": "豉油皇炒面-标准"
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 若仍报庚桌 -> 应当 409
+  POST /plates/deliver  body={"plate_id":"P0001","table":"庚桌"}
+{
+  "ok": false,
+  "error": {
+    "code": "PLATE_TAKEN",
+    "message": "P0001 已派给 辛桌 桌",
+    "delivery_id": "V0001",
+    "table": "辛桌"
+  }
+}
+[HTTP 409]
+================ 3. 午市主场景：甲乙同做法一锅，甲撤单，丙加入 ================
+  甲=M0005 乙=M0006
+──────────────────────────────────────────────
+▸ 炒档把两份同锅喊炒（每份钉菜单号）-> 锅 W0002
+──────────────────────────────────────────────
+▸ 甲撤单 —— 锅里那份撤不掉，熟后按余菜处理
+  POST /slips/cancel  body={"slip_id":"M0005"}
+{
+  "ok": true,
+  "data": {
+    "slip_id": "M0005",
+    "status": "CANCELLED",
+    "leftover_plates": 0
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 丙此时点同款（此锅已满，丙单 M0007 进队列等下一锅）
+──────────────────────────────────────────────
+▸ 照单结这锅：两份都真炒出来，甲那份起锅即余菜
+  POST /wok/finish  body={"wok_id":"W0002"}
+{
+  "ok": true,
+  "data": {
+    "wok_id": "W0002",
+    "plates": [
+      {
+        "plate_id": "P0002",
+        "slip_id": "M0005",
+        "status": "LEFTOVER"
+      },
+      {
+        "plate_id": "P0003",
+        "slip_id": "M0006",
+        "status": "READY"
+      }
+    ],
+    "shorted": []
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 传菜查 W0002 的盘号来路（portion 钉菜单、盘钉 portion）
+  GET /wok/W0002 
+{
+  "ok": true,
+  "data": {
+    "wok": {
+      "id": "W0002",
+      "prep": "豉油皇炒面-标准",
+      "status": "DONE",
+      "created_at": "2026-11-26T03:37:31+00:00",
+      "done_at": "2026-11-26T03:37:31+00:00"
+    },
+    "portions": [
+      {
+        "portion_id": 2,
+        "status": "COOKED",
+        "slip_id": "M0005",
+        "diner_id": "D003",
+        "slip_status": "CANCELLED",
+        "plate_id": "P0002",
+        "plate_status": "LEFTOVER"
+      },
+      {
+        "portion_id": 3,
+        "status": "COOKED",
+        "slip_id": "M0006",
+        "diner_id": "D004",
+        "slip_status": "WOK_LOCKED",
+        "plate_id": "P0003",
+        "plate_status": "READY"
+      }
+    ]
+  }
+}
+[HTTP 200]
+  甲的盘=P0002（余菜） 乙的盘=P0003（待派）
+──────────────────────────────────────────────
+▸ 余菜想再派出去 -> 409 余菜不可派
+  POST /plates/deliver  body={"plate_id":"P0002","table":"甲桌"}
+{
+  "ok": false,
+  "error": {
+    "code": "LEFTOVER_NOT_DELIVERABLE",
+    "message": "P0002 是余菜，不能派盘"
+  }
+}
+[HTTP 409]
+──────────────────────────────────────────────
+▸ 乙的盘派到乙桌
+  POST /plates/deliver  body={"plate_id":"P0003","table":"乙桌"}
+{
+  "ok": true,
+  "data": {
+    "delivery_id": "V0002",
+    "plate_id": "P0003",
+    "table": "乙桌",
+    "diner_id": "D004",
+    "slip_id": "M0006",
+    "prep": "豉油皇炒面-标准"
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 乙已上桌后撤单 -> 409 已派盘不能退款
+  POST /slips/cancel  body={"slip_id":"M0006"}
+{
+  "ok": false,
+  "error": {
+    "code": "ALREADY_DELIVERED",
+    "message": "M0006 已派盘上桌，撤单不能退款"
+  }
+}
+[HTTP 409]
+──────────────────────────────────────────────
+▸ 丙的单单独喊炒 -> 锅 W0003
+──────────────────────────────────────────────
+▸ 报熟
+  POST /wok/finish  body={"wok_id":"W0003"}
+{
+  "ok": true,
+  "data": {
+    "wok_id": "W0003",
+    "plates": [
+      {
+        "plate_id": "P0004",
+        "slip_id": "M0007",
+        "status": "READY"
+      }
+    ],
+    "shorted": []
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 派给丙桌
+  POST /plates/deliver  body={"plate_id":"P0004","table":"丙桌"}
+{
+  "ok": true,
+  "data": {
+    "delivery_id": "V0003",
+    "plate_id": "P0004",
+    "table": "丙桌",
+    "diner_id": "D005",
+    "slip_id": "M0007",
+    "prep": "豉油皇炒面-标准"
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 余菜清单（甲那份在此，不可重派）
+  GET /leftovers 
+{
+  "ok": true,
+  "data": {
+    "leftovers": [
+      {
+        "plate_id": "P0002",
+        "wok_id": "W0002",
+        "origin_slip_id": "M0005",
+        "prep": "豉油皇炒面-标准",
+        "diner_id": "D003",
+        "table_name": "甲桌"
+      }
+    ]
+  }
+}
+[HTTP 200]
+================ 4. 另开一锅：乙丁两份炒前入单、均不撤，报熟各派一盘 ================
+──────────────────────────────────────────────
+▸ 两份同锅喊炒、报熟两份 -> 锅 W0004
+──────────────────────────────────────────────
+▸ 
+  POST /wok/finish  body={"wok_id":"W0004"}
+{
+  "ok": true,
+  "data": {
+    "wok_id": "W0004",
+    "plates": [
+      {
+        "plate_id": "P0005",
+        "slip_id": "M0008",
+        "status": "READY"
+      },
+      {
+        "plate_id": "P0006",
+        "slip_id": "M0009",
+        "status": "READY"
+      }
+    ],
+    "shorted": []
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 各派一盘（乙、丁）
+  POST /plates/deliver  body={"plate_id":"P0005","table":"乙桌"}
+{
+  "ok": true,
+  "data": {
+    "delivery_id": "V0004",
+    "plate_id": "P0005",
+    "table": "乙桌",
+    "diner_id": "D004",
+    "slip_id": "M0008",
+    "prep": "星洲炒米-标准"
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 
+  POST /plates/deliver  body={"plate_id":"P0006","table":"丁桌"}
+{
+  "ok": true,
+  "data": {
+    "delivery_id": "V0005",
+    "plate_id": "P0006",
+    "table": "丁桌",
+    "diner_id": "D006",
+    "slip_id": "M0009",
+    "prep": "星洲炒米-标准"
+  }
+}
+[HTTP 200]
+--- 试 1：乙临时改免葱，而锅里已经有葱 -> 原锅不能给乙这份 ---
+──────────────────────────────────────────────
+▸ 喊炒并报熟（葱已下锅）-> 锅 W0005
+──────────────────────────────────────────────
+▸ 
+  POST /wok/finish  body={"wok_id":"W0005"}
+{
+  "ok": true,
+  "data": {
+    "wok_id": "W0005",
+    "plates": [
+      {
+        "plate_id": "P0007",
+        "slip_id": "M0010",
+        "status": "READY"
+      },
+      {
+        "plate_id": "P0008",
+        "slip_id": "M0011",
+        "status": "READY"
+      }
+    ],
+    "shorted": []
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 乙这时改免葱 -> 旧单留锅转余菜，另开免葱新单等下一锅
+  POST /slips/revise  body={"slip_id":"M0010","new_prep":"干炒牛河-免葱"}
+{
+  "ok": true,
+  "data": {
+    "old_slip_id": "M0010",
+    "old_slip_status": "CANCELLED",
+    "leftover_plates": 1,
+    "new_slip_id": "M0012",
+    "new_prep": "干炒牛河-免葱",
+    "explanation": "这份已喊炒并下锅，原锅不能给改后的做法；熟品转余菜，新单等下一锅炒"
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 原锅那盘再想派给乙 -> 409 余菜不可派
+  POST /plates/deliver  body={"plate_id":"P0007","table":"乙桌"}
+{
+  "ok": false,
+  "error": {
+    "code": "LEFTOVER_NOT_DELIVERABLE",
+    "message": "P0007 是余菜，不能派盘"
+  }
+}
+[HTTP 409]
+──────────────────────────────────────────────
+▸ 壬的盘照派
+  POST /plates/deliver  body={"plate_id":"P0008","table":"壬桌"}
+{
+  "ok": true,
+  "data": {
+    "delivery_id": "V0006",
+    "plate_id": "P0008",
+    "table": "壬桌",
+    "diner_id": "D007",
+    "slip_id": "M0011",
+    "prep": "干炒牛河-标准"
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 免葱新单在队列里（下一锅才轮到）
+  GET /queue?prep=%E5%B9%B2%E7%82%92%E7%89%9B%E6%B2%B3-%E5%85%8D%E8%91%B1 
+{
+  "ok": true,
+  "data": {
+    "queue": [
+      {
+        "id": "M0002",
+        "diner_id": "D001",
+        "prep": "干炒牛河-免葱",
+        "status": "ENTERED",
+        "qty": 1,
+        "note": null,
+        "revised_from": null,
+        "created_at": "2026-11-26T03:37:31+00:00",
+        "table_name": "己桌",
+        "diner_name": "己"
+      },
+      {
+        "id": "M0012",
+        "diner_id": "D004",
+        "prep": "干炒牛河-免葱",
+        "status": "ENTERED",
+        "qty": 1,
+        "note": "改菜另开",
+        "revised_from": "M0010",
+        "created_at": "2026-11-26T03:37:31+00:00",
+        "table_name": "乙桌",
+        "diner_name": "乙"
+      }
+    ]
+  }
+}
+[HTTP 200]
+--- 试 2：保留原做法，炒档只少报一份成品 -> 传菜派不出两盘 ---
+──────────────────────────────────────────────
+▸ 喊炒两份 -> 锅 W0006
+──────────────────────────────────────────────
+▸ 起锅只报癸那份熟，子的那份缺报（SHORT）
+  POST /wok/finish  body={"wok_id":"W0006","reported":["M0013"]}
+{
+  "ok": true,
+  "data": {
+    "wok_id": "W0006",
+    "plates": [
+      {
+        "plate_id": "P0009",
+        "slip_id": "M0013",
+        "status": "READY"
+      }
+    ],
+    "shorted": [
+      {
+        "slip_id": "M0014",
+        "portion_id": 10
+      }
+    ]
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 锅里只有一个 READY 盘，子那份是 SHORT
+  GET /wok/W0006 
+{
+  "ok": true,
+  "data": {
+    "wok": {
+      "id": "W0006",
+      "prep": "豉油皇炒面-标准",
+      "status": "DONE",
+      "created_at": "2026-11-26T03:37:31+00:00",
+      "done_at": "2026-11-26T03:37:31+00:00"
+    },
+    "portions": [
+      {
+        "portion_id": 9,
+        "status": "COOKED",
+        "slip_id": "M0013",
+        "diner_id": "D008",
+        "slip_status": "WOK_LOCKED",
+        "plate_id": "P0009",
+        "plate_status": "READY"
+      },
+      {
+        "portion_id": 10,
+        "status": "SHORT",
+        "slip_id": "M0014",
+        "diner_id": "D009",
+        "slip_status": "ENTERED",
+        "plate_id": null,
+        "plate_status": null
+      }
+    ]
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 派癸的盘（成功）
+  POST /plates/deliver  body={"plate_id":"P0009","table":"癸桌"}
+{
+  "ok": true,
+  "data": {
+    "delivery_id": "V0007",
+    "plate_id": "P0009",
+    "table": "癸桌",
+    "diner_id": "D008",
+    "slip_id": "M0013",
+    "prep": "豉油皇炒面-标准"
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 给不存在的盘号派 -> 404（不会凭空派第二盘）
+  POST /plates/deliver  body={"plate_id":"P9999","table":"子桌"}
+{
+  "ok": false,
+  "error": {
+    "code": "NO_PLATE",
+    "message": "盘 P9999 不存在"
+  }
+}
+[HTTP 404]
+──────────────────────────────────────────────
+▸ 子那张单已退回队列等重炒
+  GET /queue?prep=%E8%B1%89%E6%B2%B9%E7%9A%87%E7%82%92%E9%9D%A2-%E6%A0%87%E5%87%86 
+{
+  "ok": true,
+  "data": {
+    "queue": [
+      {
+        "id": "M0014",
+        "diner_id": "D009",
+        "prep": "豉油皇炒面-标准",
+        "status": "ENTERED",
+        "qty": 1,
+        "note": null,
+        "revised_from": null,
+        "created_at": "2026-11-26T03:37:31+00:00",
+        "table_name": "子桌",
+        "diner_name": "子"
+      }
+    ]
+  }
+}
+[HTTP 200]
+================ 5. 最后一盘两人同时报送不同桌：唯一归属 ================
+──────────────────────────────────────────────
+▸ 单独成锅报熟，成为最后一盘 -> 锅 W0007
+──────────────────────────────────────────────
+▸ 
+  POST /wok/finish  body={"wok_id":"W0007"}
+{
+  "ok": true,
+  "data": {
+    "wok_id": "W0007",
+    "plates": [
+      {
+        "plate_id": "P0010",
+        "slip_id": "M0015",
+        "status": "READY"
+      }
+    ],
+    "shorted": []
+  }
+}
+[HTTP 200]
+  两个传菜员同时抢 P0010（都报丑桌），只有一个能赢：
+  --- 报送结果 A ---
+{
+  "ok": true,
+  "data": {
+    "delivery_id": "V0008",
+    "plate_id": "P0010",
+    "table": "丑桌",
+    "diner_id": "D010",
+    "slip_id": "M0015",
+    "prep": "雪菜肉丝面-标准"
+  }
+}
+[HTTP 200]
+  --- 报送结果 B ---
+{
+  "ok": false,
+  "error": {
+    "code": "PLATE_TAKEN",
+    "message": "P0010 已派给 丑桌 桌",
+    "delivery_id": "V0008",
+    "table": "丑桌"
+  }
+}
+[HTTP 409]
+──────────────────────────────────────────────
+▸ 再查盘：只可能有一个 delivery 归属
+  GET /plates/P0010 
+{
+  "ok": true,
+  "data": {
+    "plate": {
+      "plate_id": "P0010",
+      "portion_id": 11,
+      "wok_id": "W0007",
+      "origin_slip_id": "M0015",
+      "prep": "雪菜肉丝面-标准",
+      "status": "DELIVERED",
+      "delivered_table": "丑桌"
+    },
+    "origin_slip": {
+      "id": "M0015",
+      "diner_id": "D010",
+      "prep": "雪菜肉丝面-标准",
+      "status": "DELIVERED",
+      "qty": 1,
+      "note": null,
+      "revised_from": null,
+      "created_at": "2026-11-26T03:37:32+00:00",
+      "diner_name": "丑",
+      "table_name": "丑桌"
+    },
+    "delivery": {
+      "id": "V0008",
+      "plate_id": "P0010",
+      "slip_id": "M0015",
+      "diner_id": "D010",
+      "table_name": "丑桌",
+      "idem_key": "race-a",
+      "at": "2026-11-26T03:37:32+00:00"
+    }
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 若有人错报甲桌 -> 409 桌别不符（食客当前在丑桌）
+  POST /plates/deliver  body={"plate_id":"P0010","table":"甲桌"}
+{
+  "ok": false,
+  "error": {
+    "code": "PLATE_TAKEN",
+    "message": "P0010 已派给 丑桌 桌",
+    "delivery_id": "V0008",
+    "table": "丑桌"
+  }
+}
+[HTTP 409]
+================ 6. 客户端丢回应：幂等键重连查回同一次派盘 ================
+──────────────────────────────────────────────
+▸ 成锅报熟 -> 锅 W0008
+──────────────────────────────────────────────
+▸ 
+  POST /wok/finish  body={"wok_id":"W0008"}
+{
+  "ok": true,
+  "data": {
+    "wok_id": "W0008",
+    "plates": [
+      {
+        "plate_id": "P0011",
+        "slip_id": "M0016",
+        "status": "READY"
+      }
+    ],
+    "shorted": []
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 第一次派盘（回应在网络上丢了）
+  POST /plates/deliver  body={"plate_id":"P0011","table":"寅桌"}
+{
+  "ok": true,
+  "data": {
+    "delivery_id": "V0009",
+    "plate_id": "P0011",
+    "table": "寅桌",
+    "diner_id": "D011",
+    "slip_id": "M0016",
+    "prep": "雪菜肉丝面-标准"
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 客户端重连，带同一幂等键重试 -> 同一 delivery，不产生第二笔
+  POST /plates/deliver  body={"plate_id":"P0011","table":"寅桌"}
+{
+  "ok": true,
+  "data": {
+    "delivery_id": "V0009",
+    "plate_id": "P0011",
+    "table": "寅桌",
+    "diner_id": "D011",
+    "slip_id": "M0016",
+    "prep": "雪菜肉丝面-标准",
+    "idempotent_replay": true
+  }
+}
+[HTTP 200]
+================ 7. 结桌：桌账只列实际交给该桌的菜 ================
+──────────────────────────────────────────────
+▸ 甲桌 桌账
+  GET /tables/%E7%94%B2%E6%A1%8C/bill 
+{
+  "ok": true,
+  "data": {
+    "table": "甲桌",
+    "items": [],
+    "count": 0
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 乙桌 桌账
+  GET /tables/%E4%B9%99%E6%A1%8C/bill 
+{
+  "ok": true,
+  "data": {
+    "table": "乙桌",
+    "items": [
+      {
+        "delivery_id": "V0002",
+        "plate_id": "P0003",
+        "slip_id": "M0006",
+        "diner_id": "D004",
+        "table_name": "乙桌",
+        "at": "2026-11-26T03:37:31+00:00",
+        "prep": "豉油皇炒面-标准",
+        "wok_id": "W0002"
+      },
+      {
+        "delivery_id": "V0004",
+        "plate_id": "P0005",
+        "slip_id": "M0008",
+        "diner_id": "D004",
+        "table_name": "乙桌",
+        "at": "2026-11-26T03:37:31+00:00",
+        "prep": "星洲炒米-标准",
+        "wok_id": "W0004"
+      }
+    ],
+    "count": 2
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 丙桌 桌账
+  GET /tables/%E4%B8%99%E6%A1%8C/bill 
+{
+  "ok": true,
+  "data": {
+    "table": "丙桌",
+    "items": [
+      {
+        "delivery_id": "V0003",
+        "plate_id": "P0004",
+        "slip_id": "M0007",
+        "diner_id": "D005",
+        "table_name": "丙桌",
+        "at": "2026-11-26T03:37:31+00:00",
+        "prep": "豉油皇炒面-标准",
+        "wok_id": "W0003"
+      }
+    ],
+    "count": 1
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 丁桌 桌账
+  GET /tables/%E4%B8%81%E6%A1%8C/bill 
+{
+  "ok": true,
+  "data": {
+    "table": "丁桌",
+    "items": [
+      {
+        "delivery_id": "V0005",
+        "plate_id": "P0006",
+        "slip_id": "M0009",
+        "diner_id": "D006",
+        "table_name": "丁桌",
+        "at": "2026-11-26T03:37:31+00:00",
+        "prep": "星洲炒米-标准",
+        "wok_id": "W0004"
+      }
+    ],
+    "count": 1
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 辛桌 桌账
+  GET /tables/%E8%BE%9B%E6%A1%8C/bill 
+{
+  "ok": true,
+  "data": {
+    "table": "辛桌",
+    "items": [
+      {
+        "delivery_id": "V0001",
+        "plate_id": "P0001",
+        "slip_id": "M0004",
+        "diner_id": "D002",
+        "table_name": "辛桌",
+        "at": "2026-11-26T03:37:31+00:00",
+        "prep": "豉油皇炒面-标准",
+        "wok_id": "W0001"
+      }
+    ],
+    "count": 1
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 壬桌 桌账
+  GET /tables/%E5%A3%AC%E6%A1%8C/bill 
+{
+  "ok": true,
+  "data": {
+    "table": "壬桌",
+    "items": [
+      {
+        "delivery_id": "V0006",
+        "plate_id": "P0008",
+        "slip_id": "M0011",
+        "diner_id": "D007",
+        "table_name": "壬桌",
+        "at": "2026-11-26T03:37:31+00:00",
+        "prep": "干炒牛河-标准",
+        "wok_id": "W0005"
+      }
+    ],
+    "count": 1
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 癸桌 桌账
+  GET /tables/%E7%99%B8%E6%A1%8C/bill 
+{
+  "ok": true,
+  "data": {
+    "table": "癸桌",
+    "items": [
+      {
+        "delivery_id": "V0007",
+        "plate_id": "P0009",
+        "slip_id": "M0013",
+        "diner_id": "D008",
+        "table_name": "癸桌",
+        "at": "2026-11-26T03:37:31+00:00",
+        "prep": "豉油皇炒面-标准",
+        "wok_id": "W0006"
+      }
+    ],
+    "count": 1
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 丑桌 桌账
+  GET /tables/%E4%B8%91%E6%A1%8C/bill 
+{
+  "ok": true,
+  "data": {
+    "table": "丑桌",
+    "items": [
+      {
+        "delivery_id": "V0008",
+        "plate_id": "P0010",
+        "slip_id": "M0015",
+        "diner_id": "D010",
+        "table_name": "丑桌",
+        "at": "2026-11-26T03:37:32+00:00",
+        "prep": "雪菜肉丝面-标准",
+        "wok_id": "W0007"
+      }
+    ],
+    "count": 1
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 寅桌 桌账
+  GET /tables/%E5%AF%85%E6%A1%8C/bill 
+{
+  "ok": true,
+  "data": {
+    "table": "寅桌",
+    "items": [
+      {
+        "delivery_id": "V0009",
+        "plate_id": "P0011",
+        "slip_id": "M0016",
+        "diner_id": "D011",
+        "table_name": "寅桌",
+        "at": "2026-11-26T03:37:32+00:00",
+        "prep": "雪菜肉丝面-标准",
+        "wok_id": "W0008"
+      }
+    ],
+    "count": 1
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 己桌 桌账
+  GET /tables/%E5%B7%B1%E6%A1%8C/bill 
+{
+  "ok": true,
+  "data": {
+    "table": "己桌",
+    "items": [],
+    "count": 0
+  }
+}
+[HTTP 200]
+================ 8. 重启服务：凭桌号/锅号查回 ================
+──────────────────────────────────────────────
+▸ 重启后查乙桌账
+  GET /tables/%E4%B9%99%E6%A1%8C/bill 
+{
+  "ok": true,
+  "data": {
+    "table": "乙桌",
+    "items": [
+      {
+        "delivery_id": "V0002",
+        "plate_id": "P0003",
+        "slip_id": "M0006",
+        "diner_id": "D004",
+        "table_name": "乙桌",
+        "at": "2026-11-26T03:37:31+00:00",
+        "prep": "豉油皇炒面-标准",
+        "wok_id": "W0002"
+      },
+      {
+        "delivery_id": "V0004",
+        "plate_id": "P0005",
+        "slip_id": "M0008",
+        "diner_id": "D004",
+        "table_name": "乙桌",
+        "at": "2026-11-26T03:37:31+00:00",
+        "prep": "星洲炒米-标准",
+        "wok_id": "W0004"
+      }
+    ],
+    "count": 2
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 重启后查甲乙那锅 W0002（含余菜来路）
+  GET /wok/W0002 
+{
+  "ok": true,
+  "data": {
+    "wok": {
+      "id": "W0002",
+      "prep": "豉油皇炒面-标准",
+      "status": "DONE",
+      "created_at": "2026-11-26T03:37:31+00:00",
+      "done_at": "2026-11-26T03:37:31+00:00"
+    },
+    "portions": [
+      {
+        "portion_id": 2,
+        "status": "COOKED",
+        "slip_id": "M0005",
+        "diner_id": "D003",
+        "slip_status": "CANCELLED",
+        "plate_id": "P0002",
+        "plate_status": "LEFTOVER"
+      },
+      {
+        "portion_id": 3,
+        "status": "COOKED",
+        "slip_id": "M0006",
+        "diner_id": "D004",
+        "slip_status": "DELIVERED",
+        "plate_id": "P0003",
+        "plate_status": "DELIVERED"
+      }
+    ]
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 重启后查余菜清单
+  GET /leftovers 
+{
+  "ok": true,
+  "data": {
+    "leftovers": [
+      {
+        "plate_id": "P0002",
+        "wok_id": "W0002",
+        "origin_slip_id": "M0005",
+        "prep": "豉油皇炒面-标准",
+        "diner_id": "D003",
+        "table_name": "甲桌"
+      },
+      {
+        "plate_id": "P0007",
+        "wok_id": "W0005",
+        "origin_slip_id": "M0010",
+        "prep": "干炒牛河-标准",
+        "diner_id": "D004",
+        "table_name": "乙桌"
+      }
+    ]
+  }
+}
+[HTTP 200]
+──────────────────────────────────────────────
+▸ 重启后总览
+  GET /state 
+{
+  "ok": true,
+  "data": {
+    "diners": 11,
+    "slips_by_status": {
+      "CANCELLED": 3,
+      "DELIVERED": 9,
+      "ENTERED": 4
+    },
+    "woks_by_status": {
+      "DONE": 8
+    },
+    "plates_by_status": {
+      "DELIVERED": 9,
+      "LEFTOVER": 2
+    },
+    "deliveries": 9
+  }
+}
+[HTTP 200]
+
+演示完成。数据库文件 chaan.db 已落盘，可用 curl 继续查；服务进程随脚本退出而停。
