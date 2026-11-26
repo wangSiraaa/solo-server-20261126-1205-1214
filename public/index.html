@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>发廊预约与拆卷调度</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <h1>发廊预约服务</h1>
+      <p>整数分钟 · 主理人保护 / 工序交接 · 持久化客单 · 重启可核对</p>
+    </div>
+    <div class="health" id="health">检查服务中…</div>
+  </header>
+
+  <main class="grid">
+    <section class="card span-2">
+      <h2>示例柜台</h2>
+      <p class="muted">按题目中的第 0 分案例一键录入员工、椅位、客单、签到和末区完工。</p>
+      <div class="buttons">
+        <button data-action="seed">1. 重置并录入基础案例</button>
+        <button data-action="quote" class="primary">2. 报价：0–3 分刘海短活</button>
+        <button data-action="confirm">3. 确认插单</button>
+        <button data-action="restart-check">4. 重新读取持久化客单</button>
+      </div>
+      <div class="buttons">
+        <button data-action="early">变异：卷齐提前两分</button>
+        <button data-action="chair">变异：刘海椅第 2 分才空</button>
+        <button data-action="zhou">加工序替班师傅</button>
+        <button data-action="recover">第 3 分恢复排序</button>
+        <button data-action="handoff">周师傅确认状态并接椅</button>
+        <button data-action="unroll">第 3 分拆卷 → 第 5 分完成 → 第 6 分结账</button>
+      </div>
+      <pre id="scenario-output" class="output">等待操作。所有结果也可在下方 API 控制台复现。</pre>
+    </section>
+
+    <section class="card">
+      <h2>资源与客单</h2>
+      <div class="buttons">
+        <button data-action="refresh-state">刷新</button>
+        <button data-action="receipt">查看 perm 回条</button>
+      </div>
+      <div id="summary" class="summary"></div>
+      <pre id="state-output" class="output small"></pre>
+    </section>
+
+    <section class="card">
+      <h2>柜台 / 员工 API 入口</h2>
+      <form id="api-form">
+        <label>Method
+          <select name="method">
+            <option>GET</option><option selected>POST</option><option>PATCH</option>
+          </select>
+        </label>
+        <label>Path
+          <input name="path" value="/api/quotes/insert" required />
+        </label>
+        <label>JSON body（GET 可留空）
+          <textarea name="body" rows="12">{
+  "stylistId": "lin",
+  "durationMinutes": 3,
+  "availableFrom": 0,
+  "availableUntil": 3,
+  "chairId": "chair2"
+}</textarea>
+        </label>
+        <button class="primary" type="submit">发送</button>
+      </form>
+      <pre id="api-output" class="output small"></pre>
+      <h3>常用路径</h3>
+      <ul class="paths">
+        <li><code>POST /api/staff</code> / <code>POST /api/chairs</code></li>
+        <li><code>POST /api/appointments</code></li>
+        <li><code>POST /api/appointments/:id/check-in</code></li>
+        <li><code>POST /api/appointments/:id/sections/:sid/complete</code></li>
+        <li><code>POST /api/appointments/:id/handoffs</code></li>
+        <li><code>POST /api/appointments/:id/move</code></li>
+        <li><code>POST /api/appointments/:id/unroll/start|complete</code></li>
+        <li><code>POST /api/appointments/:id/checkout</code></li>
+        <li><code>POST /api/quotes/insert</code></li>
+        <li><code>POST /api/schedule/recover</code></li>
+        <li><code>GET /api/appointments/:id/receipt</code></li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

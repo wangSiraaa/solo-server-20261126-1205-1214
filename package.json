@@ -1,0 +1,16 @@
+{
+  "name": "salon-booking-service",
+  "version": "1.0.0",
+  "description": "Integer-minute salon appointment, section completion, handoff and scheduling service",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "demo": "node scripts/demo.js",
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
