@@ -1,0 +1,14 @@
+{
+  "name": "disk-handover-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local whole-quote disk handover service with SQLite persistence and quota-safe ownership transfers.",
+  "scripts": {
+    "start": "python3 server.py",
+    "test": "python3 -m unittest test_server -v",
+    "demo": "./scripts/demo.sh"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
