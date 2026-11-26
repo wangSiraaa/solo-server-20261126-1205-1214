@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>青年活动中心联选后台</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>青年活动中心 · 两席联选后台</h1>
+        <p class="sub">事先承诺 / 同轮相容就任书 / 每席定额两票 / 用票与空席可审计</p>
+      </div>
+      <div class="health" id="health">检查服务中…</div>
+    </header>
+
+    <main class="layout">
+      <section class="card controls">
+        <h2>演示案卷</h2>
+        <div class="button-grid">
+          <button data-scenario="transfer" data-action="settle">① 原四票：甲阅览、乙球场</button>
+          <button data-scenario="ineligible-backup" data-action="settle">② 乙换无球场资格的丙</button>
+          <button data-scenario="refused-backup" data-action="settle">③ 乙拒绝球场</button>
+          <button data-scenario="both-willing" data-preference="reading" data-action="settle">④ 甲愿任两席（偏好阅览）</button>
+          <button data-scenario="both-willing" data-preference="court" data-action="settle">④ 甲愿任两席（偏好球场）</button>
+          <button data-scenario="overquota" data-action="settle">附：三票超定额取票规则</button>
+          <button id="concurrent-desk" class="warn">并发：两柜员同时发同一阅览席</button>
+        </div>
+        <div class="row">
+          <label for="round-select">已存轮次</label>
+          <select id="round-select"><option value="">—</option></select>
+          <button id="refresh-rounds" class="secondary">刷新</button>
+        </div>
+        <p class="hint" id="action-message"></p>
+      </section>
+
+      <section class="card">
+        <h2>值班席与真实就任书</h2>
+        <div id="roster" class="roster"><p class="muted">请选择或运行一个案卷。</p></div>
+      </section>
+
+      <section class="card wide">
+        <h2>每张票本轮去向</h2>
+        <div id="audit" class="table-wrap"><p class="muted">尚无数据。</p></div>
+      </section>
+
+      <section class="card wide">
+        <h2>柜员并发 / 回执结果</h2>
+        <pre id="concurrency-output" class="output">点击上方并发按钮，将向两个相同席位请求同时发证。</pre>
+      </section>
+
+      <section class="card wide">
+        <h2>原始 JSON</h2>
+        <pre id="raw" class="output"></pre>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
