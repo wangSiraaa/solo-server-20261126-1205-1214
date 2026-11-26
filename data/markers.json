@@ -1,0 +1,76 @@
+{
+  "open_days": ["saturday", "sunday"],
+  "stations": [
+    {
+      "id": "T1",
+      "name": "望江台",
+      "open_days": ["saturday", "sunday"],
+      "required_slot": {"id": "N1", "prefer": "S02", "fallback": null}
+    },
+    {
+      "id": "T2",
+      "name": "河湾",
+      "open_days": ["saturday", "sunday"],
+      "required_slot": { "id": "N2", "prefer": "S05", "fallback": "S06" }
+    },
+    {
+      "id": "T3",
+      "name": "柳岸",
+      "open_days": ["saturday", "sunday"],
+      "required_slot": {"id": "N3", "prefer": "S08", "fallback": null}
+    },
+    {
+      "id": "T4",
+      "name": "古渡",
+      "open_days": ["saturday", "sunday"],
+      "required_slot": {"id": "N4", "prefer": "S10", "fallback": null}
+    }
+  ],
+  "routes": [
+    {
+      "id": "R1",
+      "name": "湾畔短路（河湾拐弯）",
+      "stations": ["T1", "T2", "T3"]
+    },
+    {
+      "id": "R2",
+      "name": "沿河全线",
+      "stations": ["T1", "T2", "T3", "T4"]
+    },
+    {
+      "id": "R3",
+      "name": "古渡折返",
+      "stations": ["T4", "T3"]
+    }
+  ],
+  "segments": [
+    {"id": "S01", "station_id": "T1", "kind": "ambience",   "track": "MIC-AMB1",  "holder": "STUDIO", "start": 0.0, "end": 10.0, "leaks": []},
+    {"id": "S02", "station_id": "T1", "kind": "narration",  "track": "MIC-P",     "holder": "P",      "start": 0.0, "end": 8.0,  "leaks": []},
+
+    {"id": "S03", "station_id": "T2", "kind": "ambience",   "track": "MIC-AMB2",  "holder": "STUDIO", "start": 0.0, "end": 12.0, "leaks": []},
+    {"id": "S04", "station_id": "T2", "kind": "music",      "track": "MIC-MUSIC", "holder": "M",      "start": 0.0, "end": 12.0,
+      "leaks": [{"person": "P", "start": 2.0, "end": 4.0, "source_track": "MIC-MUSIC", "note": "河湾音乐轨第2至4秒漏入人声P"}]},
+    {"id": "S05", "station_id": "T2", "kind": "narration",  "track": "MIC-P",     "holder": "P",      "start": 1.0, "end": 10.0, "leaks": []},
+    {"id": "S06", "station_id": "T2", "kind": "narration",  "track": "MIC-Q",     "holder": "Q",      "start": 0.0, "end": 9.0,  "leaks": []},
+
+    {"id": "S07", "station_id": "T3", "kind": "ambience",   "track": "MIC-AMB3",  "holder": "STUDIO", "start": 0.0, "end": 10.0, "leaks": []},
+    {"id": "S08", "station_id": "T3", "kind": "narration",  "track": "MIC-R",     "holder": "R",      "start": 0.0, "end": 8.0,  "leaks": []},
+
+    {"id": "S09", "station_id": "T4", "kind": "ambience",   "track": "MIC-AMB4",  "holder": "STUDIO", "start": 0.0, "end": 10.0, "leaks": []},
+    {"id": "S10", "station_id": "T4", "kind": "narration",  "track": "MIC-Q",     "holder": "Q",      "start": 0.0, "end": 8.0,  "leaks": []}
+  ],
+  "licenses": [
+    {"id": "L-STUDIO", "person": "STUDIO", "stations": ["*"], "open_days": ["*"], "modes": ["speaker", "headphone"],
+     "valid_from": "2026-01-01", "valid_to": "2027-12-31"},
+    {"id": "L-P-T1", "person": "P", "stations": ["T1"], "open_days": ["*"], "modes": ["speaker", "headphone"],
+     "valid_from": "2026-01-01", "valid_to": "2026-12-31"},
+    {"id": "L-P-T2", "person": "P", "stations": ["T2"], "open_days": ["*"], "modes": ["speaker", "headphone"],
+     "valid_from": "2026-01-01", "valid_to": "2026-12-31"},
+    {"id": "L-Q", "person": "Q", "stations": ["T2", "T4"], "open_days": ["*"], "modes": ["speaker", "headphone"],
+     "valid_from": "2026-01-01", "valid_to": "2027-12-31"},
+    {"id": "L-R", "person": "R", "stations": ["T3"], "open_days": ["saturday", "sunday"], "modes": ["headphone"],
+     "valid_from": "2026-01-01", "valid_to": "2026-12-31"},
+    {"id": "L-M", "person": "M", "stations": ["T2"], "open_days": ["*"], "modes": ["speaker", "headphone"],
+     "valid_from": "2026-01-01", "valid_to": "2026-12-31"}
+  ]
+}
