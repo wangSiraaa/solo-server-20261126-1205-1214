@@ -1,0 +1,11 @@
+{
+  "name": "local-community-forum-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standard-library forum backend with moves, versioned read receipts, branch/board subscriptions, and durable pagination.",
+  "scripts": {
+    "start": "python3 server.py",
+    "demo": "./demo.sh",
+    "test:concurrency": "python3 verify_concurrency.py"
+  }
+}
