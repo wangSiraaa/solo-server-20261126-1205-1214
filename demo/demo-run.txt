@@ -1,0 +1,303 @@
+==============================================================================
+宽带合作社：迁址 / 重叠接入点 SLA / 时券兑现 / 晚到证据更正
+两个本地客户端：terminal-1（旧屋与营业员甲）, terminal-2（新址与续期窗口乙）
+SQLite：/workspace/demo/coop-demo.sqlite3
+==============================================================================
+
+【1】原始双点合同：旧 [4,8) 中断，新 [6,7) 中断
+
+$ terminal-1> create_customer {"customer_id": "C-MAIN", "name": "MAIN 住户"}
+
+$ terminal-1> create_line {"line_id": "OLD-MAIN", "customer_id": "C-MAIN", "label": "old", "address": "MAIN 旧屋", "opened_at": 0, "returned_at": 9}
+
+$ terminal-2> create_line {"line_id": "NEW-MAIN", "customer_id": "C-MAIN", "label": "new", "address": "MAIN 新套间", "opened_at": 3}
+
+$ terminal-1> add_commitment {"commitment_id": "CMT-MAIN-OLD", "line_id": "OLD-MAIN", "start_minute": 0, "end_minute": 9, "kind": "promised", "contract_id": "K-MAIN"}
+
+$ terminal-2> add_commitment {"commitment_id": "CMT-MAIN-NEW", "line_id": "NEW-MAIN", "start_minute": 4, "end_minute": 12, "kind": "promised", "contract_id": "K-MAIN"}
+
+$ terminal-1> record_fault_report {"report_id": "RPT-MAIN-OLD", "line_id": "OLD-MAIN", "fault_key": "MAIN-OLD-4-8", "start_minute": 4, "end_minute": 8, "reporter": "subscriber-terminal-1"}
+
+$ terminal-2> record_fault_report {"report_id": "RPT-MAIN-NEW", "line_id": "NEW-MAIN", "fault_key": "MAIN-NEW-6-7", "start_minute": 6, "end_minute": 7, "reporter": "subscriber-terminal-2"}
+
+$ terminal-2> record_fault_report {"report_id": "RPT-MAIN-OLD-RELAYED-BY-2", "line_id": "OLD-MAIN", "fault_key": "MAIN-OLD-4-8", "start_minute": 4, "end_minute": 8, "reporter": "same subscriber, second local client relay"}
+  ↳ 同故障异单转发：duplicate_fault=True，canonical outage=OUT-MAIN-OLD-4-8
+
+$ terminal-1> run_compensation {"case_id": "CASE-MAIN", "customer_id": "C-MAIN", "window_start": 0, "window_end": 12}
+
+$ terminal-2> get_case {"case_id": "CASE-MAIN"}
+  minute decisions: 3:— 4:— 5:— 6:欠 7:— 8:—
+  owed_intervals=[[6, 7]] expected=1
+  ↳ 真实可查时券：VCH-CASE-MAIN-BASE-V1 / TIME-VCH-CASE-MAIN-BASE-V1
+
+$ terminal-1> list_renewal_options {"customer_id": "C-MAIN", "voucher_id": "VCH-CASE-MAIN-BASE-V1"}
+  ↳ 客户选择可办理续期：coop-30-minutes list=30 voucher_discount=1 due=29
+
+【2】下一次续期使用时券；同一笔续期回执重到
+
+$ terminal-2> receive_renewal_receipt {"receipt_id": "RCPT-MAIN-2026-11", "customer_id": "C-MAIN", "order_id": "RNW-MAIN-001", "package_code": "coop-30-minutes", "service_minutes": 30, "rate_minor_per_minute": 1, "service_start": 10, "voucher_id": "VCH-CASE-MAIN-BASE-V1", "voucher_minutes": 1}
+{
+  "order_id": "RNW-MAIN-001",
+  "receipt_id": "RCPT-MAIN-2026-11",
+  "delivery_count": 1,
+  "service_interval": [
+    10,
+    40
+  ],
+  "list": 30,
+  "voucher_minutes": 1,
+  "discount": 1,
+  "amount_due": 29,
+  "paid": 29,
+  "balance": 0,
+  "duplicate_receipt": false,
+  "ledger": [
+    [
+      "renewal_charge",
+      30
+    ],
+    [
+      "voucher_discount",
+      -1
+    ],
+    [
+      "payment",
+      -29
+    ]
+  ]
+}
+
+$ terminal-1> receive_renewal_receipt {"receipt_id": "RCPT-MAIN-2026-11", "customer_id": "C-MAIN", "order_id": "RNW-MAIN-001", "package_code": "coop-30-minutes", "service_minutes": 30, "rate_minor_per_minute": 1, "service_start": 10, "voucher_id": "VCH-CASE-MAIN-BASE-V1", "voucher_minutes": 1}
+  ↳ 回执重到结果（不得二次抵扣/二次收款）：
+{
+  "order_id": "RNW-MAIN-001",
+  "receipt_id": "RCPT-MAIN-2026-11",
+  "delivery_count": 2,
+  "service_interval": [
+    10,
+    40
+  ],
+  "list": 30,
+  "voucher_minutes": 1,
+  "discount": 1,
+  "amount_due": 29,
+  "paid": 29,
+  "balance": 0,
+  "duplicate_receipt": true,
+  "ledger": [
+    [
+      "renewal_charge",
+      30
+    ],
+    [
+      "voucher_discount",
+      -1
+    ],
+    [
+      "payment",
+      -29
+    ]
+  ]
+}
+
+【3】第一次重启后端：SQLite 中的案件、券、回执次数和账仍可查询
+
+$ terminal-2> get_renewal {"order_or_receipt_id": "RNW-MAIN-001"}
+{
+  "order_id": "RNW-MAIN-001",
+  "receipt_id": "RCPT-MAIN-2026-11",
+  "delivery_count": 2,
+  "service_interval": [
+    10,
+    40
+  ],
+  "list": 30,
+  "voucher_minutes": 1,
+  "discount": 1,
+  "amount_due": 29,
+  "paid": 29,
+  "balance": 0,
+  "duplicate_receipt": false,
+  "ledger": [
+    [
+      "renewal_charge",
+      30
+    ],
+    [
+      "voucher_discount",
+      -1
+    ],
+    [
+      "payment",
+      -29
+    ]
+  ]
+}
+
+【4】晚到的修复/遥测证据：新址实际上全程可用，补偿 1 -> 0
+
+$ terminal-1> add_evidence {"evidence_id": "EV-MAIN-LATE-FULL", "customer_id": "C-MAIN", "kind": "late_repair_and_telemetry_review", "summary": "6-7 分钟为自测误报，用户面全程可用，无实际修复换件", "payload": {"telemetry": "new-access=up", "repair_ticket": "REP-NEW-LATE-01"}}
+
+$ terminal-1> correct_outage {"outage_id": "OUT-MAIN-NEW-6-7", "evidence_id": "EV-MAIN-LATE-FULL", "new_status": "void"}
+
+$ terminal-2> recalculate_compensation {"case_id": "CASE-MAIN", "evidence_id": "EV-MAIN-LATE-FULL", "as_of_minute": 12}
+  minute decisions: 3:— 4:— 5:— 6:— 7:— 8:—
+  owed_intervals=[] expected=0
+  voucher after correction: [{"id": "VCH-CASE-MAIN-BASE-V1", "granted": 1, "redeemed": 1, "cancelled": 0, "clawed_back": 1, "status": "overissued_settled"}]
+
+$ terminal-2> get_renewal {"order_or_receipt_id": "RNW-MAIN-001", "as_of_minute": 12}
+  ↳ 晚到证据改变的是已用券对应的同一期续期挂账：
+{
+  "order_id": "RNW-MAIN-001",
+  "receipt_id": "RCPT-MAIN-2026-11",
+  "delivery_count": 2,
+  "service_interval": [
+    10,
+    40
+  ],
+  "list": 30,
+  "voucher_minutes": 1,
+  "discount": 1,
+  "amount_due": 29,
+  "paid": 29,
+  "balance": 1,
+  "duplicate_receipt": false,
+  "ledger": [
+    [
+      "renewal_charge",
+      30
+    ],
+    [
+      "voucher_discount",
+      -1
+    ],
+    [
+      "payment",
+      -29
+    ],
+    [
+      "voucher_clawback_charge",
+      1
+    ]
+  ]
+}
+  ↳ 已消费部分交代：{"as_of_minute": 12, "performed_interval": [10, 12], "performed_minutes": 2, "preserved": true}
+
+$ terminal-1> list_notifications {"customer_id": "C-MAIN"}
+  通知 NTF-1417f118fd《补偿更正：已兑现时券需结算差额》：晚到证据 EV-MAIN-LATE-FULL 使案件 CASE-MAIN 应付分钟下调。其中 1 分钟已用于续期回执 RCPT-MAIN-2026-11，对应续期单 RNW-MAIN-001 补记 1 合成币应付款。截至查询时刻 minute 12，该续期段已履行 10≤t<12 共 2 分钟；这些上网分钟保留，不做删除。已开通并履行的上网时段保持不变，不会被删除或断网。
+  通知 NTF-0c3e6de17c《补偿案件已更正》：案件 CASE-MAIN 已按证据 EV-MAIN-LATE-FULL 生成 CASE-MAIN-V2；本次追回 1 个过发分钟。未用分钟已注销，已用部分已回到原续期期挂账。
+
+$ terminal-2> trace_evidence {"evidence_id": "EV-MAIN-LATE-FULL"}
+  ↳ 证据追账链：evidence -> cases=['CASE-MAIN'] -> renewals=['RNW-MAIN-001'] -> entries=[('voucher_clawback_charge', 1)]
+
+【5】更正后同一续期回执再次重到；随后结清差额并再次重启查询
+
+$ terminal-2> receive_renewal_receipt {"receipt_id": "RCPT-MAIN-2026-11", "customer_id": "C-MAIN", "order_id": "RNW-MAIN-001", "package_code": "coop-30-minutes", "service_minutes": 30, "rate_minor_per_minute": 1, "service_start": 10, "voucher_id": "VCH-CASE-MAIN-BASE-V1", "voucher_minutes": 1}
+{
+  "order_id": "RNW-MAIN-001",
+  "receipt_id": "RCPT-MAIN-2026-11",
+  "delivery_count": 3,
+  "service_interval": [
+    10,
+    40
+  ],
+  "list": 30,
+  "voucher_minutes": 1,
+  "discount": 1,
+  "amount_due": 29,
+  "paid": 29,
+  "balance": 1,
+  "duplicate_receipt": true,
+  "ledger": [
+    [
+      "renewal_charge",
+      30
+    ],
+    [
+      "voucher_discount",
+      -1
+    ],
+    [
+      "payment",
+      -29
+    ],
+    [
+      "voucher_clawback_charge",
+      1
+    ]
+  ]
+}
+
+$ terminal-1> pay_outstanding_balance {"renewal_order_id": "RNW-MAIN-001", "payment_id": "PAY-MAIN-CLAWBACK"}
+  ↳  synthetic settlement payment posted; balance=0
+
+$ terminal-2> get_renewal {"order_or_receipt_id": "RCPT-MAIN-2026-11"}
+
+$ terminal-2> get_customer_ledger {"customer_id": "C-MAIN"}
+  ↳ restarted query by receipt id works; final balance=0, service interval remains 10..40
+
+【6】保持线路事实，新址 [4,8) 改为仅供测试：补偿升为 4 分钟
+
+$ terminal-1> create_customer {"customer_id": "C-TEST", "name": "TEST 住户"}
+
+$ terminal-1> create_line {"line_id": "OLD-TEST", "customer_id": "C-TEST", "label": "old", "address": "TEST 旧屋", "opened_at": 0, "returned_at": 9}
+
+$ terminal-2> create_line {"line_id": "NEW-TEST", "customer_id": "C-TEST", "label": "new", "address": "TEST 新套间", "opened_at": 3}
+
+$ terminal-1> add_commitment {"commitment_id": "CMT-TEST-OLD", "line_id": "OLD-TEST", "start_minute": 0, "end_minute": 9, "kind": "promised", "contract_id": "K-TEST"}
+
+$ terminal-2> add_commitment {"commitment_id": "CMT-TEST-NEW", "line_id": "NEW-TEST", "start_minute": 4, "end_minute": 12, "kind": "promised", "contract_id": "K-TEST"}
+
+$ terminal-1> record_fault_report {"report_id": "RPT-TEST-OLD", "line_id": "OLD-TEST", "fault_key": "TEST-OLD-4-8", "start_minute": 4, "end_minute": 8, "reporter": "subscriber-terminal-1"}
+
+$ terminal-2> record_fault_report {"report_id": "RPT-TEST-NEW", "line_id": "NEW-TEST", "fault_key": "TEST-NEW-6-7", "start_minute": 6, "end_minute": 7, "reporter": "subscriber-terminal-2"}
+
+$ terminal-2> record_fault_report {"report_id": "RPT-TEST-OLD-RELAYED-BY-2", "line_id": "OLD-TEST", "fault_key": "TEST-OLD-4-8", "start_minute": 4, "end_minute": 8, "reporter": "same subscriber, second local client relay"}
+  ↳ 同故障异单转发：duplicate_fault=True，canonical outage=OUT-TEST-OLD-4-8
+
+$ terminal-1> run_compensation {"case_id": "CASE-TEST", "customer_id": "C-TEST", "window_start": 0, "window_end": 12}
+
+$ terminal-1> add_evidence {"evidence_id": "EV-TEST-TESTONLY", "customer_id": "C-TEST", "kind": "commitment_correction", "summary": "新址 4-8 分钟为内部测试，未对住户承诺日常可用；第 8 分钟才切换"}
+
+$ terminal-1> correct_commitment_to_test {"line_id": "NEW-TEST", "start_minute": 4, "end_minute": 8, "evidence_id": "EV-TEST-TESTONLY", "correction_id": "CMT-TEST-4-8-TEST"}
+
+$ terminal-2> recalculate_compensation {"case_id": "CASE-TEST", "evidence_id": "EV-TEST-TESTONLY"}
+  minute decisions: 3:— 4:欠 5:欠 6:欠 7:欠 8:—
+  owed_intervals=[[4, 8]] expected=4
+
+【7】从原始双点合同出发，只更正新址全程可用：补偿为 0
+
+$ terminal-1> create_customer {"customer_id": "C-ZERO", "name": "ZERO 住户"}
+
+$ terminal-1> create_line {"line_id": "OLD-ZERO", "customer_id": "C-ZERO", "label": "old", "address": "ZERO 旧屋", "opened_at": 0, "returned_at": 9}
+
+$ terminal-2> create_line {"line_id": "NEW-ZERO", "customer_id": "C-ZERO", "label": "new", "address": "ZERO 新套间", "opened_at": 3}
+
+$ terminal-1> add_commitment {"commitment_id": "CMT-ZERO-OLD", "line_id": "OLD-ZERO", "start_minute": 0, "end_minute": 9, "kind": "promised", "contract_id": "K-ZERO"}
+
+$ terminal-2> add_commitment {"commitment_id": "CMT-ZERO-NEW", "line_id": "NEW-ZERO", "start_minute": 4, "end_minute": 12, "kind": "promised", "contract_id": "K-ZERO"}
+
+$ terminal-1> record_fault_report {"report_id": "RPT-ZERO-OLD", "line_id": "OLD-ZERO", "fault_key": "ZERO-OLD-4-8", "start_minute": 4, "end_minute": 8, "reporter": "subscriber-terminal-1"}
+
+$ terminal-2> record_fault_report {"report_id": "RPT-ZERO-NEW", "line_id": "NEW-ZERO", "fault_key": "ZERO-NEW-6-7", "start_minute": 6, "end_minute": 7, "reporter": "subscriber-terminal-2"}
+
+$ terminal-2> record_fault_report {"report_id": "RPT-ZERO-OLD-RELAYED-BY-2", "line_id": "OLD-ZERO", "fault_key": "ZERO-OLD-4-8", "start_minute": 4, "end_minute": 8, "reporter": "same subscriber, second local client relay"}
+  ↳ 同故障异单转发：duplicate_fault=True，canonical outage=OUT-ZERO-OLD-4-8
+
+$ terminal-1> run_compensation {"case_id": "CASE-ZERO", "customer_id": "C-ZERO", "window_start": 0, "window_end": 12}
+
+$ terminal-1> add_evidence {"evidence_id": "EV-ZERO-FULL", "customer_id": "C-ZERO", "kind": "availability_correction", "summary": "网管与迟到修复记录复核：新址全程可用，6-7 分钟事件不成立"}
+
+$ terminal-1> correct_outage {"outage_id": "OUT-ZERO-NEW-6-7", "evidence_id": "EV-ZERO-FULL", "new_status": "void"}
+
+$ terminal-2> recalculate_compensation {"case_id": "CASE-ZERO", "evidence_id": "EV-ZERO-FULL"}
+  minute decisions: 3:— 4:— 5:— 6:— 7:— 8:—
+  owed_intervals=[] expected=0
+  voucher status: [{"granted": 1, "cancelled": 1, "status": "cancelled"}]
+
+==============================================================================
+DEMO OK
+完整调用/响应/分钟级账据：/workspace/demo/demo-output.json
+可继续用客户端查询，例如：COOP base url was http://127.0.0.1:34679
+重启真实服务：python3 -m coop.server --db /workspace/demo/coop-demo.sqlite3 --port 8931
+==============================================================================
