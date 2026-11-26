@@ -1,0 +1,16 @@
+{
+  "name": "exchange-homestay",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Backend for a language-exchange club homestay: applications, grouping, check-in, changes, closing, and night-level offset accounting.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test test/",
+    "demo": "node demo.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
