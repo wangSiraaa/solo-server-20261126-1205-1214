@@ -1,0 +1,4 @@
+{"payload": {"mode": "presale", "screen_id": "screen-1", "show_id": "show-A2", "tracks": 1, "width": 3}, "type": "show_created"}
+{"payload": {"occlusion": {"from_beat": 2, "left_col": 2, "occ_id": "SUB-MID", "right_col": 2, "to_beat": 2, "track": 1}, "result": {"affected_orders": [], "occ_id": "SUB-MID"}}, "type": "occlusion_added"}
+{"payload": {"order": {"allowed_tracks": [1], "buyer": "买家Bob", "mode": "presale", "note": "", "order_id": "O-bob", "quantity": 1, "seq": 1, "speed": 1, "status": "BROKEN", "width": 1, "window_end": 1, "window_start": 1}, "result": {"accepted": false, "order_id": "O-bob", "reason": "窗口内无完整无碰撞路径，不予出售"}}, "type": "presale_placed"}
+{"payload": {"occ_id": "SUB-MID", "result": {"affected_orders": [{"broken": false, "buyer": "买家Bob", "instr_id": "I-0001", "order_id": "O-bob", "start": 1, "track": 1}], "occ_id": "SUB-MID"}}, "type": "occlusion_removed"}

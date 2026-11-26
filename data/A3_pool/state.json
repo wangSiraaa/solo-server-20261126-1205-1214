@@ -1,0 +1,158 @@
+{
+  "counters": {
+    "I": 1,
+    "O": 1
+  },
+  "current_beat": 1,
+  "instructions": {
+    "I-0001": {
+      "buyer": "老买家Carol",
+      "instr_id": "I-0001",
+      "last_played_beat": 1,
+      "order_id": "O-carol2",
+      "receipt_id": "R-screen-1-0001",
+      "screen_id": "screen-1",
+      "speed": 1,
+      "start": 1,
+      "status": "STARTED",
+      "track": 1,
+      "trajectory": {
+        "end_beat": 4,
+        "order_id": "O-carol2",
+        "speed": 1,
+        "start": 1,
+        "steps": [
+          {
+            "beat": 1,
+            "left_col": 3,
+            "right_col": 3,
+            "track": 1
+          },
+          {
+            "beat": 2,
+            "left_col": 2,
+            "right_col": 2,
+            "track": 1
+          },
+          {
+            "beat": 3,
+            "left_col": 1,
+            "right_col": 1,
+            "track": 1
+          },
+          {
+            "beat": 4,
+            "left_col": 0,
+            "right_col": 0,
+            "track": 1
+          }
+        ],
+        "track": 1,
+        "visible_steps": [
+          {
+            "beat": 1,
+            "left_col": 3,
+            "right_col": 3,
+            "track": 1
+          },
+          {
+            "beat": 2,
+            "left_col": 2,
+            "right_col": 2,
+            "track": 1
+          },
+          {
+            "beat": 3,
+            "left_col": 1,
+            "right_col": 1,
+            "track": 1
+          }
+        ],
+        "width": 1
+      },
+      "width": 1
+    }
+  },
+  "mode": "pool",
+  "occlusions": [],
+  "order_seq": 2,
+  "orders": {
+    "O-carol2": {
+      "allowed_tracks": [
+        1
+      ],
+      "buyer": "老买家Carol",
+      "mode": "pool",
+      "note": "",
+      "order_id": "O-carol2",
+      "quantity": 1,
+      "seq": 1,
+      "speed": 1,
+      "status": "PLAYING",
+      "width": 1,
+      "window_end": 1,
+      "window_start": 1
+    },
+    "O-dave2": {
+      "allowed_tracks": [
+        1
+      ],
+      "buyer": "新买家Dave",
+      "mode": "pool",
+      "note": "",
+      "order_id": "O-dave2",
+      "quantity": 1,
+      "seq": 2,
+      "speed": 1,
+      "status": "EXPIRED",
+      "width": 1,
+      "window_end": 1,
+      "window_start": 1
+    }
+  },
+  "outbox": [
+    {
+      "claimed": false,
+      "instr_id": "I-0001",
+      "outbox_id": "O-0001",
+      "payload": {
+        "buyer": "老买家Carol",
+        "instr_id": "I-0001",
+        "order_id": "O-carol2",
+        "screen_id": "screen-1",
+        "speed": 1,
+        "start_beat": 1,
+        "track": 1,
+        "visible_path": [
+          {
+            "beat": 1,
+            "left_col": 3,
+            "right_col": 3,
+            "track": 1
+          },
+          {
+            "beat": 2,
+            "left_col": 2,
+            "right_col": 2,
+            "track": 1
+          },
+          {
+            "beat": 3,
+            "left_col": 1,
+            "right_col": 1,
+            "track": 1
+          }
+        ],
+        "width": 1
+      },
+      "screen_id": "screen-1"
+    }
+  ],
+  "screen_id": "screen-1",
+  "seen_receipts": [
+    "R-screen-1-0001"
+  ],
+  "show_id": "show-A3b",
+  "tracks": 1,
+  "width": 3
+}

@@ -1,0 +1,142 @@
+{
+  "counters": {
+    "I": 1,
+    "O": 1
+  },
+  "current_beat": 3,
+  "instructions": {
+    "I-0001": {
+      "buyer": "买家Alice",
+      "instr_id": "I-0001",
+      "last_played_beat": 3,
+      "order_id": "O-alice",
+      "receipt_id": "R-screen-1-0001",
+      "screen_id": "screen-1",
+      "speed": 1,
+      "start": 1,
+      "status": "DONE",
+      "track": 1,
+      "trajectory": {
+        "end_beat": 4,
+        "order_id": "O-alice",
+        "speed": 1,
+        "start": 1,
+        "steps": [
+          {
+            "beat": 1,
+            "left_col": 3,
+            "right_col": 3,
+            "track": 1
+          },
+          {
+            "beat": 2,
+            "left_col": 2,
+            "right_col": 2,
+            "track": 1
+          },
+          {
+            "beat": 3,
+            "left_col": 1,
+            "right_col": 1,
+            "track": 1
+          },
+          {
+            "beat": 4,
+            "left_col": 0,
+            "right_col": 0,
+            "track": 1
+          }
+        ],
+        "track": 1,
+        "visible_steps": [
+          {
+            "beat": 1,
+            "left_col": 3,
+            "right_col": 3,
+            "track": 1
+          },
+          {
+            "beat": 2,
+            "left_col": 2,
+            "right_col": 2,
+            "track": 1
+          },
+          {
+            "beat": 3,
+            "left_col": 1,
+            "right_col": 1,
+            "track": 1
+          }
+        ],
+        "width": 1
+      },
+      "width": 1
+    }
+  },
+  "mode": "presale",
+  "occlusions": [],
+  "order_seq": 1,
+  "orders": {
+    "O-alice": {
+      "allowed_tracks": [
+        1
+      ],
+      "buyer": "买家Alice",
+      "mode": "presale",
+      "note": "",
+      "order_id": "O-alice",
+      "quantity": 1,
+      "seq": 1,
+      "speed": 1,
+      "status": "SETTLED",
+      "width": 1,
+      "window_end": 1,
+      "window_start": 1
+    }
+  },
+  "outbox": [
+    {
+      "claimed": true,
+      "instr_id": "I-0001",
+      "outbox_id": "O-0001",
+      "payload": {
+        "buyer": "买家Alice",
+        "instr_id": "I-0001",
+        "order_id": "O-alice",
+        "screen_id": "screen-1",
+        "speed": 1,
+        "start_beat": 1,
+        "track": 1,
+        "visible_path": [
+          {
+            "beat": 1,
+            "left_col": 3,
+            "right_col": 3,
+            "track": 1
+          },
+          {
+            "beat": 2,
+            "left_col": 2,
+            "right_col": 2,
+            "track": 1
+          },
+          {
+            "beat": 3,
+            "left_col": 1,
+            "right_col": 1,
+            "track": 1
+          }
+        ],
+        "width": 1
+      },
+      "screen_id": "screen-1"
+    }
+  ],
+  "screen_id": "screen-1",
+  "seen_receipts": [
+    "R-screen-1-0001"
+  ],
+  "show_id": "show-A1",
+  "tracks": 1,
+  "width": 3
+}

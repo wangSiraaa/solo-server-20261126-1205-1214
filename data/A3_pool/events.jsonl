@@ -1,0 +1,7 @@
+{"payload": {"mode": "pool", "screen_id": "screen-1", "show_id": "show-A3b", "tracks": 1, "width": 3}, "type": "show_created"}
+{"payload": {"order": {"allowed_tracks": [1], "buyer": "老买家Carol", "mode": "pool", "note": "", "order_id": "O-carol2", "quantity": 1, "seq": 1, "speed": 1, "status": "QUEUED", "width": 1, "window_end": 1, "window_start": 1}, "result": {"order_id": "O-carol2", "owed": 1, "queued": true}}, "type": "pool_placed"}
+{"payload": {"played_beat": 0, "result": {"dispatched": [{"buyer": "老买家Carol", "instr_id": "I-0001", "order_id": "O-carol2", "outbox_id": "O-0001", "start": 1, "track": 1}], "expired": [], "outbox_pending": ["O-0001"], "played_beat": 0, "settled": [], "stopped": []}}, "type": "progress"}
+{"payload": {"duplicate": false, "instr_id": "I-0001", "receipt_id": "R-screen-1-0001", "started_beat": 1}, "type": "receipt_accepted"}
+{"payload": {"played_beat": 1, "result": {"dispatched": [], "expired": [], "outbox_pending": ["O-0001"], "played_beat": 1, "settled": [], "stopped": []}}, "type": "progress"}
+{"payload": {"order": {"allowed_tracks": [1], "buyer": "新买家Dave", "mode": "pool", "note": "", "order_id": "O-dave2", "quantity": 1, "seq": 2, "speed": 1, "status": "QUEUED", "width": 1, "window_end": 1, "window_start": 1}, "result": {"order_id": "O-dave2", "owed": 1, "queued": true}}, "type": "pool_placed"}
+{"payload": {"played_beat": 1, "result": {"dispatched": [], "expired": [{"buyer": "新买家Dave", "order_id": "O-dave2", "owed": 1}], "outbox_pending": ["O-0001"], "played_beat": 1, "settled": [], "stopped": []}}, "type": "progress"}
