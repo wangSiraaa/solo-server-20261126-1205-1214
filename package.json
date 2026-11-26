@@ -1,0 +1,15 @@
+{
+  "name": "pottery-night-school-makeup-service",
+  "version": "1.0.0",
+  "description": "虚构陶艺夜校补修办理服务（仅选保留原件辅导班型）",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

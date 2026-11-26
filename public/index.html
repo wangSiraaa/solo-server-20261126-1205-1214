@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>泥火夜校 · 补修办理服务</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>泥火夜校 · 补修办理服务</h1>
+        <p>符号动作记账，不接真实设备。当前仅开办：<strong>保留原件辅导</strong>。</p>
+      </div>
+      <div class="top-actions">
+        <span id="health" class="badge">检查服务中…</span>
+        <button id="refreshBtn" class="secondary">刷新资料</button>
+        <button id="resetBtn" class="danger-soft">恢复验题种子</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="answer-banner card">
+        <h2>开篇问题的判定</h2>
+        <p id="openingAnswer">正在核对补看示范可补全的练习…</p>
+        <div id="demoMatches" class="demo-list"></div>
+        <p class="muted">
+          观摩只能补入教学规则明确允许旁听的“流程见闻档”；要求同件、亲手完成的结课动作，不能靠另一件动作或观摩拼接。
+        </p>
+      </section>
+
+      <section class="card scenario">
+        <h2>一键验题脚本</h2>
+        <div class="button-row">
+          <button id="happyFlowBtn">跑甲的可完成补修单 / 到课 / 双导师并发 / 查章</button>
+          <button id="controlFlowBtn" class="secondary">跑乙的规则变更对照</button>
+          <button id="negativeFlowBtn" class="secondary">只跑跨件与观摩反例</button>
+        </div>
+        <pre id="scenarioOutput" class="terminal">等待运行…</pre>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <h2>学员与历史</h2>
+          <div class="inline-form">
+            <input id="newStudentName" placeholder="新学员姓名，如：己" />
+            <button id="addStudentBtn" class="secondary">换/加一名学生</button>
+          </div>
+        </div>
+        <div id="studentList" class="chip-list"></div>
+        <div id="studentDetail" class="detail"></div>
+
+        <h3>给所选学生补记一条练习动作</h3>
+        <form id="recordForm" class="grid-form">
+          <label>课次<input name="sessionId" value="OPEN-1126" required /></label>
+          <label>泥件号<input name="pieceNo" value="P-TEST-01" required /></label>
+          <label>动作
+            <select name="action">
+              <option value="open">开孔</option>
+              <option value="raise_wall" selected>立壁</option>
+              <option value="close">收口</option>
+              <option value="center">定中心</option>
+              <option value="attach_handle">装把</option>
+              <option value="smooth_join">接缝抹平</option>
+            </select>
+          </label>
+          <label>参与方式
+            <select name="mode">
+              <option value="hands_on">学员亲手独立</option>
+              <option value="observed">观摩/旁听</option>
+              <option value="assisted">助教把手</option>
+            </select>
+          </label>
+          <label>助教/确认导师<input name="confirmedBy" value="TA-ZHOU" required /></label>
+          <button type="submit">写入练习记录</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>教学衔接规定（可改后重新办理）</h2>
+        <div id="ruleList" class="rules"></div>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <h2>补修单与办理</h2>
+          <button id="createCaseBtn">为所选学员发起补修</button>
+        </div>
+        <p class="muted">不指定缺口时，服务优先选择有原泥件锚点、可保留原件的未完成连续段。</p>
+        <div id="caseList" class="case-list"></div>
+      </section>
+
+      <section class="card">
+        <h2>结课章查询</h2>
+        <div class="button-row">
+          <button id="queryStampsBtn" class="secondary">查询所选学员印章</button>
+          <button id="queryAllStampsBtn" class="secondary">查询全部印章</button>
+        </div>
+        <div id="stampList" class="stamp-list"></div>
+      </section>
+
+      <section class="card">
+        <h2>泥件保留台账</h2>
+        <div id="pieceList" class="table-wrap"></div>
+      </section>
+
+      <section class="card">
+        <h2>审计日志</h2>
+        <div id="auditList" class="audit"></div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

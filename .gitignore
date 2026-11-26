@@ -1,0 +1,5 @@
+node_modules/
+data/pottery.json
+data/pottery.json.tmp-*
+*.log
+.DS_Store
