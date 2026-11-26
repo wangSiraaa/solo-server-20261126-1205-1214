@@ -1,0 +1,15 @@
+{
+  "name": "beadworks-counter-service",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dependency-free counter service for beaded chains, fitting, loans, clasps and individual returns.",
+  "scripts": {
+    "start": "./run.sh",
+    "test": "./test.sh",
+    "test:unit": "python3 -m unittest discover -s tests -v",
+    "demo": "python3 -m beadworks.demo"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
