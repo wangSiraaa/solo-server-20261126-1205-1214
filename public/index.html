@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>联合掩星值守控制台</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>天文社联合掩星值守控制台</h1>
+    <p>自造公共秒区间 · 两次对时与整数偏差 · 丢帧挖空 · 背景距离 · 实到结案 · 确认窗口/接力派班 · 逻辑钟与封交报告</p>
+    <nav>
+      <a href="/reader.html?commissionId=C-DONE">读片员：C-DONE 追踪</a>
+      <a href="/reader.html?commissionId=C-LAB">读片员：C-LAB 实验</a>
+      <a href="/reader.html?commissionId=C-STAGGER">错开三秒样例</a>
+      <a href="/api">API 目录</a>
+      <button class="secondary" id="refreshAll" type="button">刷新状态</button>
+    </nav>
+  </header>
+
+  <main class="grid">
+    <section class="grid cols-3">
+      <div class="card"><h2>逻辑钟</h2><div class="kpi" id="clock">–</div><p class="muted">所有命令按 Lamport 规则 <code>max(L, remote)+1</code> 推进。</p></div>
+      <div class="card"><h2>站点</h2><div class="kpi" id="stationCount">–</div><p class="muted">单个活动最多四站；失联不删已到数据。</p></div>
+      <div class="card"><h2>封交报告</h2><div class="kpi good" id="reportCount">–</div><p class="muted">原版报告不可覆盖，重复交帧仍可读。</p></div>
+    </section>
+
+    <section class="card">
+      <h2>剧本一键核验</h2>
+      <p class="muted">这些按钮直接驱动内置样例；右侧/下方输出每次 API 回执。</p>
+      <button data-action="eval-lab">评估 C-LAB（应为 3 秒、合格）</button>
+      <button data-action="shift-s2" class="warn">S2 对时偏差 +1（[6,9)，交集 2 秒）</button>
+      <button data-action="restore-s2" class="good">恢复 S2 偏差 0</button>
+      <button data-action="require-four" class="bad">C-LAB 改要求 4 秒并重算</button>
+      <button data-action="trace-stagger">查看错开三秒 C-STAGGER</button>
+      <button data-action="repeat-frame">S4 重复交同一帧</button>
+      <button data-action="race">并发抢 W-RACE-50-54</button>
+      <button data-action="reset" class="secondary">重置并播种</button>
+      <div id="storyResult" class="notice">等待操作。</div>
+    </section>
+
+    <div class="grid cols-2">
+      <section class="card">
+        <h2>站点对时 / 状态</h2>
+        <form id="clockForm" class="row">
+          <label>站点 ID<input name="stationId" value="S2" required /></label>
+          <label>整数偏差<input name="agreedOffset" type="number" step="1" value="1" required /></label>
+          <button type="submit">修正对时</button>
+        </form>
+        <form id="syncForm" class="row">
+          <label>站点<input name="stationId" value="S1" required /></label>
+          <label>本地秒<input name="localSecond" type="number" value="0" required /></label>
+          <label>公共秒<input name="commonSecond" type="number" value="0" required /></label>
+          <button type="submit" class="secondary">追加一次对时</button>
+        </form>
+        <form id="statusForm" class="row">
+          <label>站点<input name="stationId" value="S3" required /></label>
+          <label>状态
+            <select name="status"><option value="lost">失联</option><option value="online">恢复在线</option></select>
+          </label>
+          <button type="submit" class="warn">更新</button>
+        </form>
+        <div id="stations"></div>
+      </section>
+
+      <section class="card">
+        <h2>交帧 / 背景标定</h2>
+        <form id="frameForm">
+          <div class="row">
+            <label>站点<input name="stationId" value="S1" required /></label>
+            <label>帧号（重复用同号）<input name="id" placeholder="F-UNIQUE" /></label>
+            <label>类型<select name="mode"><option value="target">目标曝光</option><option value="background">背景标定</option></select></label>
+          </div>
+          <div class="row">
+            <label>本地区间 start<input name="start" type="number" step="any" value="4" required /></label>
+            <label>本地区间 end<input name="end" type="number" step="any" value="8" required /></label>
+            <label>关联委托（可空）<input name="commissionId" placeholder="C-LAB" /></label>
+          </div>
+          <label>丢帧空段 JSON 数组，例如 [[5,6]]<textarea name="droppedIntervals">[]</textarea></label>
+          <button type="submit">提交实到帧</button>
+        </form>
+      </section>
+    </div>
+
+    <div class="grid cols-2">
+      <section class="card">
+        <h2>新建委托</h2>
+        <form id="commissionForm">
+          <div class="row">
+            <label>委托号<input name="id" placeholder="C-NEW-001" required /></label>
+            <label>站点组合（逗号，2–4）<input name="stationIds" value="S1,S2" required /></label>
+          </div>
+          <div class="row">
+            <label>天象 start<input name="start" type="number" value="4" /></label>
+            <label>end<input name="end" type="number" value="8" /></label>
+            <label>需要共同秒<input name="requiredCommonSeconds" type="number" value="3" /></label>
+          </div>
+          <div class="row">
+            <label>背景允许提前秒<input name="before" type="number" value="1" /></label>
+            <label>背景允许延后秒<input name="after" type="number" value="1" /></label>
+          </div>
+          <button type="submit">创建</button>
+        </form>
+        <h3>主持人评估 / 结案</h3>
+        <form id="closeForm" class="row">
+          <label>委托号<input name="commissionId" value="C-LAB" required /></label>
+          <button type="button" id="evaluateBtn">只评估（不结案）</button>
+          <button type="submit" class="good">按实到记录结案</button>
+          <a id="readerLink" href="/reader.html?commissionId=C-LAB" target="_blank"><button type="button" class="secondary">读片员入口</button></a>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>确认窗口派班</h2>
+        <form id="windowDispatchForm">
+          <div class="row">
+            <label>委托号<input name="commissionId" value="C-DONE" required /></label>
+            <label>已确认窗口<input name="windowId" value="W-4-8-S1S2" required /></label>
+          </div>
+          <button type="submit">凭窗口发出时段</button>
+          <p class="muted">窗口必须 <code>confirmed</code>；同一站时段竞争时只有一单成功，发出后不可直接转给临时委托。</p>
+        </form>
+        <h3>接力指挥台试算</h3>
+        <form id="relayForm">
+          <div class="row">
+            <label>前站预报发出<input name="sentAt" type="number" value="100" /></label>
+            <label>预报段 start<input name="forecastStart" type="number" value="106" /></label>
+            <label>end<input name="forecastEnd" type="number" value="112" /></label>
+          </div>
+          <div class="row">
+            <label>通知延迟<input name="notificationDelaySeconds" type="number" value="1" /></label>
+            <label>回执延迟<input name="receiptDelaySeconds" type="number" value="1" /></label>
+            <label>转向秒<input name="slewSeconds" type="number" value="2" /></label>
+          </div>
+          <div class="row">
+            <label>候选站<input name="stationId" value="S2" /></label>
+            <label>可值班 start<input name="availStart" type="number" value="100" /></label>
+            <label>end<input name="availEnd" type="number" value="120" /></label>
+          </div>
+          <button type="submit">计算并生成接力回执</button>
+        </form>
+      </section>
+    </div>
+
+    <section class="card">
+      <h2>委托与报告</h2>
+      <div class="grid cols-2">
+        <div>
+          <h3>委托</h3>
+          <table><thead><tr><th>ID</th><th>状态</th><th>要求</th><th>读片</th></tr></thead><tbody id="commissions"></tbody></table>
+        </div>
+        <div>
+          <h3>封交报告</h3>
+          <table><thead><tr><th>报告</th><th>委托</th><th>版本</th><th>共同秒</th></tr></thead><tbody id="reports"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>逻辑钟事件流</h2>
+      <div id="events" class="timeline"></div>
+    </section>
+
+    <section class="card">
+      <h2>最近 API 输出</h2>
+      <pre class="json" id="output">点击任意操作后显示。</pre>
+    </section>
+  </main>
+
+  <script src="/app.js" type="module"></script>
+</body>
+</html>

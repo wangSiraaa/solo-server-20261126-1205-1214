@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>读片员追踪入口 · 联合掩星值守</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>读片员追踪入口</h1>
+    <p>从委托号追到公共秒共同段、各站背景、实到帧、派班/接力回执与封交原版报告。</p>
+    <nav>
+      <a href="/">值守控制台</a>
+      <a href="/reader.html">读片员入口</a>
+      <a href="/api">API 目录</a>
+      <a href="/api/commissions">委托 JSON</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card">
+      <form id="lookup" class="row">
+        <label style="flex:2 1 280px">
+          委托号 / commissionId
+          <input id="commissionId" list="commissionIds" value="C-DONE" placeholder="例如 C-DONE、C-LAB、C-STAGGER" required />
+          <datalist id="commissionIds"></datalist>
+        </label>
+        <button type="submit">追踪</button>
+        <a class="button-like" href="#" id="jsonLink"><button type="button" class="secondary">原始 JSON</button></a>
+      </form>
+      <div id="status" class="notice">正在读取……</div>
+    </section>
+
+    <div id="result" class="grid" style="margin-top:16px"></div>
+  </main>
+
+  <script src="/reader.js" type="module"></script>
+</body>
+</html>
