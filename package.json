@@ -1,0 +1,15 @@
+{
+  "name": "soap-grid-order-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "彩皂方格浇注、切片回放、样卡匹配、装盒去向与余料后台",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

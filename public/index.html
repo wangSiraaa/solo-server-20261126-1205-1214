@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>彩皂订单后台 · 条坯回放与样卡装盒</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>彩皂订单后台</h1>
+    <div class="subtitle">只模拟彩色方格、真实浇注层、切片两端面、样卡方向、整盒分配、余料与取货去向。</div>
+  </header>
+
+  <main>
+    <div class="row" style="margin-bottom:16px">
+      <button class="secondary" id="refreshBtn">刷新数据</button>
+      <button class="danger" id="resetBtn">重置并灌入八格样条</button>
+      <button class="blue" id="concurrentClaimBtn">两个柜员同领 PIECE-0001</button>
+      <span id="globalStatus" class="badge">未加载</span>
+    </div>
+
+    <div class="grid-layout">
+      <section>
+        <div class="panel">
+          <h2>① 师傅条坯回放 <span class="badge code" id="barCode">BAR-DEMO</span></h2>
+          <div class="muted">从条头到条尾依次显示实际浇注层；斜纹格是切口格，蓝框格属于实物片。点“黄改蓝”只改第二处花的中心格。</div>
+          <div id="barStrip" class="bar-strip"></div>
+          <div class="row">
+            <button class="secondary" id="yellowBlueBtn">重放：第 6 格黄心改蓝</button>
+            <button class="ok" id="restoreBtn">换回原条</button>
+            <a class="badge blue" href="/api/bars/BAR-DEMO/replay" target="_blank">查看 replay JSON</a>
+            <a class="badge" href="/api/bars/BAR-DEMO/remnants" target="_blank">余料 JSON</a>
+          </div>
+          <h3>余料连续段</h3>
+          <div id="remnants" class="muted"></div>
+        </div>
+
+        <div class="panel">
+          <h2>② 柜员换样卡询单</h2>
+          <div class="row">
+            <label class="field">样卡
+              <select id="cardSelect"></select>
+            </label>
+            <label class="field">每盒片数
+              <input id="piecesPerBox" type="number" min="1" value="2" style="width:90px" />
+            </label>
+            <label class="field">朝向
+              <select id="policySelect">
+                <option value="horizontal-ok">允许左右翻转摆放</option>
+                <option value="bar-direction">只许照条坯头尾方向</option>
+              </select>
+            </label>
+            <button class="blue" id="quoteBtn">重新询单</button>
+            <button class="secondary" id="recommendBtn">今天能照哪张卡装盒？</button>
+          </div>
+          <div id="quoteSummary" style="margin-top:12px"></div>
+          <div id="recommendList" class="match-list"></div>
+          <div id="matchList" class="match-list"></div>
+        </div>
+
+        <div class="panel">
+          <h2>③ 开模 / 切取 / 余料</h2>
+          <div class="row">
+            <label class="field">新条号<input id="newBarCode" type="text" placeholder="BAR-LOCAL-1" /></label>
+            <label class="field">长度<input id="newBarLength" type="number" min="1" max="64" value="9" style="width:90px" /></label>
+            <label class="field">合模
+              <select id="closeMode">
+                <option value="normal">正常合模</option>
+                <option value="invert">倒扣</option>
+                <option value="shift_one">平移一格合模</option>
+              </select>
+            </label>
+            <button id="openBarBtn">本地请求开模并合模</button>
+          </div>
+          <div class="row">
+            <label class="field">条号<input id="cutBarCode" type="text" value="BAR-LOCAL-1" /></label>
+            <label class="field">从哪头切
+              <select id="cutFrom"><option value="head">条头</option><option value="tail">条尾</option></select>
+            </label>
+            <label class="field">保留宽<input id="cutWidth" type="number" value="3" style="width:80px" /></label>
+            <label class="field">切口格<input id="cutKerf" type="number" value="1" style="width:80px" /></label>
+            <button class="secondary" id="cutBtn">切取一片</button>
+            <button class="secondary" id="concurrentCutBtn">两柜员并发切同一条</button>
+          </div>
+          <div id="cutResult" class="muted" style="margin-top:10px"></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="panel">
+          <h2>④ 办理一盒并取货</h2>
+          <div class="row">
+            <label class="field">柜员<input id="clerk" type="text" value="clerk-li" /></label>
+            <label class="field">客人<input id="customer" type="text" value="手作教室" /></label>
+          </div>
+          <div class="row">
+            <label class="field" style="flex:1">确切去向<input id="destination" type="text" value="教室自提柜 A1" /></label>
+          </div>
+          <div class="row">
+            <button class="ok" id="boxOrderBtn">先办一盒两片的订单</button>
+            <span class="muted">按当前样卡和朝向原子领片、装盒。</span>
+          </div>
+          <pre id="orderResult" class="json" style="display:none"></pre>
+        </div>
+
+        <div class="panel">
+          <h2>⑤ 按盒号查原片、两面和去向</h2>
+          <div class="row">
+            <input id="boxSearch" type="text" placeholder="例如 BOX-0001" value="BOX-0001" />
+            <button id="boxSearchBtn">查询盒号</button>
+            <button class="secondary" id="pickupBtn">办理取货</button>
+          </div>
+          <div id="boxDetail"></div>
+        </div>
+
+        <div class="panel">
+          <h2>已有盒号</h2>
+          <div id="boxList" class="match-list"></div>
+        </div>
+
+        <div class="panel">
+          <h2>并发结果 / 原始响应</h2>
+          <pre id="debug" class="json">等待操作…</pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
