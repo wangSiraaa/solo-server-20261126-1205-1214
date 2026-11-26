@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>原型试用受理台 · 本地入口</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🧪 原型试用受理台</div>
+    <nav>
+      <a href="/" class="active">总入口</a>
+      <a href="/intake.html">受理 / 派出</a>
+      <a href="/terminal.html">试用终端</a>
+      <a href="/pay.html">领报酬</a>
+      <a href="/review.html">审核 / 重启复查</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>相似结束页，不等于亲自找到入口。</h1>
+      <p>
+        这里把委托人任务、事前计件约定、试用员身份、签发原型版本、逐步点击轨迹、
+        提示泄题记录、招募方审核和一次完成只付一次的报酬台账放在同一套本地持久化服务中。
+      </p>
+      <div class="row" style="margin-top:18px">
+        <a class="button success" href="/intake.html">① 本地受理与派出</a>
+        <a class="button" href="/terminal.html">② 试用员点击</a>
+        <a class="button secondary" href="/pay.html" style="color:white;background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.28)">③ 领取报酬</a>
+        <a class="button secondary" href="/review.html" style="color:white;background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.28)">④ 重启后复查</a>
+      </div>
+    </section>
+
+    <section class="grid cols-4">
+      <a class="card entry-card" href="/intake.html">
+        <div class="num">1</div>
+        <h2>受理 / 发包</h2>
+        <p class="muted">委托人登记任务与提示；招募方按泄题键检查任务包，并向指定试用员真正发出邀约。</p>
+      </a>
+      <a class="card entry-card" href="/terminal.html">
+        <div class="num">2</div>
+        <h2>试用终端</h2>
+        <p class="muted">只显示当前画面、当前可点动作和任务步骤状态；每个点击由服务端状态机生效。</p>
+      </a>
+      <a class="card entry-card" href="/pay.html">
+        <div class="num">3</div>
+        <h2>领报酬</h2>
+        <p class="muted">按接单时保存的三点或两点约定支付；多设备重传同一 completionId 不重复发薪。</p>
+      </a>
+      <a class="card entry-card" href="/review.html">
+        <div class="num">4</div>
+        <h2>审核 / 复查</h2>
+        <p class="muted">查看精确目标、重放错误、设计师捷径、代点来源、此前提示回条和结算台账。</p>
+      </a>
+    </section>
+
+    <section class="grid cols-2" style="margin-top:18px">
+      <div class="card">
+        <h2>本题的判定红线</h2>
+        <ul>
+          <li>“收藏蓝册 → 取消收藏蓝册”必须是签发原型上两个有序、真实改状态的事件。</li>
+          <li>第二个动作改绑另一本册，即使出现外观键相同的结束页，也会因目标不一致失败。</li>
+          <li>服务端只认 <span class="code-pill">actionId + targetId + screenId + version</span>，不认同名“确定”。</li>
+          <li>此前同一身份实际看过排除提示，受理服务会读回原领取回条；本次不临时提示也排除发现奖。</li>
+          <li>互不泄题的红册待借任务仍可正常接做、审核和领酬。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>命令行入口</h2>
+        <pre class="json">npm start
+# 默认地址 http://127.0.0.1:4173
+# 数据文件 data/local-db.json
+
+npm run verify
+# 自动跑通：独立三点、错目标失败、
+# 旧提示回条排除、不泄题任务得酬、
+# 多设备并发重传、停服重启复查。
+
+npm test
+# 纯领域规则测试。</pre>
+        <p class="muted small">所有数据均在本地；无需真实网站或外部服务。</p>
+        <p id="health" class="small muted">正在检查服务…</p>
+      </div>
+    </section>
+    <div class="footer">Prototype trial acceptance ledger · zero external dependencies</div>
+  </main>
+  <script type="module">
+    import { api } from '/api.js';
+    try {
+      const health = await api('/api/health');
+      document.querySelector('#health').innerHTML =
+        `<span class="badge green">服务正常</span> ${health.time}<br><span class="mono">${health.dataFile}</span>`;
+    } catch (error) {
+      document.querySelector('#health').innerHTML = `<span class="badge red">服务未启动</span> ${error.message}`;
+    }
+  </script>
+</body>
+</html>

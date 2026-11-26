@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>审核与重启复查 · 试用受理台</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🧪 原型试用受理台</div>
+    <nav>
+      <a href="/">总入口</a>
+      <a href="/intake.html">受理 / 派出</a>
+      <a href="/terminal.html">试用终端</a>
+      <a href="/pay.html">领报酬</a>
+      <a href="/review.html" class="active">审核 / 重启复查</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="row spread">
+      <div>
+        <h1 style="margin-bottom:4px">招募方审核与重启后复查</h1>
+        <p class="muted" style="margin-top:0">所有结论由服务端依据持久化的受理回条、提示曝光和逐步轨迹复核；审核员不能临时改单价。</p>
+      </div>
+      <button id="refresh">重新读取台账</button>
+    </div>
+
+    <section class="grid cols-4" id="counts"></section>
+
+    <section class="card" style="margin-top:18px">
+      <h2>待审核 / 全部完成记录</h2>
+      <div id="queue"></div>
+    </section>
+
+    <section class="grid cols-2" style="margin-top:18px">
+      <div class="card">
+        <h2>领取回条与提示曝光</h2>
+        <div id="receipts"></div>
+      </div>
+      <div class="card">
+        <h2>结算 / 工资台账</h2>
+        <div id="ledger"></div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <h2>原始持久化数据 / 重启后仍在此处</h2>
+      <p class="small muted">停掉 <span class="code-pill">npm start</span> 后重新启动，再点“重新读取台账”；数据来自 <span id="data-file" class="code-pill"></span>。</p>
+      <pre class="json" id="raw-audit">加载中…</pre>
+    </section>
+  </main>
+
+  <script type="module" src="/review.js"></script>
+</body>
+</html>

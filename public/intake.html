@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>受理与派出 · 试用受理台</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🧪 试用受理台</div>
+    <nav>
+      <a href="/">总入口</a>
+      <a href="/intake.html" class="active">受理 / 派出</a>
+      <a href="/terminal.html">试用终端</a>
+      <a href="/pay.html">领报酬</a>
+      <a href="/review.html">审核 / 重启复查</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>受理、任务包与招募方派出</h1>
+    <p class="muted">委托人登记任务和泄题提示；发包策略检查“前一项实际学会的键”是否会破坏后一项的首次发现。</p>
+
+    <div class="grid cols-2">
+      <section class="card">
+        <h2>1. 委托人登记任务</h2>
+        <form id="task-form">
+          <label>任务标题
+            <input name="title" value="从空收藏夹自行把蓝册加入后再移出" required />
+          </label>
+          <div class="grid cols-2">
+            <label>往返目标册子
+              <select name="targetBookId">
+                <option value="book-blue">蓝册</option>
+                <option value="book-green">绿册</option>
+                <option value="book-red">红册</option>
+                <option value="book-ochre">黄册</option>
+              </select>
+            </label>
+            <label>事前计件单价
+              <input name="unitPrice" type="number" min="0" step="1" value="3" required />
+            </label>
+          </div>
+          <label>任务说明
+            <textarea name="brief">开始时收藏夹为空。试用员须自行找到目标册，完成收藏和取消收藏两个真实改状态动作。</textarea>
+          </label>
+          <label>直接说破答案、会排除发现奖的提示 ID（逗号分隔；可先用内置 hint-blue-answer / hint-red-answer）
+            <input name="exclusionHintIds" placeholder="hint-blue-answer" />
+          </label>
+          <button type="submit">登记任务与计件约定</button>
+          <span id="task-result" class="small"></span>
+        </form>
+
+        <h3>已登记任务</h3>
+        <div id="task-list" class="table-wrap"></div>
+      </section>
+
+      <section class="card">
+        <h2>2. 无主持任务包泄题检查</h2>
+        <p class="small muted">
+          安全包示例：<span class="code-pill">task-blue-roundtrip</span> +
+          <span class="code-pill">task-red-loan-flag</span>。<br />
+          冲突示例：蓝册题 + <span class="code-pill">task-green-roundtrip-known-variant</span> 共享收藏手势。
+        </p>
+        <label>选择任务（按住 Ctrl/⌘ 多选）
+          <select id="package-tasks" multiple size="5"></select>
+        </label>
+        <div class="row">
+          <button class="secondary" id="plan-btn">检查会不会提前泄题</button>
+          <button id="create-package-btn">封存为安全任务包</button>
+        </div>
+        <div id="plan-result"></div>
+
+        <h3>已封存任务包</h3>
+        <div id="package-list" class="small"></div>
+      </section>
+    </div>
+
+    <section class="grid cols-2" style="margin-top:18px">
+      <div class="card">
+        <h2>3. 招募方真正派出邀约</h2>
+        <form id="dispatch-form">
+          <div class="grid cols-2">
+            <label>试用员身份 ID
+              <input name="testerId" id="dispatch-tester" placeholder="例如 T-blue-independent" required />
+            </label>
+            <label>显示名（可选）
+              <input name="displayName" placeholder="招募台账名称" />
+            </label>
+          </div>
+          <label>派出任务
+            <select name="taskId" id="dispatch-task"></select>
+          </label>
+          <label>设备备注 / deviceId（可选）
+            <input name="deviceId" placeholder="lab-device-01" />
+          </label>
+          <button type="submit" class="success">派出邀约并写入本地台账</button>
+          <div id="dispatch-result"></div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>4. 试用员收件与受理回条</h2>
+        <label>我是试用员，身份 ID
+          <div class="row">
+            <input id="current-tester" placeholder="输入或生成身份" />
+            <button class="secondary" id="save-tester">读取我的邀约/回条</button>
+            <button class="secondary" id="new-tester">生成新人</button>
+          </div>
+        </label>
+        <div id="tester-history" class="small"></div>
+        <div id="invitation-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/intake.js"></script>
+</body>
+</html>

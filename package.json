@@ -1,0 +1,16 @@
+{
+  "name": "prototype-trial-acceptance",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "本地原型试用受理、轨迹审核、计件报酬与重启复查服务",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "showcase": "node scripts/seed-showcase.mjs",
+    "verify": "node scripts/verify.mjs",
+    "test": "node --test test/"
+  }
+}

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>领报酬 · 试用受理台</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🧪 原型试用受理台</div>
+    <nav>
+      <a href="/">总入口</a>
+      <a href="/intake.html">受理 / 派出</a>
+      <a href="/terminal.html">试用终端</a>
+      <a href="/pay.html" class="active">领报酬</a>
+      <a href="/review.html">审核 / 重启复查</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>领取报酬</h1>
+    <p class="muted">金额来自试用员接单时保存的事前约定快照；审核通过后才能领取。同一受理单/结算单在多设备重复请求只返回同一笔发放。</p>
+
+    <section class="card">
+      <label>试用员身份 ID
+        <div class="row">
+          <input id="tester-id" placeholder="T-..." />
+          <button id="load">读取结算与发放</button>
+        </div>
+      </label>
+      <div id="totals" class="grid cols-3" style="margin-top:16px"></div>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <h2>我的可结算工作</h2>
+      <div id="settlements"></div>
+    </section>
+  </main>
+
+  <script type="module" src="/pay.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>试用终端 · 试用受理台</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🧪 原型试用受理台</div>
+    <nav>
+      <a href="/">总入口</a>
+      <a href="/intake.html">受理 / 派出</a>
+      <a href="/terminal.html" class="active">试用终端</a>
+      <a href="/pay.html">领报酬</a>
+      <a href="/review.html">审核 / 重启复查</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card" style="margin-bottom:18px">
+      <div class="row">
+        <label style="flex:1;margin:0">受理单 / 回条号
+          <input id="claim-input" placeholder="claim_... 或 RC-..." />
+        </label>
+        <button id="load-claim" style="margin-top:14px">读取终端</button>
+        <a class="button secondary" href="/intake.html" style="margin-top:14px">没有受理单？去受理</a>
+      </div>
+      <p class="small muted" style="margin-bottom:0">终端只显示当前画面、当前可点动作和任务状态；不是真实网站。</p>
+    </div>
+
+    <div id="root" class="two-col-terminal">
+      <div class="sticky-side">
+        <div class="phone">
+          <div class="phone-screen" id="phone">
+            <p class="muted">请先读取受理单。</p>
+          </div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <h3>多设备 / 异常重放演练</h3>
+          <label>设备 ID
+            <input id="device-id" />
+          </label>
+          <div class="row">
+            <button class="secondary" id="retarget-btn">注入：把蓝册取消收藏改绑绿册</button>
+            <button class="secondary" id="shortcut-btn">点设计师捷径</button>
+          </div>
+          <p class="small muted">正常按钮不会发出错目标；此面板用于演示直接重放/篡改请求也会被服务端拒绝并在审核中失败。</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="row spread">
+            <h2 style="margin:0">任务状态</h2>
+            <span id="claim-badges"></span>
+          </div>
+          <div id="task-panel"></div>
+          <div id="eligibility-panel"></div>
+        </div>
+
+        <div class="grid cols-2" style="margin-top:18px">
+          <div class="card">
+            <h3>封存提示</h3>
+            <div id="hint-panel" class="small"></div>
+          </div>
+          <div class="card">
+            <h3>提交完成 / 多设备重传</h3>
+            <label>completionId（同一次完成的所有重传必须相同）
+              <input id="completion-id" placeholder="提交后自动生成" />
+            </label>
+            <div class="row">
+              <button class="success" id="submit-btn">提交本次完成</button>
+              <button class="secondary" id="retransmit-b-btn" disabled>用设备 B 重传同一单</button>
+              <button class="secondary" id="retransmit-c-btn" disabled>用设备 C 重传同一单</button>
+            </div>
+            <div id="completion-result"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:18px">
+          <h3>服务端返回 / 审核结论</h3>
+          <div id="verdict-panel"><p class="muted small">尚未提交。</p></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="/terminal.js"></script>
+</body>
+</html>
