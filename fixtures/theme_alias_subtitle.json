@@ -1,0 +1,28 @@
+{
+  "name": "样例主题（含别名覆盖）",
+  "styles": {
+    "round_dark":  {"name": "round_dark",  "shape": "圆",   "edge": {"kind": "explicit", "code": "C-DARK"},  "fill": {"kind": "explicit", "code": "C-MID"}},
+    "round_light": {"name": "round_light", "shape": "圆",   "edge": {"kind": "explicit", "code": "C-LIGHT"}, "fill": {"kind": "explicit", "code": "C-MID"}},
+    "square_dark": {"name": "square_dark", "shape": "方",   "edge": {"kind": "explicit", "code": "C-DARK"},  "fill": {"kind": "explicit", "code": "C-MID"}},
+    "triangle_light": {"name": "triangle_light", "shape": "三角", "edge": {"kind": "explicit", "code": "C-LIGHT"}, "fill": {"kind": "explicit", "code": "C-MID"}}
+  },
+  "surfaces": {
+    "房间": {"name": "房间"},
+    "字幕条": {
+      "name": "字幕条",
+      "overrides": {
+        "大字|round_light": {"edge": {"kind": "alias", "style": "round_dark", "part": "edge"}}
+      }
+    },
+    "弹幕浮层": {"name": "弹幕浮层"}
+  },
+  "modes": {
+    "普通": {"name": "普通", "color_map": {"C-DARK": "色块·深", "C-LIGHT": "色块·浅", "C-MID": "色块·中"}},
+    "大字": {"name": "大字", "color_map": {"C-DARK": "色块·深（大字）", "C-LIGHT": "色块·浅（大字）", "C-MID": "色块·中（大字）"}}
+  },
+  "contexts": [
+    ["房间", "普通"], ["房间", "大字"],
+    ["字幕条", "普通"], ["字幕条", "大字"],
+    ["弹幕浮层", "普通"], ["弹幕浮层", "大字"]
+  ]
+}

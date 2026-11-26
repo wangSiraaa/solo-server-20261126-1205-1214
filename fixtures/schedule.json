@@ -1,0 +1,13 @@
+{
+  "sessions": [
+    {"id": "E1", "label": "开幕场", "guests": ["阿青", "阿白"]},
+    {"id": "E2", "label": "中段",   "guests": ["阿白", "阿蓝"]},
+    {"id": "E3", "label": "收尾",   "guests": ["阿青", "阿蓝"]}
+  ],
+  "simulcasts": [["E2", "E3"]],
+  "allowances": {
+    "阿青": ["round_dark", "round_light"],
+    "阿白": ["round_dark", "round_light"],
+    "阿蓝": ["round_dark", "round_light", "square_dark", "triangle_light"]
+  }
+}
