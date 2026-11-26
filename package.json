@@ -1,0 +1,15 @@
+{
+  "name": "campaign-lending-backend",
+  "version": "1.0.0",
+  "description": "共享桌游馆战役借还后台：认养战役盒 + 空白底盒/个人战役袋，队伍存档与实物盒永久痕迹分离，借单可重启后追溯。",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "demo": "node scripts/demo.js",
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
