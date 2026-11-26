@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>夜校报名表服务</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1f2933;
+      --muted: #64748b;
+      --line: #d8dee8;
+      --brand: #1d4ed8;
+      --brand-soft: #eff6ff;
+      --ok: #166534;
+      --ok-soft: #dcfce7;
+      --warn: #9a3412;
+      --warn-soft: #ffedd5;
+      --err: #991b1b;
+      --err-soft: #fee2e2;
+      --card: #ffffff;
+      --bg: #f4f6fb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+    header {
+      padding: 28px 24px 18px;
+      background: linear-gradient(135deg, #172554, #1d4ed8);
+      color: white;
+    }
+    header h1 { margin: 0 0 6px; font-size: 28px; }
+    header p { margin: 4px 0; opacity: .9; }
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .wide { grid-column: 1 / -1; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, .06);
+      min-width: 0;
+    }
+    .card h2 { margin: 0 0 12px; font-size: 20px; }
+    .card h3 { margin: 16px 0 8px; font-size: 16px; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .row > * { min-width: 0; }
+    input[type=text], input:not([type]), textarea, select {
+      width: 100%;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      font: inherit;
+      background: white;
+    }
+    textarea { min-height: 76px; }
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 9px 13px;
+      background: var(--brand);
+      color: white;
+      font-weight: 650;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    button.secondary { background: #475569; }
+    button.ok { background: #15803d; }
+    button.warn { background: #c2410c; }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    label.field { display: block; margin: 12px 0; }
+    label.field > .label { display: block; font-weight: 650; margin-bottom: 4px; }
+    .hint { color: var(--muted); font-size: 13px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--brand-soft);
+      color: var(--brand);
+      border: 1px solid #bfdbfe;
+    }
+    .badge.ok { background: var(--ok-soft); color: var(--ok); border-color: #bbf7d0; }
+    .badge.warn { background: var(--warn-soft); color: var(--warn); border-color: #fed7aa; }
+    .badge.err { background: var(--err-soft); color: var(--err); border-color: #fecaca; }
+    pre {
+      background: #0f172a;
+      color: #dbeafe;
+      padding: 12px;
+      border-radius: 10px;
+      overflow: auto;
+      max-height: 360px;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    pre.light { background: #f8fafc; color: #0f172a; border: 1px solid var(--line); }
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .station {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #f8fafc;
+    }
+    .station.taken { background: #fef2f2; border-color: #fecaca; }
+    .station strong { display: block; }
+    .pair { margin-top: 8px; padding: 8px; border-radius: 8px; background: #ecfdf5; border: 1px solid #a7f3d0; font-size: 13px; }
+    .pair.blocked { background: #fff7ed; border-color: #fed7aa; }
+    .stale-note { color: var(--warn); font-size: 12px; margin-top: 3px; }
+    .error-text { color: var(--err); font-size: 13px; margin-top: 3px; }
+    .qa { border-top: 1px solid var(--line); padding: 8px 0; }
+    .qa:first-child { border-top: 0; }
+    .qa .q { font-weight: 650; }
+    .pill-list { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pill { background: #f1f5f9; border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px; font-size: 12px; }
+    #log { min-height: 120px; max-height: 260px; }
+    .inline-check { display: flex; align-items: flex-start; gap: 8px; }
+    .inline-check input { width: auto; margin-top: 4px; }
+    @media (max-width: 900px) { main { grid-template-columns: 1fr; } .wide { grid-column: auto; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>夜校报名表服务</h1>
+    <p>办学办法：<strong>领到哪张表，就按哪张表办</strong>（草稿固定表单版本；旧题与课程条款可解释到草稿到期）。</p>
+    <p><strong>上午填的两人组晚上还算一起报过名吗？</strong> 已成功递交并拿到两个入班号就算，重启/发新表后重复递交仍只有原两席；仅存草稿还未占台，但可按上午旧表续填；若换过班级、报名方式或同伴，旧邀请必须重新确认。</p>
+    <p>成功递交后台位立即固定、不可再分配；重复递交只返回原单与原两个入班号。</p>
+  </header>
+
+  <main>
+    <section class="card wide">
+      <h2>网络入口演示</h2>
+      <div class="row">
+        <button id="btn-continuation-demo" class="ok">一键演示：发布新表后从未交旧草稿续填</button>
+        <button id="btn-acceptance-demo" class="secondary">一键跑核心验收（双人单 / 错回执 / 一号台被散客领走 / 重启式重复递交）</button>
+        <span id="health-badge" class="badge">检查服务中…</span>
+      </div>
+      <pre id="log">操作日志会显示在这里。</pre>
+    </section>
+
+    <section class="card">
+      <h2>1. 班级、台号与可结伴组</h2>
+      <div class="row">
+        <button id="btn-create-demo-class">新建三班台：S1/S2 可结伴，S3 不可</button>
+        <button id="btn-load-classes" class="secondary">刷新班级</button>
+      </div>
+      <h3>或自定义班级</h3>
+      <div class="row">
+        <input type="text" id="class-id" placeholder="班级 ID（可留空）" />
+        <input type="text" id="class-name" placeholder="班级名称" />
+        <input type="text" id="class-count" placeholder="台位数，如 3" value="3" />
+      </div>
+      <div class="row" style="margin-top:8px">
+        <input type="text" id="class-pairs" placeholder='可结伴组 JSON，如 [["S1","S2"]]' value='[["S1","S2"]]' />
+        <button id="btn-create-custom-class">创建自定义班</button>
+      </div>
+      <div id="classes" style="margin-top:14px"></div>
+    </section>
+
+    <section class="card">
+      <h2>2. 凭草稿继续填</h2>
+      <div class="row">
+        <select id="draft-class-id" aria-label="选择班级"></select>
+        <button id="btn-new-draft">新草稿（领取当前表）</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <input type="text" id="open-draft-id" placeholder="输入草稿 ID 继续" />
+        <button id="btn-open-draft" class="secondary">打开草稿</button>
+      </div>
+      <p class="hint">网址中的 <code>?draft=...</code> 也会自动打开草稿。</p>
+      <div id="draft-summary"></div>
+    </section>
+
+    <section class="card wide" id="draft-panel" hidden>
+      <div class="row" style="justify-content:space-between">
+        <h2 style="margin:0">3. 填写报名表</h2>
+        <span id="draft-version-badge" class="badge"></span>
+      </div>
+      <p id="draft-policy-note" class="hint"></p>
+      <form id="answer-form" onsubmit="return false"></form>
+      <div class="row" style="margin-top:12px">
+        <button id="btn-save-draft">保存草稿/退回修改</button>
+        <button id="btn-issue-invitation" class="secondary">生成同伴邀请</button>
+      </div>
+      <h3>当前真正生效的答复</h3>
+      <pre id="effective-json" class="light">{}</pre>
+    </section>
+
+    <section class="card">
+      <h2>4. 同伴用自己的邀请确认</h2>
+      <label class="field"><span class="label">邀请 ID</span><input type="text" id="invitation-id" /></label>
+      <label class="field"><span class="label">邀请令牌</span><input type="text" id="invitation-token" /></label>
+      <label class="field"><span class="label">回执确认哪张草稿？</span><input type="text" id="confirm-target-draft" /></label>
+      <label class="field"><span class="label">同伴姓名</span><input type="text" id="companion-name" placeholder="小校" /></label>
+      <label class="inline-check">
+        <input type="checkbox" id="companion-consent" />
+        <span>我是被邀请的同伴，同意参加这一次指定报名并使用对应台位。</span>
+      </label>
+      <div class="row" style="margin-top:10px">
+        <button id="btn-confirm-companion" class="ok">提交同伴回执</button>
+      </div>
+      <h3>把已有回执关联到当前草稿（可用于演示“回执属于另一张草稿”）</h3>
+      <div class="row">
+        <input type="text" id="attach-receipt-id" placeholder="rcp_..." />
+        <button id="btn-attach-receipt" class="warn">关联回执</button>
+      </div>
+      <pre id="companion-result" class="light">尚未确认。</pre>
+    </section>
+
+    <section class="card">
+      <h2>5. 末尾递交：单人课或双人两台</h2>
+      <label class="field"><span class="label">幂等键</span><input type="text" id="submit-idem" /></label>
+      <label class="field"><span class="label">散客指定台号（可选，如 S1）</span><input type="text" id="submit-station" placeholder="留空则分配第一张空台" /></label>
+      <label class="field"><span class="label">双人结伴组 ID（可选）</span><input type="text" id="submit-pair-group" placeholder="通常留空，自动找两台皆空的可结伴组" /></label>
+      <div class="row">
+        <button id="btn-submit">递交报名</button>
+        <button id="btn-repeat-submit" class="secondary">用同一请求重复递交</button>
+      </div>
+      <h3>报名单 / 席位</h3>
+      <pre id="order-result" class="light">尚未递交。</pre>
+    </section>
+
+    <section class="card wide">
+      <h2>6. 柜台查询：表单版本、生效答复、两人入班号、实际就坐台号</h2>
+      <div class="row">
+        <input type="text" id="counter-query" placeholder="输入 order ID 或 ENR-... 入班号" />
+        <button id="btn-counter-query">柜台查询</button>
+      </div>
+      <div id="counter-view" style="margin-top:12px"></div>
+    </section>
+
+    <section class="card">
+      <h2>7. 管理员发布新表</h2>
+      <p>演示动作会把旧题“来过实作室”拆成 <code>visitedOrientation</code> 与 <code>operatedStationBefore</code> 两题。</p>
+      <div class="row">
+        <button id="btn-publish-split" class="warn">发布拆分版新表</button>
+        <button id="btn-load-forms" class="secondary">刷新表单版本</button>
+      </div>
+      <pre id="forms-json" class="light">尚未加载。</pre>
+    </section>
+
+    <section class="card">
+      <h2>API 速览</h2>
+      <pre class="light">POST /api/classes
+POST /api/drafts
+GET  /api/drafts/:id
+PATCH /api/drafts/:id
+POST /api/drafts/:id/invitations
+POST /api/invitations/:id/confirm
+POST /api/drafts/:id/submit
+GET  /api/counter/orders/:id
+GET  /api/counter/enrollments/:ENR-...
+POST /api/admin/forms/publish-split</pre>
+    </section>
+  </main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const state = { draft: null, lastSubmitBody: null, lastOrder: null };
+
+function newIdemKey() {
+  return (crypto.randomUUID ? crypto.randomUUID() : `idem-${Date.now()}-${Math.random()}`);
+}
+$('submit-idem').value = newIdemKey();
+
+function log(message, data) {
+  const line = `[${new Date().toLocaleTimeString()}] ${message}`;
+  $('log').textContent = `${$('log').textContent}\n${line}${data ? `\n${typeof data === 'string' ? data : JSON.stringify(data, null, 2)}` : ''}`;
+  $('log').scrollTop = $('log').scrollHeight;
+}
+
+async function api(method, url, body) {
+  const options = { method, headers: {} };
+  if (body !== undefined) {
+    options.headers['content-type'] = 'application/json';
+    options.body = JSON.stringify(body);
+  }
+  const response = await fetch(url, options);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.ok === false) {
+    const error = new Error(data?.error?.message || `HTTP ${response.status}`);
+    error.data = data;
+    throw error;
+  }
+  return data;
+}
+
+function pretty(value) {
+  return JSON.stringify(value, null, 2);
+}
+
+function evalCriterion(criterion, answers) {
+  const actual = answers[criterion.question];
+  if ('equals' in criterion || 'eq' in criterion) return actual === (criterion.equals ?? criterion.eq);
+  if (criterion.in) return criterion.in.includes(actual);
+  return Boolean(actual);
+}
+function evalShowWhen(showWhen, answers) {
+  if (!showWhen) return true;
+  if (showWhen.all) return showWhen.all.every((c) => evalCriterion(c, answers));
+  if (showWhen.any) return showWhen.any.some((c) => evalCriterion(c, answers));
+  return evalCriterion(showWhen, answers);
+}
+
+async function loadHealth() {
+  try {
+    const health = await api('GET', '/api/health');
+    $('health-badge').className = 'badge ok';
+    $('health-badge').textContent = `${health.policy} / 表 v${health.activeFormVersion}`;
+  } catch (error) {
+    $('health-badge').className = 'badge err';
+    $('health-badge').textContent = error.message;
+  }
+}
+
+async function loadClasses(selectedId) {
+  const data = await api('GET', '/api/classes');
+  const select = $('draft-class-id');
+  select.innerHTML = '';
+  if (!data.classes.length) {
+    select.innerHTML = '<option value="">（请先创建班级）</option>';
+  }
+  for (const cls of data.classes) {
+    const option = document.createElement('option');
+    option.value = cls.id;
+    option.textContent = `${cls.name} (${cls.id})`;
+    select.appendChild(option);
+  }
+  if (selectedId) select.value = selectedId;
+  $('classes').innerHTML = data.classes.map(renderClassCard).join('') || '<p class="hint">还没有班级。</p>';
+  return data.classes;
+}
+
+function renderClassCard(cls) {
+  const stations = cls.stations.map((s) => `
+    <div class="station ${s.available ? '' : 'taken'}">
+      <strong>${s.label} <span class="pill">${s.id}</span></strong>
+      <span class="badge ${s.available ? 'ok' : 'err'}">${s.available ? '空' : '已占'}</span>
+      ${s.occupancy ? `<div class="hint">${s.occupancy.personName}<br>${s.occupancy.enrollmentNumber}</div>` : ''}
+    </div>`).join('');
+  const pairs = cls.pairGroups.map((p) => `
+    <div class="pair ${p.canBookPair ? '' : 'blocked'}">
+      可结伴 ${p.stationIds.join(' + ')}：<strong>${p.canBookPair ? '两台皆空，可领双人单' : '至少一台已占，不能拆配'}</strong>
+    </div>`).join('');
+  return `<div style="border-top:1px solid var(--line);padding-top:10px;margin-top:10px">
+    <div class="row" style="justify-content:space-between">
+      <strong>${cls.name} <span class="pill">${cls.id}</span></strong>
+      <span class="pill">空台：${cls.availableStationIds.join(', ') || '无'}</span>
+    </div>
+    <div class="grid3" style="margin-top:8px">${stations}</div>
+    ${pairs || '<p class="hint">未公布可结伴组。</p>'}
+  </div>`;
+}
+
+async function createDemoClass() {
+  const id = `web3-${Date.now()}`;
+  try {
+    const result = await api('POST', '/api/classes', {
+      id,
+      name: '网页演示三台班',
+      stationCount: 3,
+      pairGroups: [['S1', 'S2']],
+    });
+    log('已创建班级', result.class.id);
+    await loadClasses(result.class.id);
+  } catch (error) { log('创建班级失败', error.data || error.message); }
+}
+
+async function createCustomClass() {
+  try {
+    const pairGroups = JSON.parse($('class-pairs').value || '[]');
+    const result = await api('POST', '/api/classes', {
+      id: $('class-id').value.trim() || undefined,
+      name: $('class-name').value.trim() || undefined,
+      stationCount: Number($('class-count').value || 3),
+      pairGroups,
+    });
+    log('已创建自定义班级', result.class.id);
+    await loadClasses(result.class.id);
+  } catch (error) { log('自定义班级失败', error.data || error.message); }
+}
+
+async function newDraft() {
+  const classId = $('draft-class-id').value;
+  if (!classId) return log('请先创建并选择班级');
+  const draft = await api('POST', '/api/drafts', { classId });
+  state.draft = draft.draft;
+  window.history.replaceState({}, '', `/?draft=${draft.draft.id}`);
+  $('open-draft-id').value = draft.draft.id;
+  $('confirm-target-draft').value = draft.draft.id;
+  renderDraft();
+  log('已领取草稿，固定表单版本', { id: draft.draft.id, formVersion: draft.draft.formVersion });
+}
+
+async function openDraft(draftId = $('open-draft-id').value.trim()) {
+  if (!draftId) return;
+  try {
+    const data = await api('GET', `/api/drafts/${encodeURIComponent(draftId)}`);
+    state.draft = data.draft;
+    $('open-draft-id').value = draftId;
+    $('confirm-target-draft').value = draftId;
+    window.history.replaceState({}, '', `/?draft=${draftId}`);
+    renderDraft();
+    log('已打开草稿', { id: draftId, formVersion: data.draft.formVersion, canContinue: data.draft.canContinue });
+  } catch (error) {
+    log('打开草稿失败', error.data || error.message);
+  }
+}
+
+function fieldElement(q, value, stale) {
+  const wrap = document.createElement('label');
+  wrap.className = 'field';
+  wrap.dataset.field = q.key;
+  const label = document.createElement('span');
+  label.className = 'label';
+  label.textContent = `${q.title}${q.required ? ' *' : ''}`;
+  wrap.appendChild(label);
+
+  let input;
+  if (q.type === 'textarea') {
+    input = document.createElement('textarea');
+    input.dataset.key = q.key;
+    if (value !== undefined && !stale) input.value = value;
+    if (stale) input.placeholder = `旧答复“${String(state.draft.rawAnswers[q.key] ?? '')}”已不能充当新答复，请重新填写`;
+    wrap.appendChild(input);
+  } else if (q.type === 'choice') {
+    input = document.createElement('select');
+    input.dataset.key = q.key;
+    const empty = document.createElement('option');
+    empty.value = ''; empty.textContent = '请选择…';
+    input.appendChild(empty);
+    for (const option of q.options || []) {
+      const opt = document.createElement('option');
+      opt.value = option.value; opt.textContent = option.label;
+      if (value === option.value) opt.selected = true;
+      input.appendChild(opt);
+    }
+    wrap.appendChild(input);
+  } else if (q.type === 'boolean' || q.type === 'consent') {
+    wrap.classList.add('inline-check');
+    input = document.createElement('input');
+    input.type = 'checkbox';
+    input.dataset.key = q.key;
+    if (value === true) input.checked = true;
+    const box = document.createElement('span');
+    box.textContent = q.description || (q.type === 'consent' ? '勾选表示同意' : '是');
+    wrap.prepend(input);
+    wrap.appendChild(box);
+  } else {
+    input = document.createElement('input');
+    input.type = 'text';
+    input.dataset.key = q.key;
+    if (value !== undefined && !stale) input.value = value;
+    if (stale) input.placeholder = `旧答复“${String(state.draft.rawAnswers[q.key] ?? '')}”已失效，请重新填写`;
+    wrap.appendChild(input);
+  }
+
+  if (q.description && q.type !== 'boolean' && q.type !== 'consent') {
+    const hint = document.createElement('div');
+    hint.className = 'hint';
+    hint.textContent = q.description;
+    wrap.appendChild(hint);
+  }
+  if (stale) {
+    const note = document.createElement('div');
+    note.className = 'stale-note';
+    note.textContent = '该题曾填写，但显示条件/前答已变化；旧答案未计入“真正生效的答复”。';
+    wrap.appendChild(note);
+  }
+  const error = state.draft.validation?.errors?.find((e) => e.key === q.key);
+  if (error) {
+    const note = document.createElement('div');
+    note.className = 'error-text';
+    note.textContent = error.message;
+    wrap.appendChild(note);
+  }
+  return wrap;
+}
+
+function renderDraft() {
+  const draft = state.draft;
+  if (!draft) return;
+  $('draft-panel').hidden = false;
+  $('draft-version-badge').textContent = `固定：${draft.form.formId} v${draft.formVersion}`;
+  $('draft-policy-note').textContent = `${draft.form.title}。${draft.form.terms?.title ?? ''}：${draft.form.terms?.body ?? ''}`;
+  $('draft-summary').innerHTML = `
+    <p>草稿 <code>${draft.id}</code> · 班级 <code>${draft.classId}</code> ·
+    <span class="badge ${draft.canContinue ? 'ok' : 'err'}">${draft.status}/${draft.expired ? '已到期' : '可续填'}</span></p>
+    <p class="hint">到期时间：${new Date(draft.expiresAt).toLocaleString()}；目标修订：${draft.targetRevision}</p>`;
+
+  const form = $('answer-form');
+  form.innerHTML = '';
+  const staleKeys = new Set((draft.validation?.staleAnswers || []).map((x) => x.key));
+  for (const q of draft.form.questions) {
+    form.appendChild(fieldElement(q, draft.effectiveAnswers[q.key], staleKeys.has(q.key)));
+  }
+  for (const section of draft.form.sections || []) {
+    const fieldset = document.createElement('fieldset');
+    fieldset.dataset.sectionKey = section.key;
+    fieldset.style.border = '1px solid var(--line)';
+    fieldset.style.borderRadius = '12px';
+    fieldset.style.padding = '12px';
+    const legend = document.createElement('legend');
+    legend.textContent = section.title;
+    fieldset.appendChild(legend);
+    const desc = document.createElement('p');
+    desc.className = 'hint';
+    desc.textContent = section.description || '';
+    fieldset.appendChild(desc);
+    for (const q of section.questions) {
+      fieldset.appendChild(fieldElement(q, draft.effectiveAnswers[q.key], staleKeys.has(q.key)));
+    }
+    form.appendChild(fieldset);
+  }
+  $('effective-json').textContent = pretty(draft.effectiveAnswers);
+  applyClientVisibility();
+}
+
+function readAllDomAnswers() {
+  const answers = {};
+  document.querySelectorAll('#answer-form [data-key]').forEach((el) => {
+    const key = el.dataset.key;
+    if (el.type === 'checkbox') answers[key] = el.checked;
+    else answers[key] = el.value;
+  });
+  return answers;
+}
+
+function applyClientVisibility() {
+  if (!state.draft) return;
+  const answers = readAllDomAnswers();
+  for (const section of state.draft.form.sections || []) {
+    const el = document.querySelector(`[data-section-key="${section.key}"]`);
+    if (el) el.hidden = !evalShowWhen(section.showWhen, answers);
+  }
+}
+
+function collectVisibleAnswers() {
+  const answers = {};
+  document.querySelectorAll('#answer-form [data-key]').forEach((el) => {
+    const field = el.closest('[data-field]');
+    const hiddenAncestor = el.closest('fieldset[hidden]') || (field && field.hidden);
+    if (hiddenAncestor) return;
+    const key = el.dataset.key;
+    if (el.type === 'checkbox') answers[key] = el.checked;
+    else answers[key] = el.value;
+  });
+  return answers;
+}
+
+async function saveDraft() {
+  if (!state.draft) return;
+  try {
+    applyClientVisibility();
+    const answers = collectVisibleAnswers();
+    const data = await api('PATCH', `/api/drafts/${state.draft.id}`, { answers });
+    state.draft = data.draft;
+    $('confirm-target-draft').value = state.draft.id;
+    renderDraft();
+    log('草稿已保存；服务端已重算可见性与生效答复', { effective: data.draft.effectiveAnswers, stale: data.draft.validation.staleAnswers });
+  } catch (error) { log('保存失败', error.data || error.message); }
+}
+
+async function issueInvitation() {
+  if (!state.draft) return;
+  try {
+    await saveDraft();
+    const data = await api('POST', `/api/drafts/${state.draft.id}/invitations`, {});
+    state.invitation = data.invitation;
+    $('invitation-id').value = data.invitation.id;
+    $('invitation-token').value = data.invitation.token;
+    const url = `${location.origin}${data.invitationUrl}`;
+    log('同伴邀请已生成（换报名对象会使它作废）', { id: data.invitation.id, url });
+    $('companion-result').textContent = `邀请链接：${url}`;
+  } catch (error) { log('生成邀请失败', error.data || error.message); }
+}
+
+async function confirmCompanion() {
+  const invitationId = $('invitation-id').value.trim();
+  const token = $('invitation-token').value.trim();
+  const targetDraftId = $('confirm-target-draft').value.trim();
+  try {
+    const data = await api('POST', `/api/invitations/${invitationId}/confirm`, {
+      token,
+      draftId: targetDraftId || undefined,
+      companionName: $('companion-name').value.trim() || undefined,
+      consent: $('companion-consent').checked,
+    });
+    $('companion-result').textContent = pretty(data.receipt);
+    $('attach-receipt-id').value = data.receipt.id;
+    log(data.warning || '同伴回执有效并已自动关联当前草稿', data.receipt);
+    if (data.attachedToDraftId === state.draft?.id) await openDraft(state.draft.id);
+  } catch (error) {
+    $('companion-result').textContent = pretty(error.data || { message: error.message });
+    log('同伴确认失败', error.data || error.message);
+  }
+}
+
+async function attachReceipt() {
+  if (!state.draft) return;
+  try {
+    const receiptId = $('attach-receipt-id').value.trim();
+    const data = await api('PATCH', `/api/drafts/${state.draft.id}`, { companionReceiptId: receiptId });
+    state.draft = data.draft;
+    renderDraft();
+    log('已关联回执；若它确认的是另一张草稿，递交时会被拒绝且不占台', receiptId);
+  } catch (error) { log('关联回执失败', error.data || error.message); }
+}
+
+function submitBody() {
+  return {
+    idempotencyKey: $('submit-idem').value.trim() || newIdemKey(),
+    stationId: $('submit-station').value.trim() || undefined,
+    pairGroupId: $('submit-pair-group').value.trim() || undefined,
+  };
+}
+
+async function submitDraft(repeat = false) {
+  if (!state.draft) return log('请先打开草稿');
+  try {
+    const body = repeat && state.lastSubmitBody ? state.lastSubmitBody : submitBody();
+    state.lastSubmitBody = body;
+    const data = await api('POST', `/api/drafts/${state.draft.id}/submit`, body);
+    state.lastOrder = data.order;
+    state.draft.status = 'submitted';
+    $('order-result').textContent = pretty({
+      replayed: data.replayed,
+      replayReason: data.replayReason,
+      id: data.order.id,
+      orderNumber: data.order.orderNumber,
+      formVersion: data.order.formVersion,
+      enrollmentNumbers: data.order.enrollmentNumbers,
+      seats: data.order.seats,
+    });
+    $('counter-query').value = data.order.id;
+    log(data.replayed ? '重复递交返回原单，没有新增席位' : '递交成功，席位已固定', data.order.seats);
+    await loadClasses(state.draft.classId);
+    await openDraft(state.draft.id);
+  } catch (error) {
+    $('order-result').textContent = pretty(error.data || { message: error.message });
+    log('递交被拒绝（未占台或未新增台位）', error.data || error.message);
+    await loadClasses(state.draft.classId).catch(() => {});
+  }
+}
+
+function renderCounter(order) {
+  const c = order.counter;
+  const qa = c.effectiveQa.map((item) => `<div class="qa">
+    <div class="q">${item.sectionTitle ? `[${item.sectionTitle}] ` : ''}${item.title}</div>
+    <div>${typeof item.value === 'boolean' ? (item.value ? '是/同意' : '否') : String(item.value ?? '—')}</div>
+  </div>`).join('');
+  const people = c.seatedPeople.map((p) => `
+    <div class="station taken"><strong>${p.stationLabel} ${p.stationId}</strong>
+      <div>${p.name} · <span class="pill">${p.role}</span></div>
+      <div class="hint">入班号：${p.enrollmentNumber}</div>
+    </div>`).join('');
+  $('counter-view').innerHTML = `
+    <div class="row" style="justify-content:space-between">
+      <div><strong>${order.orderNumber}</strong> <span class="pill">${order.kind}</span>
+      <span class="badge ok">${order.status}</span></div>
+      <span class="badge">表单 v${c.formVersion.version}</span>
+    </div>
+    <p class="hint">${c.formVersion.title} · 条款：${c.formVersion.terms?.code ?? ''}</p>
+    <h3>两人入班号</h3>
+    <div class="pill-list">${c.enrollmentNumbers.map((n) => `<span class="pill">${n}</span>`).join('')}</div>
+    <h3>实际就坐</h3><div class="grid3">${people}</div>
+    <h3>真正生效的答复（不含隐藏旧答案）</h3>${qa}`;
+}
+
+async function counterQuery() {
+  const query = $('counter-query').value.trim();
+  if (!query) return;
+  try {
+    const url = query.startsWith('ENR-')
+      ? `/api/counter/enrollments/${encodeURIComponent(query)}`
+      : `/api/counter/orders/${encodeURIComponent(query)}`;
+    const order = await api('GET', url);
+    renderCounter(order);
+    log('柜台查询成功', { formVersion: order.formVersion, enrollmentNumbers: order.enrollmentNumbers });
+  } catch (error) {
+    $('counter-view').innerHTML = `<span class="badge err">${error.message}</span>`;
+    log('柜台查询失败', error.data || error.message);
+  }
+}
+
+async function loadForms() {
+  const data = await api('GET', '/api/forms');
+  $('forms-json').textContent = data.forms.map((f) => `v${f.version}: ${f.title}\n  questions: ${f.questions.map((q) => q.key).join(', ')}`).join('\n\n');
+}
+
+async function publishSplit() {
+  try {
+    const data = await api('POST', '/api/admin/forms/publish-split', {});
+    log(data.alreadyPublished ? '拆分版已发布过' : '新表已发布：旧题已拆分', data.form.version);
+    await loadForms();
+    await loadHealth();
+  } catch (error) { log('发布失败', error.data || error.message); }
+}
+
+async function runContinuationDemo() {
+  try {
+    log('--- 开始网络续填演示 ---');
+    const classId = `continue-${Date.now()}`;
+    await api('POST', '/api/classes', { id: classId, stationCount: 3, pairGroups: [['S1', 'S2']] });
+    const oldDraft = await api('POST', '/api/drafts', {
+      classId,
+      formVersion: 1,
+      answers: { guestName: '上午客人', visitedLab: true, generalConsent: true },
+    });
+    log('1) 未交草稿已按上午的 v1 旧表领取', oldDraft.draft.id);
+
+    const published = await api('POST', '/api/admin/forms/publish-split', {});
+    log('2) 管理员发布拆分新表，当前版本 v' + published.form.version);
+
+    const continued = await api('PATCH', `/api/drafts/${oldDraft.draft.id}`, {
+      answers: { contact: 'evening-continue@example.test' },
+    });
+    log('3) 晚上从旧草稿续填成功；它仍固定 v1，旧题 visitedLab 仍有效', {
+      formVersion: continued.draft.formVersion,
+      visitedLab: continued.draft.effectiveAnswers.visitedLab,
+      contact: continued.draft.effectiveAnswers.contact,
+    });
+
+    const newDraft = await api('POST', '/api/drafts', { classId });
+    log('4) 新客人领取的草稿自动用 v' + newDraft.draft.formVersion + '，包含拆分题', newDraft.draft.form.questions.map((q) => q.key));
+
+    await loadClasses(classId);
+    await openDraft(oldDraft.draft.id);
+    log('--- 续填演示完成：页面已打开适合所选“原表原办”办法的旧草稿 ---');
+  } catch (error) {
+    log('续填演示失败', error.data || error.message);
+  }
+}
+
+async function runAcceptanceDemo() {
+  try {
+    log('--- 开始核心验收网络演示 ---');
+    const suffix = Date.now();
+    const classA = `ok-${suffix}`;
+    const classWrong = `wrong-${suffix}`;
+    const classBlock = `block-${suffix}`;
+    for (const id of [classA, classWrong, classBlock]) {
+      await api('POST', '/api/classes', { id, stationCount: 3, pairGroups: [['S1', 'S2']] });
+    }
+    const answers = {
+      guestName: '阿夜', contact: 'aye@example.test', attendanceMode: 'pair', generalConsent: true,
+      partnerName: '小校', partnerContact: 'xiao@example.test', pairWorkPlan: '复核与操作', pairConsent: true,
+    };
+
+    const d1 = (await api('POST', '/api/drafts', { classId: classA, answers })).draft;
+    const inv1 = (await api('POST', `/api/drafts/${d1.id}/invitations`, {})).invitation;
+    const rcp1 = (await api('POST', `/api/invitations/${inv1.id}/confirm`, { token: inv1.token, consent: true, companionName: '小校' })).receipt;
+    const order1 = await api('POST', `/api/drafts/${d1.id}/submit`, { idempotencyKey: `demo-${suffix}` });
+    log('验收1 双人单成功', { seats: order1.order.seats.map((s) => [s.stationId, s.personName, s.enrollmentNumber]) });
+    const repeat1 = await api('POST', `/api/drafts/${d1.id}/submit`, { idempotencyKey: `demo-${suffix}` });
+    log('验收1 重复递交', { replayed: repeat1.replayed, sameOrder: repeat1.order.id === order1.order.id });
+
+    const da = (await api('POST', '/api/drafts', { classId: classWrong, answers })).draft;
+    const db = (await api('POST', '/api/drafts', { classId: classWrong, answers })).draft;
+    const invW = (await api('POST', `/api/drafts/${da.id}/invitations`, {})).invitation;
+    const rcpW = (await api('POST', `/api/invitations/${invW.id}/confirm`, { token: invW.token, draftId: db.id, consent: true })).receipt;
+    await api('PATCH', `/api/drafts/${da.id}`, { companionReceiptId: rcpW.id });
+    let wrongBlocked = false;
+    try {
+      await api('POST', `/api/drafts/${da.id}/submit`, {});
+    } catch (error) {
+      wrongBlocked = error.data?.error?.code === 'COMPANION_RECEIPT_FOR_OTHER_DRAFT';
+    }
+    log('验收2 同伴回执确认另一张草稿时，本单不占台', { blocked: wrongBlocked, receiptId: rcpW.id });
+
+    const solo = (await api('POST', '/api/drafts', {
+      classId: classBlock,
+      answers: { guestName: '散客', contact: 'solo@example.test', attendanceMode: 'solo', generalConsent: true },
+    })).draft;
+    await api('POST', `/api/drafts/${solo.id}/submit`, { stationId: 'S1' });
+    const dp = (await api('POST', '/api/drafts', { classId: classBlock, answers })).draft;
+    const invP = (await api('POST', `/api/drafts/${dp.id}/invitations`, {})).invitation;
+    await api('POST', `/api/invitations/${invP.id}/confirm`, { token: invP.token, consent: true, companionName: '小校' });
+    let pairBlocked = false;
+    try {
+      await api('POST', `/api/drafts/${dp.id}/submit`, {});
+    } catch (error) {
+      pairBlocked = error.data?.error?.code === 'PAIR_STATIONS_UNAVAILABLE';
+    }
+    const cls = await api('GET', `/api/classes/${classBlock}`);
+    log('验收3 一号台被散客领走后，三号虽空也不能与二号凑双', {
+      pairBlocked,
+      free: cls.class.availableStationIds,
+      pairGroups: cls.class.pairGroups.map((p) => ({ id: p.id, canBookPair: p.canBookPair })),
+    });
+    await loadClasses();
+    log('--- 核心验收演示完成；重启服务后可再次点击“用同一请求重复递交”验证持久化幂等 ---');
+  } catch (error) {
+    log('验收演示失败', error.data || error.message);
+  }
+}
+
+$('btn-create-demo-class').addEventListener('click', createDemoClass);
+$('btn-create-custom-class').addEventListener('click', createCustomClass);
+$('btn-load-classes').addEventListener('click', () => loadClasses().catch((e) => log(e.message)));
+$('btn-new-draft').addEventListener('click', newDraft);
+$('btn-open-draft').addEventListener('click', () => openDraft());
+$('btn-save-draft').addEventListener('click', saveDraft);
+$('btn-issue-invitation').addEventListener('click', issueInvitation);
+$('btn-confirm-companion').addEventListener('click', confirmCompanion);
+$('btn-attach-receipt').addEventListener('click', attachReceipt);
+$('btn-submit').addEventListener('click', () => submitDraft(false));
+$('btn-repeat-submit').addEventListener('click', () => submitDraft(true));
+$('btn-counter-query').addEventListener('click', counterQuery);
+$('btn-publish-split').addEventListener('click', publishSplit);
+$('btn-load-forms').addEventListener('click', loadForms);
+$('btn-continuation-demo').addEventListener('click', runContinuationDemo);
+$('btn-acceptance-demo').addEventListener('click', runAcceptanceDemo);
+$('answer-form').addEventListener('change', (event) => {
+  if (event.target.matches('[data-key="attendanceMode"]')) applyClientVisibility();
+});
+
+(async function init() {
+  await loadHealth();
+  await loadClasses().catch((error) => log('班级加载失败', error.message));
+  await loadForms().catch(() => {});
+  const params = new URLSearchParams(location.search);
+  if (params.get('draft')) await openDraft(params.get('draft'));
+  if (params.get('invitation')) {
+    $('invitation-id').value = params.get('invitation');
+    $('invitation-token').value = params.get('token') || '';
+  }
+  if (params.get('order')) {
+    $('counter-query').value = params.get('order');
+    await counterQuery();
+  }
+})();
+</script>
+</body>
+</html>
