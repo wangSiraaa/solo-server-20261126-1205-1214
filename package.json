@@ -1,0 +1,14 @@
+{
+  "name": "remote-dub-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zero-dependency local HTTP evidence and delivery-sheet service for a remote dubbing stage.",
+  "scripts": {
+    "start": "python3 server.py --host 127.0.0.1 --port 8787 --db data/studio.sqlite3",
+    "demo": "python3 demo.py",
+    "test": "python3 -m unittest -v test_service.py"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
