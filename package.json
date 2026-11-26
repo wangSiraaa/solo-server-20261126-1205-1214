@@ -1,0 +1,15 @@
+{
+  "name": "neighborhood-vending-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local simulation backend for a two-machine / one-maintenance vending shop",
+  "scripts": {
+    "start": "node src/server.js",
+    "demo": "node demo/run-demo.mjs",
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
