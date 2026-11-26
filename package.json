@@ -1,0 +1,16 @@
+{
+  "name": "verified-fit-review-service",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Receipt-verified product reviews and merchant follow-up routing for an accessories mall.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node scripts/e2e.mjs",
+    "e2e": "node scripts/e2e.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

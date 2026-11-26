@@ -1,0 +1,979 @@
+{
+  "meta": {
+    "schemaVersion": 1,
+    "createdAt": "2026-11-26T13:49:39.187Z",
+    "updatedAt": "2026-11-26T13:50:20.219Z"
+  },
+  "counters": {
+    "buyer": 0,
+    "merchant": 0,
+    "product": 0,
+    "order": 0,
+    "unit": 0,
+    "receipt": 2,
+    "review": 0,
+    "addendum": 0,
+    "question": 0,
+    "answer": 1,
+    "event": 32
+  },
+  "products": {
+    "JIA": {
+      "modelCode": "JIA",
+      "name": "甲款 · 开放式耳机",
+      "createdAt": "2026-11-26T13:49:39.188Z"
+    },
+    "YI": {
+      "modelCode": "YI",
+      "name": "乙款 · 入耳式耳机（确认替代品）",
+      "createdAt": "2026-11-26T13:49:39.188Z"
+    },
+    "BING": {
+      "modelCode": "BING",
+      "name": "丙款 · 换件补交示例款",
+      "createdAt": "2026-11-26T13:49:39.188Z"
+    }
+  },
+  "buyers": {
+    "byr_ok": {
+      "id": "byr_ok",
+      "displayName": "乙款实测买家",
+      "token": "buyer_7f9609df-328d-4fd5-b7cb-6eddf92137b0",
+      "answerConsent": true,
+      "note": null,
+      "createdAt": "2026-11-26T13:49:39.426Z"
+    },
+    "byr_corr": {
+      "id": "byr_corr",
+      "displayName": "凭证更正买家",
+      "token": "buyer_77b77b09-b2a6-4440-bb0e-73e5e27a5131",
+      "answerConsent": false,
+      "note": null,
+      "createdAt": "2026-11-26T13:49:39.713Z"
+    },
+    "byr_decline": {
+      "id": "byr_decline",
+      "displayName": "不愿追访买家",
+      "token": "buyer_8d4fb79c-bc9e-45bf-a185-23f242869d0d",
+      "answerConsent": false,
+      "note": null,
+      "createdAt": "2026-11-26T13:49:39.846Z"
+    },
+    "byr_two": {
+      "id": "byr_two",
+      "displayName": "两件分批买家",
+      "token": "buyer_b0f6dbc4-5b69-4895-8113-9d3f90b36d5f",
+      "answerConsent": false,
+      "note": null,
+      "createdAt": "2026-11-26T13:49:39.902Z"
+    }
+  },
+  "merchants": {
+    "merchant_default": {
+      "id": "merchant_default",
+      "name": "配件商城官方商家账号",
+      "token": "merchant-dev-token",
+      "createdAt": "2026-11-26T13:49:39.188Z"
+    }
+  },
+  "orders": {
+    "ord_ok": {
+      "id": "ord_ok",
+      "buyerId": "byr_ok",
+      "orderedModelCode": "JIA",
+      "status": "PAID",
+      "paymentId": "pay_ord_ok",
+      "paidAmountCents": null,
+      "splitShipment": false,
+      "note": null,
+      "units": [
+        {
+          "id": "u_ok",
+          "orderedModelCode": "JIA",
+          "serialNo": null,
+          "status": "HELD",
+          "createdAt": "2026-11-26T13:49:39.484Z",
+          "actualModelCode": "YI",
+          "heldSince": "2026-11-26T13:49:39.532Z",
+          "currentReceiptId": "rcp_ok"
+        }
+      ],
+      "createdAt": "2026-11-26T13:49:39.485Z"
+    },
+    "ord_corr": {
+      "id": "ord_corr",
+      "buyerId": "byr_corr",
+      "orderedModelCode": "JIA",
+      "status": "PAID",
+      "paymentId": "pay_ord_corr",
+      "paidAmountCents": null,
+      "splitShipment": false,
+      "note": null,
+      "units": [
+        {
+          "id": "u_corr",
+          "orderedModelCode": "JIA",
+          "serialNo": null,
+          "status": "REJECTED",
+          "createdAt": "2026-11-26T13:49:39.744Z",
+          "actualModelCode": "YI",
+          "heldSince": "2026-11-26T13:49:39.785Z",
+          "currentReceiptId": "rcp_corr",
+          "rejectedAt": "2026-11-26T13:49:39.837Z",
+          "rejectionReceiptId": "rcp_reject_direct"
+        }
+      ],
+      "createdAt": "2026-11-26T13:49:39.744Z"
+    },
+    "ord_decline": {
+      "id": "ord_decline",
+      "buyerId": "byr_decline",
+      "orderedModelCode": "YI",
+      "status": "PAID",
+      "paymentId": "pay_ord_decline",
+      "paidAmountCents": null,
+      "splitShipment": false,
+      "note": null,
+      "units": [
+        {
+          "id": "u_decline",
+          "orderedModelCode": "YI",
+          "serialNo": null,
+          "status": "HELD",
+          "createdAt": "2026-11-26T13:49:39.859Z",
+          "actualModelCode": "YI",
+          "heldSince": "2026-11-26T13:49:39.864Z",
+          "currentReceiptId": "rcp_decline"
+        }
+      ],
+      "createdAt": "2026-11-26T13:49:39.859Z"
+    },
+    "ord_two": {
+      "id": "ord_two",
+      "buyerId": "byr_two",
+      "orderedModelCode": "JIA",
+      "status": "PAID",
+      "paymentId": "pay_ord_two",
+      "paidAmountCents": null,
+      "splitShipment": true,
+      "note": null,
+      "units": [
+        {
+          "id": "u_two_1",
+          "orderedModelCode": "JIA",
+          "serialNo": null,
+          "status": "HELD",
+          "createdAt": "2026-11-26T13:49:39.910Z",
+          "actualModelCode": "JIA",
+          "heldSince": "2026-11-26T13:49:39.915Z",
+          "currentReceiptId": "rcp_two_1"
+        },
+        {
+          "id": "u_two_2",
+          "orderedModelCode": "JIA",
+          "serialNo": null,
+          "status": "RETURNED",
+          "createdAt": "2026-11-26T13:49:39.910Z",
+          "actualModelCode": "YI",
+          "heldSince": "2026-11-26T13:49:39.927Z",
+          "currentReceiptId": "rcp_two_2",
+          "returnedAt": "2026-11-26T13:49:39.962Z",
+          "returnReceiptId": "rcp_two_return"
+        },
+        {
+          "id": "u_two_3",
+          "orderedModelCode": "JIA",
+          "actualModelCode": "JIA",
+          "replacesUnitId": "u_two_2",
+          "status": "HELD",
+          "createdAt": "2026-11-26T13:49:39.979Z",
+          "heldSince": "2026-11-26T13:49:39.979Z",
+          "currentReceiptId": "rcp_two_exchange"
+        }
+      ],
+      "createdAt": "2026-11-26T13:49:39.910Z"
+    },
+    "ord_two_more": {
+      "id": "ord_two_more",
+      "buyerId": "byr_two",
+      "orderedModelCode": "JIA",
+      "status": "PAID",
+      "paymentId": "pay_ord_two_more",
+      "paidAmountCents": null,
+      "splitShipment": false,
+      "note": null,
+      "units": [
+        {
+          "id": "u_more",
+          "orderedModelCode": "JIA",
+          "serialNo": null,
+          "status": "HELD",
+          "createdAt": "2026-11-26T13:49:40.040Z",
+          "actualModelCode": "JIA",
+          "heldSince": "2026-11-26T13:49:40.046Z",
+          "currentReceiptId": "rcp_000002"
+        }
+      ],
+      "createdAt": "2026-11-26T13:49:40.040Z"
+    }
+  },
+  "receipts": {
+    "rcp_ok": {
+      "id": "rcp_ok",
+      "type": "ARRIVAL",
+      "typeLabel": "到件/正常签收凭证",
+      "orderId": "ord_ok",
+      "buyerId": "byr_ok",
+      "unitId": "u_ok",
+      "replacesUnitId": null,
+      "exchangeGroupId": null,
+      "modelCode": "YI",
+      "voucherNo": "VCH-OK-YI",
+      "carrier": null,
+      "signer": "本人",
+      "proof": {
+        "signer": "本人",
+        "parcel": "split-1"
+      },
+      "refundAmountCents": null,
+      "refundCurrency": "CNY",
+      "refundNote": null,
+      "note": null,
+      "status": "EFFECTIVE",
+      "occurredAt": "2026-11-26T13:49:39.532Z",
+      "createdAt": "2026-11-26T13:49:39.532Z"
+    },
+    "rcp_corr": {
+      "id": "rcp_corr",
+      "type": "ARRIVAL",
+      "typeLabel": "到件/正常签收凭证",
+      "orderId": "ord_corr",
+      "buyerId": "byr_corr",
+      "unitId": "u_corr",
+      "replacesUnitId": null,
+      "exchangeGroupId": null,
+      "modelCode": "YI",
+      "voucherNo": "vch_rcp_corr",
+      "carrier": null,
+      "signer": null,
+      "proof": {},
+      "refundAmountCents": null,
+      "refundCurrency": "CNY",
+      "refundNote": null,
+      "note": null,
+      "status": "CORRECTED",
+      "occurredAt": "2026-11-26T13:49:39.785Z",
+      "createdAt": "2026-11-26T13:49:39.785Z",
+      "correctedAt": "2026-11-26T13:49:39.809Z",
+      "correctedByReceiptId": "rcp_corr_000001"
+    },
+    "rcp_corr_000001": {
+      "id": "rcp_corr_000001",
+      "type": "REJECTION",
+      "typeLabel": "拒收凭证",
+      "orderId": "ord_corr",
+      "buyerId": "byr_corr",
+      "unitId": "u_corr",
+      "replacesUnitId": null,
+      "exchangeGroupId": null,
+      "modelCode": "YI",
+      "voucherNo": "vch_corr_rcp_corr_000001",
+      "carrier": null,
+      "signer": null,
+      "proof": {
+        "correction": true,
+        "originalVoucherNo": "vch_rcp_corr"
+      },
+      "refundAmountCents": null,
+      "status": "EFFECTIVE",
+      "correctsReceiptId": "rcp_corr",
+      "reason": "复做：单把乙的收货凭证改为拒收",
+      "correctedBy": "e2e-audit",
+      "occurredAt": "2026-11-26T13:49:39.785Z",
+      "createdAt": "2026-11-26T13:49:39.809Z"
+    },
+    "rcp_reject_direct": {
+      "id": "rcp_reject_direct",
+      "type": "REJECTION",
+      "typeLabel": "拒收凭证",
+      "orderId": "ord_corr",
+      "buyerId": "byr_corr",
+      "unitId": "u_corr",
+      "replacesUnitId": null,
+      "exchangeGroupId": null,
+      "modelCode": "YI",
+      "voucherNo": "vch_rcp_reject_direct",
+      "carrier": null,
+      "signer": null,
+      "proof": {},
+      "refundAmountCents": null,
+      "refundCurrency": "CNY",
+      "refundNote": null,
+      "note": null,
+      "status": "EFFECTIVE",
+      "occurredAt": "2026-11-26T13:49:39.837Z",
+      "createdAt": "2026-11-26T13:49:39.837Z"
+    },
+    "rcp_decline": {
+      "id": "rcp_decline",
+      "type": "ARRIVAL",
+      "typeLabel": "到件/正常签收凭证",
+      "orderId": "ord_decline",
+      "buyerId": "byr_decline",
+      "unitId": "u_decline",
+      "replacesUnitId": null,
+      "exchangeGroupId": null,
+      "modelCode": "YI",
+      "voucherNo": "vch_rcp_decline",
+      "carrier": null,
+      "signer": null,
+      "proof": {},
+      "refundAmountCents": null,
+      "refundCurrency": "CNY",
+      "refundNote": null,
+      "note": null,
+      "status": "EFFECTIVE",
+      "occurredAt": "2026-11-26T13:49:39.864Z",
+      "createdAt": "2026-11-26T13:49:39.864Z"
+    },
+    "rcp_two_1": {
+      "id": "rcp_two_1",
+      "type": "ARRIVAL",
+      "typeLabel": "到件/正常签收凭证",
+      "orderId": "ord_two",
+      "buyerId": "byr_two",
+      "unitId": "u_two_1",
+      "replacesUnitId": null,
+      "exchangeGroupId": null,
+      "modelCode": "JIA",
+      "voucherNo": "VCH-TWO-1",
+      "carrier": null,
+      "signer": null,
+      "proof": {},
+      "refundAmountCents": null,
+      "refundCurrency": "CNY",
+      "refundNote": null,
+      "note": null,
+      "status": "EFFECTIVE",
+      "occurredAt": "2026-11-26T13:49:39.915Z",
+      "createdAt": "2026-11-26T13:49:39.915Z"
+    },
+    "rcp_two_2": {
+      "id": "rcp_two_2",
+      "type": "ARRIVAL",
+      "typeLabel": "到件/正常签收凭证",
+      "orderId": "ord_two",
+      "buyerId": "byr_two",
+      "unitId": "u_two_2",
+      "replacesUnitId": null,
+      "exchangeGroupId": null,
+      "modelCode": "YI",
+      "voucherNo": "VCH-TWO-2-YI-SUBSTITUTE",
+      "carrier": null,
+      "signer": null,
+      "proof": {
+        "confirmedSubstitute": true,
+        "buyerConfirmedAt": "2026-11-26T13:49:39.924Z"
+      },
+      "refundAmountCents": null,
+      "refundCurrency": "CNY",
+      "refundNote": null,
+      "note": null,
+      "status": "EFFECTIVE",
+      "occurredAt": "2026-11-26T13:49:39.927Z",
+      "createdAt": "2026-11-26T13:49:39.927Z"
+    },
+    "rcp_two_return": {
+      "id": "rcp_two_return",
+      "type": "RETURN",
+      "typeLabel": "退件/换货收回凭证",
+      "orderId": "ord_two",
+      "buyerId": "byr_two",
+      "unitId": "u_two_2",
+      "replacesUnitId": null,
+      "exchangeGroupId": "exg_two",
+      "modelCode": "YI",
+      "voucherNo": "VCH-TWO-RETURN",
+      "carrier": null,
+      "signer": null,
+      "proof": {},
+      "refundAmountCents": 1,
+      "refundCurrency": "CNY",
+      "refundNote": "退款/补偿金额不决定试用过什么",
+      "note": null,
+      "status": "EFFECTIVE",
+      "occurredAt": "2026-11-26T13:49:39.962Z",
+      "createdAt": "2026-11-26T13:49:39.962Z"
+    },
+    "rcp_two_exchange": {
+      "id": "rcp_two_exchange",
+      "type": "EXCHANGE_DELIVERY",
+      "typeLabel": "换件补交签收凭证",
+      "orderId": "ord_two",
+      "buyerId": "byr_two",
+      "unitId": "u_two_3",
+      "replacesUnitId": "u_two_2",
+      "exchangeGroupId": "exg_two",
+      "modelCode": "JIA",
+      "voucherNo": "VCH-TWO-EXCHANGE",
+      "carrier": null,
+      "signer": null,
+      "proof": {},
+      "refundAmountCents": null,
+      "refundCurrency": "CNY",
+      "refundNote": null,
+      "note": null,
+      "status": "EFFECTIVE",
+      "occurredAt": "2026-11-26T13:49:39.979Z",
+      "createdAt": "2026-11-26T13:49:39.979Z"
+    },
+    "rcp_000002": {
+      "id": "rcp_000002",
+      "type": "ARRIVAL",
+      "typeLabel": "到件/正常签收凭证",
+      "orderId": "ord_two_more",
+      "buyerId": "byr_two",
+      "unitId": "u_more",
+      "replacesUnitId": null,
+      "exchangeGroupId": null,
+      "modelCode": "JIA",
+      "voucherNo": "vch_rcp_000002",
+      "carrier": null,
+      "signer": null,
+      "proof": {},
+      "refundAmountCents": null,
+      "refundCurrency": "CNY",
+      "refundNote": null,
+      "note": null,
+      "status": "EFFECTIVE",
+      "occurredAt": "2026-11-26T13:49:40.046Z",
+      "createdAt": "2026-11-26T13:49:40.046Z"
+    }
+  },
+  "reviews": {
+    "rvw_ok": {
+      "id": "rvw_ok",
+      "buyerId": "byr_ok",
+      "modelCode": "YI",
+      "orderId": "ord_ok",
+      "receiptId": "rcp_ok",
+      "rating": 5,
+      "title": "乙款佩戴稳固",
+      "body": "UNIQUE_OK_BODY 我确实收到替代品乙，发文时仍持有。",
+      "status": "PUBLISHED",
+      "publishedAt": "2026-11-26T13:49:39.554Z",
+      "experiencedAt": "2026-11-26T13:49:39.554Z",
+      "answerConsent": true,
+      "addenda": [],
+      "createdAt": "2026-11-26T13:49:39.554Z"
+    },
+    "rvw_corr": {
+      "id": "rvw_corr",
+      "buyerId": "byr_corr",
+      "modelCode": "YI",
+      "orderId": "ord_corr",
+      "receiptId": "rcp_corr",
+      "rating": 5,
+      "title": null,
+      "body": "UNIQUE_CORR_BODY 这篇之后会因为改成拒收而失去依据。",
+      "status": "WITHHELD",
+      "publishedAt": "2026-11-26T13:49:39.794Z",
+      "experiencedAt": "2026-11-26T13:49:39.794Z",
+      "answerConsent": false,
+      "addenda": [],
+      "createdAt": "2026-11-26T13:49:39.794Z",
+      "withheldAt": "2026-11-26T13:49:39.785Z",
+      "withholdReason": "该收货登记已更正为拒收，不能证明买家曾收到此款",
+      "withholdCode": "RECEIPT_CORRECTED_TO_REJECTION",
+      "invalidatedByCorrectionId": "rcp_corr_000001"
+    },
+    "rvw_decline": {
+      "id": "rvw_decline",
+      "buyerId": "byr_decline",
+      "modelCode": "YI",
+      "orderId": "ord_decline",
+      "receiptId": "rcp_decline",
+      "rating": 5,
+      "title": null,
+      "body": "UNIQUE_DECLINE_BODY 体验可以看，但我不回答商家追问。",
+      "status": "PUBLISHED",
+      "publishedAt": "2026-11-26T13:49:39.875Z",
+      "experiencedAt": "2026-11-26T13:49:39.875Z",
+      "answerConsent": false,
+      "addenda": [],
+      "createdAt": "2026-11-26T13:49:39.876Z"
+    },
+    "rvw_jia_first": {
+      "id": "rvw_jia_first",
+      "buyerId": "byr_two",
+      "modelCode": "JIA",
+      "orderId": "ord_two",
+      "receiptId": "rcp_two_1",
+      "rating": 5,
+      "title": "第一件甲款首测",
+      "body": "UNIQUE_JIA_BODY 第一件甲款一直留在我手里。",
+      "status": "PUBLISHED",
+      "publishedAt": "2026-11-26T13:49:39.932Z",
+      "experiencedAt": "2026-11-26T13:49:39.932Z",
+      "answerConsent": false,
+      "addenda": [
+        {
+          "id": "add_jia_exchange",
+          "kind": "EXCHANGE",
+          "side": null,
+          "title": "只换走第二件后收到的甲款补交件",
+          "body": "UNIQUE_JIA_ADDENDUM 新补交件是另一个物件，按时间挂追记。",
+          "receiptId": "rcp_two_exchange",
+          "subjectModelCode": "JIA",
+          "sequence": 1,
+          "status": "PUBLISHED",
+          "createdAt": "2026-11-26T13:49:40.003Z"
+        },
+        {
+          "id": "add_jia_side",
+          "kind": "SIDE_SWAP",
+          "side": "left/right",
+          "title": "左右耳调换后的补充",
+          "body": "UNIQUE_SIDE_ADD 调换左右件后，触控位置需要重新适应。",
+          "receiptId": "rcp_two_1",
+          "subjectModelCode": "JIA",
+          "sequence": 2,
+          "status": "PUBLISHED",
+          "createdAt": "2026-11-26T13:49:40.017Z"
+        }
+      ],
+      "createdAt": "2026-11-26T13:49:39.932Z"
+    },
+    "rvw_yi_second": {
+      "id": "rvw_yi_second",
+      "buyerId": "byr_two",
+      "modelCode": "YI",
+      "orderId": "ord_two",
+      "receiptId": "rcp_two_2",
+      "rating": 5,
+      "title": "拆出的乙款",
+      "body": "UNIQUE_YI_TWO_BODY 第二件实际是确认替代品乙。",
+      "status": "PUBLISHED",
+      "publishedAt": "2026-11-26T13:49:39.943Z",
+      "experiencedAt": "2026-11-26T13:49:39.943Z",
+      "answerConsent": false,
+      "addenda": [],
+      "createdAt": "2026-11-26T13:49:39.943Z"
+    }
+  },
+  "questions": {
+    "q_ok": {
+      "id": "q_ok",
+      "reviewId": "rvw_ok",
+      "modelCode": "YI",
+      "buyerId": "byr_ok",
+      "merchantId": "merchant_default",
+      "body": "想补充问：长时间佩戴会压耳吗？",
+      "status": "ANSWERED",
+      "createdAt": "2026-11-26T13:49:39.608Z",
+      "deliveredAt": "2026-11-26T13:49:39.608Z",
+      "openedAt": "2026-11-26T13:49:39.646Z",
+      "answeredAt": "2026-11-26T13:49:39.661Z",
+      "declinedAt": null,
+      "voidedAt": null,
+      "answer": {
+        "id": "ans_000001",
+        "buyerId": "byr_ok",
+        "body": "UNIQUE_OK_ANSWER 六小时略有压感，但可以接受。",
+        "createdAt": "2026-11-26T13:49:39.661Z",
+        "publiclyVisible": true
+      },
+      "publiclyVisible": true,
+      "delivery": {
+        "channel": "BUYER_NORMAL_ACCOUNT_INBOX",
+        "buyerId": "byr_ok",
+        "deliveredAt": "2026-11-26T13:49:39.608Z"
+      },
+      "events": [
+        {
+          "type": "QUESTION_CREATED_FOR_SPECIFIC_REVIEW",
+          "at": "2026-11-26T13:49:39.608Z",
+          "merchantId": "merchant_default"
+        },
+        {
+          "type": "DELIVERED_TO_VERIFIED_REVIEW_AUTHOR_ACCOUNT",
+          "at": "2026-11-26T13:49:39.608Z",
+          "buyerId": "byr_ok"
+        },
+        {
+          "type": "OPENED_FROM_NORMAL_BUYER_ACCOUNT",
+          "at": "2026-11-26T13:49:39.646Z",
+          "buyerId": "byr_ok"
+        },
+        {
+          "type": "ANSWER_RECEIVED_FROM_ROUTED_BUYER_ACCOUNT",
+          "at": "2026-11-26T13:49:39.661Z",
+          "answerId": "ans_000001"
+        }
+      ]
+    },
+    "q_corr": {
+      "id": "q_corr",
+      "reviewId": "rvw_corr",
+      "modelCode": "YI",
+      "buyerId": "byr_corr",
+      "merchantId": "merchant_default",
+      "body": "这条询问尚未回答。",
+      "status": "VOIDED",
+      "createdAt": "2026-11-26T13:49:39.801Z",
+      "deliveredAt": "2026-11-26T13:49:39.801Z",
+      "openedAt": null,
+      "answeredAt": null,
+      "declinedAt": null,
+      "voidedAt": "2026-11-26T13:49:39.785Z",
+      "answer": null,
+      "publiclyVisible": true,
+      "delivery": {
+        "channel": "BUYER_NORMAL_ACCOUNT_INBOX",
+        "buyerId": "byr_corr",
+        "deliveredAt": "2026-11-26T13:49:39.801Z"
+      },
+      "events": [
+        {
+          "type": "QUESTION_CREATED_FOR_SPECIFIC_REVIEW",
+          "at": "2026-11-26T13:49:39.801Z",
+          "merchantId": "merchant_default"
+        },
+        {
+          "type": "DELIVERED_TO_VERIFIED_REVIEW_AUTHOR_ACCOUNT",
+          "at": "2026-11-26T13:49:39.801Z",
+          "buyerId": "byr_corr"
+        },
+        {
+          "type": "QUESTION_VOIDED_BY_RECEIPT_CORRECTION",
+          "at": "2026-11-26T13:49:39.785Z",
+          "correctionId": "rcp_corr_000001"
+        }
+      ],
+      "voidReason": "UNDERLYING_RECEIPT_CORRECTED",
+      "voidExplanation": "旧刊收货依据已更正；询问随旧刊冻结，不会转投另一款或另一个买家。"
+    },
+    "q_decline": {
+      "id": "q_decline",
+      "reviewId": "rvw_decline",
+      "modelCode": "YI",
+      "buyerId": "byr_decline",
+      "merchantId": "merchant_default",
+      "body": "可以追问吗？",
+      "status": "DECLINED",
+      "createdAt": "2026-11-26T13:49:39.881Z",
+      "deliveredAt": "2026-11-26T13:49:39.881Z",
+      "openedAt": null,
+      "answeredAt": null,
+      "declinedAt": "2026-11-26T13:49:39.888Z",
+      "voidedAt": null,
+      "answer": null,
+      "publiclyVisible": true,
+      "delivery": {
+        "channel": "BUYER_NORMAL_ACCOUNT_INBOX",
+        "buyerId": "byr_decline",
+        "deliveredAt": "2026-11-26T13:49:39.881Z"
+      },
+      "events": [
+        {
+          "type": "QUESTION_CREATED_FOR_SPECIFIC_REVIEW",
+          "at": "2026-11-26T13:49:39.881Z",
+          "merchantId": "merchant_default"
+        },
+        {
+          "type": "DELIVERED_TO_VERIFIED_REVIEW_AUTHOR_ACCOUNT",
+          "at": "2026-11-26T13:49:39.881Z",
+          "buyerId": "byr_decline"
+        },
+        {
+          "type": "BUYER_DECLINED_QUESTION",
+          "at": "2026-11-26T13:49:39.888Z",
+          "reason": "买家拒收后续询问"
+        }
+      ],
+      "declineReason": "买家拒收后续询问"
+    }
+  },
+  "events": [
+    {
+      "id": "evt_000001",
+      "type": "buyer.created",
+      "at": "2026-11-26T13:49:39.426Z",
+      "buyerId": "byr_ok",
+      "answerConsent": true
+    },
+    {
+      "id": "evt_000002",
+      "type": "order.created",
+      "at": "2026-11-26T13:49:39.485Z",
+      "orderId": "ord_ok",
+      "buyerId": "byr_ok",
+      "unitCount": 1
+    },
+    {
+      "id": "evt_000003",
+      "type": "ARRIVAL",
+      "at": "2026-11-26T13:49:39.532Z",
+      "receiptId": "rcp_ok",
+      "orderId": "ord_ok",
+      "unitId": "u_ok",
+      "modelCode": "YI"
+    },
+    {
+      "id": "evt_000004",
+      "type": "review.published",
+      "at": "2026-11-26T13:49:39.554Z",
+      "reviewId": "rvw_ok",
+      "buyerId": "byr_ok",
+      "modelCode": "YI",
+      "receiptId": "rcp_ok"
+    },
+    {
+      "id": "evt_000005",
+      "type": "question.sent",
+      "at": "2026-11-26T13:49:39.608Z",
+      "questionId": "q_ok",
+      "reviewId": "rvw_ok",
+      "buyerId": "byr_ok",
+      "routedBy": "review.receiptId -> receipt.buyerId / review.buyerId"
+    },
+    {
+      "id": "evt_000006",
+      "type": "question.opened",
+      "at": "2026-11-26T13:49:39.646Z",
+      "questionId": "q_ok",
+      "buyerId": "byr_ok"
+    },
+    {
+      "id": "evt_000007",
+      "type": "question.answered",
+      "at": "2026-11-26T13:49:39.661Z",
+      "questionId": "q_ok",
+      "answerId": "ans_000001",
+      "buyerId": "byr_ok"
+    },
+    {
+      "id": "evt_000008",
+      "type": "buyer.created",
+      "at": "2026-11-26T13:49:39.713Z",
+      "buyerId": "byr_corr",
+      "answerConsent": false
+    },
+    {
+      "id": "evt_000009",
+      "type": "order.created",
+      "at": "2026-11-26T13:49:39.744Z",
+      "orderId": "ord_corr",
+      "buyerId": "byr_corr",
+      "unitCount": 1
+    },
+    {
+      "id": "evt_000010",
+      "type": "ARRIVAL",
+      "at": "2026-11-26T13:49:39.785Z",
+      "receiptId": "rcp_corr",
+      "orderId": "ord_corr",
+      "unitId": "u_corr",
+      "modelCode": "YI"
+    },
+    {
+      "id": "evt_000011",
+      "type": "review.published",
+      "at": "2026-11-26T13:49:39.794Z",
+      "reviewId": "rvw_corr",
+      "buyerId": "byr_corr",
+      "modelCode": "YI",
+      "receiptId": "rcp_corr"
+    },
+    {
+      "id": "evt_000012",
+      "type": "question.sent",
+      "at": "2026-11-26T13:49:39.801Z",
+      "questionId": "q_corr",
+      "reviewId": "rvw_corr",
+      "buyerId": "byr_corr",
+      "routedBy": "review.receiptId -> receipt.buyerId / review.buyerId"
+    },
+    {
+      "id": "evt_000013",
+      "type": "receipt.corrected",
+      "at": "2026-11-26T13:49:39.810Z",
+      "originalReceiptId": "rcp_corr",
+      "correctionId": "rcp_corr_000001",
+      "correctedType": "REJECTION",
+      "affectedReviews": [
+        {
+          "reviewId": "rvw_corr",
+          "modelCode": "YI",
+          "status": "WITHHELD",
+          "reason": "RECEIPT_CORRECTED_TO_REJECTION",
+          "modelMovedTo": null
+        }
+      ],
+      "voidedQuestions": [
+        "q_corr"
+      ],
+      "withheldAddenda": []
+    },
+    {
+      "id": "evt_000014",
+      "type": "REJECTION",
+      "at": "2026-11-26T13:49:39.837Z",
+      "receiptId": "rcp_reject_direct",
+      "orderId": "ord_corr",
+      "unitId": "u_corr",
+      "modelCode": "YI"
+    },
+    {
+      "id": "evt_000015",
+      "type": "buyer.created",
+      "at": "2026-11-26T13:49:39.846Z",
+      "buyerId": "byr_decline",
+      "answerConsent": false
+    },
+    {
+      "id": "evt_000016",
+      "type": "order.created",
+      "at": "2026-11-26T13:49:39.859Z",
+      "orderId": "ord_decline",
+      "buyerId": "byr_decline",
+      "unitCount": 1
+    },
+    {
+      "id": "evt_000017",
+      "type": "ARRIVAL",
+      "at": "2026-11-26T13:49:39.864Z",
+      "receiptId": "rcp_decline",
+      "orderId": "ord_decline",
+      "unitId": "u_decline",
+      "modelCode": "YI"
+    },
+    {
+      "id": "evt_000018",
+      "type": "review.published",
+      "at": "2026-11-26T13:49:39.876Z",
+      "reviewId": "rvw_decline",
+      "buyerId": "byr_decline",
+      "modelCode": "YI",
+      "receiptId": "rcp_decline"
+    },
+    {
+      "id": "evt_000019",
+      "type": "question.sent",
+      "at": "2026-11-26T13:49:39.881Z",
+      "questionId": "q_decline",
+      "reviewId": "rvw_decline",
+      "buyerId": "byr_decline",
+      "routedBy": "review.receiptId -> receipt.buyerId / review.buyerId"
+    },
+    {
+      "id": "evt_000020",
+      "type": "question.declined",
+      "at": "2026-11-26T13:49:39.888Z",
+      "questionId": "q_decline",
+      "buyerId": "byr_decline"
+    },
+    {
+      "id": "evt_000021",
+      "type": "buyer.created",
+      "at": "2026-11-26T13:49:39.902Z",
+      "buyerId": "byr_two",
+      "answerConsent": false
+    },
+    {
+      "id": "evt_000022",
+      "type": "order.created",
+      "at": "2026-11-26T13:49:39.910Z",
+      "orderId": "ord_two",
+      "buyerId": "byr_two",
+      "unitCount": 2
+    },
+    {
+      "id": "evt_000023",
+      "type": "ARRIVAL",
+      "at": "2026-11-26T13:49:39.915Z",
+      "receiptId": "rcp_two_1",
+      "orderId": "ord_two",
+      "unitId": "u_two_1",
+      "modelCode": "JIA"
+    },
+    {
+      "id": "evt_000024",
+      "type": "ARRIVAL",
+      "at": "2026-11-26T13:49:39.927Z",
+      "receiptId": "rcp_two_2",
+      "orderId": "ord_two",
+      "unitId": "u_two_2",
+      "modelCode": "YI"
+    },
+    {
+      "id": "evt_000025",
+      "type": "review.published",
+      "at": "2026-11-26T13:49:39.932Z",
+      "reviewId": "rvw_jia_first",
+      "buyerId": "byr_two",
+      "modelCode": "JIA",
+      "receiptId": "rcp_two_1"
+    },
+    {
+      "id": "evt_000026",
+      "type": "review.published",
+      "at": "2026-11-26T13:49:39.943Z",
+      "reviewId": "rvw_yi_second",
+      "buyerId": "byr_two",
+      "modelCode": "YI",
+      "receiptId": "rcp_two_2"
+    },
+    {
+      "id": "evt_000027",
+      "type": "RETURN",
+      "at": "2026-11-26T13:49:39.963Z",
+      "receiptId": "rcp_two_return",
+      "orderId": "ord_two",
+      "unitId": "u_two_2",
+      "modelCode": "YI"
+    },
+    {
+      "id": "evt_000028",
+      "type": "EXCHANGE_DELIVERY",
+      "at": "2026-11-26T13:49:39.979Z",
+      "receiptId": "rcp_two_exchange",
+      "orderId": "ord_two",
+      "unitId": "u_two_3",
+      "modelCode": "JIA"
+    },
+    {
+      "id": "evt_000029",
+      "type": "review.addendum",
+      "at": "2026-11-26T13:49:40.003Z",
+      "reviewId": "rvw_jia_first",
+      "addendumId": "add_jia_exchange",
+      "receiptId": "rcp_two_exchange"
+    },
+    {
+      "id": "evt_000030",
+      "type": "review.addendum",
+      "at": "2026-11-26T13:49:40.017Z",
+      "reviewId": "rvw_jia_first",
+      "addendumId": "add_jia_side",
+      "receiptId": "rcp_two_1"
+    },
+    {
+      "id": "evt_000031",
+      "type": "order.created",
+      "at": "2026-11-26T13:49:40.040Z",
+      "orderId": "ord_two_more",
+      "buyerId": "byr_two",
+      "unitCount": 1
+    },
+    {
+      "id": "evt_000032",
+      "type": "ARRIVAL",
+      "at": "2026-11-26T13:49:40.046Z",
+      "receiptId": "rcp_000002",
+      "orderId": "ord_two_more",
+      "unitId": "u_more",
+      "modelCode": "JIA"
+    }
+  ]
+}
