@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>家庭戏水馆替班后台</title>
+  <style>
+    :root {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #17324d;
+      background: #eef7fb;
+    }
+    body { margin: 0; }
+    header {
+      padding: 20px 28px;
+      background: linear-gradient(135deg, #0e7490, #0891b2);
+      color: white;
+      box-shadow: 0 2px 12px #0e749033;
+    }
+    header h1 { margin: 0 0 6px; font-size: 24px; }
+    header p { margin: 0; opacity: .9; }
+    main { padding: 22px 28px; max-width: 1280px; margin: 0 auto; }
+    .toolbar, .grid { display: grid; gap: 16px; }
+    .toolbar { grid-template-columns: 1fr auto auto; align-items: end; margin-bottom: 18px; }
+    label { font-size: 13px; color: #486581; display: grid; gap: 6px; }
+    input {
+      border: 1px solid #bcccdc; border-radius: 10px; padding: 10px 12px;
+      font-size: 14px; min-width: 260px; background: white;
+    }
+    button {
+      border: 0; border-radius: 10px; padding: 10px 16px; background: #0e7490;
+      color: white; font-weight: 700; cursor: pointer;
+    }
+    button.secondary { background: #486581; }
+    button:hover { filter: brightness(1.05); }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card {
+      background: white; border-radius: 18px; padding: 18px;
+      box-shadow: 0 8px 28px #102a4314;
+      min-width: 0;
+    }
+    .card.wide { grid-column: 1 / -1; }
+    h2 { font-size: 17px; margin: 0 0 14px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid #e6eef5; vertical-align: top; }
+    th { color: #627d98; font-weight: 700; background: #f8fbfd; }
+    .badge { display: inline-block; border-radius: 999px; padding: 3px 9px; font-size: 12px; font-weight: 700; }
+    .inside { background: #dcfce7; color: #166534; }
+    .outside, .no_receipt { background: #fee2e2; color: #991b1b; }
+    .prepared { background: #fef9c3; color: #854d0e; }
+    .effective, .consumed, .fulfilled { background: #dcfce7; color: #166534; }
+    .issued, .applied, .approved_sold { background: #dbeafe; color: #1e40af; }
+    pre {
+      background: #0f172a; color: #d9f99d; padding: 14px; border-radius: 12px;
+      overflow: auto; max-height: 420px; font-size: 12px;
+    }
+    .muted { color: #627d98; font-size: 13px; }
+    .ok { color: #15803d; font-weight: 800; }
+    .err { color: #b91c1c; font-weight: 800; }
+    @media (max-width: 900px) { .grid, .toolbar { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>家庭戏水馆 · 中途替班后台</h1>
+    <p>口岸与视线分离 · 实际回条定位 · 名额唯一占用 · 预备交接和过闸兑现分别入账 · SQLite 关机可重开</p>
+  </header>
+  <main>
+    <div class="toolbar">
+      <label>场次 ID
+        <input id="sessionId" value="SESS-MAIN" />
+      </label>
+      <button onclick="load()">刷新答案</button>
+      <button class="secondary" onclick="resetDemo()">重置并播种园区/腕带</button>
+    </div>
+    <p id="health" class="muted">正在连接服务…</p>
+
+    <div class="grid">
+      <section class="card wide">
+        <h2>每人在哪 / 谁实际接下孩子 / 哪次离开已发生</h2>
+        <div id="answer"><span class="muted">运行 <code>./demo.sh</code> 或 <code>python -m family_pool.replay</code> 后刷新。</span></div>
+      </section>
+
+      <section class="card">
+        <h2>三片区域、标明口岸与可见关系</h2>
+        <div id="venue" class="muted"></div>
+      </section>
+
+      <section class="card">
+        <h2>腕带与名额状态</h2>
+        <div id="slots" class="muted"></div>
+      </section>
+
+      <section class="card wide">
+        <h2>入账流水（最新在前）</h2>
+        <div id="ledger"></div>
+      </section>
+
+      <section class="card wide">
+        <h2>原始 /api/state</h2>
+        <pre id="raw">等待加载…</pre>
+      </section>
+    </div>
+  </main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+function badge(v) { return `<span class="badge ${v}">${v}</span>`; }
+function zhLocation(p) {
+  if (p.location_kind === 'inside') return `${p.zone_name || p.zone_id}`;
+  if (p.location_kind === 'outside') return '闸外/馆外';
+  return '无实际入区回条';
+}
+async function getJSON(url, options) {
+  const r = await fetch(url, options);
+  const data = await r.json();
+  if (!r.ok) throw new Error(`${data.error}: ${data.message}`);
+  return data;
+}
+async function resetDemo() {
+  if (!confirm('清空当前数据库表并重建三片区域/五条腕带？')) return;
+  await getJSON('/api/demo/reset-and-seed', {method:'POST', headers:{'Content-Type':'application/json'}, body:'{}'});
+  alert('已播种。请运行 replay 创建完整复演场次。');
+  load();
+}
+async function load() {
+  const sid = $('sessionId').value.trim();
+  try {
+    const health = await getJSON('/api/health');
+    $('health').innerHTML = `<span class="ok">● 服务正常</span> ${health.service} ${health.version}`;
+    const state = await getJSON('/api/state' + (sid ? `?session_id=${encodeURIComponent(sid)}` : ''));
+    $('venue').innerHTML = `
+      <table><tr><th>区域</th><td>${state.venue.zones.map(z=>z.name).join(' / ')}</td></tr>
+      <tr><th>标明口岸</th><td>${state.venue.ports.map(p=>p.name).join('<br>')}</td></tr>
+      <tr><th>可见关系</th><td>同区恒可见；额外可见：${state.venue.visibility_edges.map(e=>`${e.zone_a_id} ↔ ${e.zone_b_id}`).join('，') || '无'}</td></tr></table>`;
+    $('slots').innerHTML = `<table><thead><tr><th>成人</th><th>槽位</th><th>孩子</th><th>状态</th><th>用途</th></tr></thead><tbody>
+      ${state.slot_allocations.map(s=>`<tr><td>${s.adult_id}</td><td>#${s.slot_no}</td><td>${s.child_id}</td><td>${badge(s.status)}</td><td>${s.purpose}</td></tr>`).join('')}
+    </tbody></table>`;
+    $('ledger').innerHTML = `<table><thead><tr><th>时间</th><th>类型</th><th>摘要</th><th>关联</th></tr></thead><tbody>
+      ${state.ledger.map(e=>`<tr><td>${e.at}</td><td><code>${e.entry_type}</code></td><td>${e.summary}</td><td>${e.ref_type}:${e.ref_id}</td></tr>`).join('')}
+    </tbody></table>`;
+    $('raw').textContent = JSON.stringify(state.answer || state, null, 2);
+    if (state.answer) renderAnswer(state.answer);
+    else $('answer').innerHTML = '<span class="muted">该场次尚无答案数据。</span>';
+  } catch (e) {
+    $('health').innerHTML = `<span class="err">● ${e.message}</span>`;
+  }
+}
+function renderAnswer(a) {
+  const rows = a.people_locations.map(p => `<tr>
+    <td>${p.display_name}<br><span class="muted">${p.wristband_id} · ${p.role}</span></td>
+    <td>${badge(p.location_kind)} ${zhLocation(p)}</td>
+    <td>${p.receipt_id || '—'}</td>
+  </tr>`).join('');
+  const kids = a.children.map(c => `<tr>
+    <td>${c.display_name}</td>
+    <td>${zhLocation(c.location)}</td>
+    <td><strong>${c.actual_receiver_names.join('、') || '尚无实际接手人'}</strong><br>
+      <span class="muted">IDs: ${c.actual_receiver_ids.join(', ') || '—'}</span></td>
+  </tr>`).join('');
+  const exits = a.gate_exits.map(e=>`<li><code>${e.at}</code> · ${e.display_name}（${e.wristband_id}）经 ${e.id} 出闸，许可 ${e.permit_id}</li>`).join('') || '<li>暂无</li>';
+  const hos = [...a.effective_handovers, ...a.prepared_handovers].map(h=>`<li>${badge(h.status)} ${h.departing_adult_name} → ${h.receiving_adult_name}；槽位 ${(h.children||[]).map(c=>'#'+c.slot_no).join(',')}</li>`).join('');
+  $('answer').innerHTML = `
+    <div style="display:grid;grid-template-columns:1.2fr .8fr;gap:18px">
+      <div><h2 style="font-size:15px">腕带实际位置</h2><table><thead><tr><th>人/腕带</th><th>最新回条</th><th>回条号</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div><h2 style="font-size:15px">孩子与实际接手</h2><table><thead><tr><th>孩子</th><th>位置</th><th>过闸后接手</th></tr></thead><tbody>${kids}</tbody></table>
+      <h2 style="font-size:15px;margin-top:16px">交接状态</h2><ul class="muted" style="padding-left:18px">${hos}</ul>
+      <h2 style="font-size:15px">已发生离开</h2><ul class="muted" style="padding-left:18px">${exits}</ul></div>
+    </div>`;
+}
+load();
+setInterval(load, 5000);
+</script>
+</body>
+</html>

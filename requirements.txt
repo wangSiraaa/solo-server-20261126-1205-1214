@@ -1,0 +1,2 @@
+# Runtime uses only the Python 3.11 standard library (http.server + sqlite3).
+# Unittest is also standard library; no pip packages are required.
