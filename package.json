@@ -1,0 +1,15 @@
+{
+  "name": "community-lost-and-found",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local lost-and-found matching, signing, atomic outbound and restart-safe stock ledger.",
+  "scripts": {
+    "start": "./start.sh",
+    "test": "python3 -m unittest -v tests.test_lostfound",
+    "seed": "python3 app.py --seed-demo --seed-only",
+    "serve": "python3 app.py --seed-demo"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

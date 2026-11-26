@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>社区运动馆失物受理台</title>
+  <style>
+    :root { color-scheme: light; font-family: -apple-system, "Noto Sans SC", "Microsoft YaHei", sans-serif; }
+    body { margin: 0; background: #f5f7fb; color: #172033; }
+    header { background: #0f4c81; color: white; padding: 20px 28px; }
+    header h1 { margin: 0 0 6px; font-size: 22px; }
+    header p { margin: 0; opacity: .86; font-size: 14px; }
+    main { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; padding: 20px; }
+    section { background: white; border: 1px solid #dce3ee; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(16,24,40,.06); }
+    h2 { font-size: 17px; margin: 0 0 12px; }
+    label { display: block; font-size: 13px; margin: 8px 0 4px; color: #475467; }
+    input, select { width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; }
+    button { border: 0; border-radius: 8px; padding: 8px 12px; background: #0f4c81; color: white; cursor: pointer; font-size: 14px; margin: 4px 4px 4px 0; }
+    button.secondary { background: #475467; }
+    button.danger { background: #b42318; }
+    button.good { background: #067647; }
+    button:hover { filter: brightness(1.08); }
+    .row { display: flex; gap: 8px; align-items: end; }
+    .row > div { flex: 1; }
+    pre { background: #101828; color: #e4e7ec; padding: 12px; border-radius: 8px; overflow: auto; max-height: 430px; font-size: 12px; line-height: 1.45; }
+    .hint { font-size: 12px; color: #667085; line-height: 1.5; }
+    .ok { color: #067647; font-weight: 700; }
+    .warn { color: #b54708; font-weight: 700; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>社区运动馆 · 失物受理 / 核对 / 签单 / 出库 / 复查</h1>
+  <p>编号登记、封闭配对、封存检查、复访绑定回答；同一领物凭条并发出库只有一份成功。</p>
+</header>
+
+<main>
+  <section>
+    <h2>示例与轮次</h2>
+    <button onclick="seed(false)">载入海豚壶示例</button>
+    <button class="danger" onclick="seed(true)">重置并重载示例</button>
+    <button class="secondary" onclick="api('/api/rounds')">列出轮次</button>
+    <button class="secondary" onclick="api('/api/stock-check')">库房对号检查</button>
+    <label>round_id</label>
+    <input id="roundId" value="dolphin-complete" />
+    <button onclick="reconcile()">核对</button>
+    <button class="good" onclick="signDeterminate()">签出所有确定申领</button>
+    <p class="hint">
+      示例：<br>
+      dolphin-complete：完整一对一，甲→I-D1，乙必为 I-D2<br>
+      dolphin-unfound：允许未找到壶，甲可签 I-U1，乙不得排除签 I-U2<br>
+      dolphin-both-star：完整配对但两只底记均星，唯一领取消失<br>
+      sealed-check：先“检查 I-K1”再核对<br>
+      revisit-answer：C-R 复访回答“月”
+    </p>
+  </section>
+
+  <section>
+    <h2>普通按号复查（隐私视图）</h2>
+    <label>申领号 / 凭条号 / 实物号 / 检查号</label>
+    <div class="row">
+      <div><input id="trackNo" value="C-A" /></div>
+      <button onclick="track()">复查</button>
+    </div>
+    <p class="hint">申领号只回本人能否领取和下一步，不列暗记或别人的描述。</p>
+    <label>申领人视图快捷号</label>
+    <button class="secondary" onclick="setTrack('C-A')">C-A</button>
+    <button class="secondary" onclick="setTrack('C-B')">C-B</button>
+    <button class="secondary" onclick="setTrack('C-UB')">C-UB</button>
+    <button class="secondary" onclick="setTrack('C-R')">C-R</button>
+  </section>
+
+  <section>
+    <h2>签单</h2>
+    <label>claim_no（留空 item_no 时由核对结果唯一指定）</label>
+    <input id="signClaim" value="C-A" />
+    <label>可选 item_no</label>
+    <input id="signItem" placeholder="通常留空" />
+    <button class="good" onclick="signOne()">核对并签单</button>
+    <p class="hint">有歧义、冲突或登记不完整时，接口返回 422 和下一步，不会签单。</p>
+  </section>
+
+  <section>
+    <h2>两个窗口同时出库</h2>
+    <label>voucher_no</label>
+    <input id="voucherNo" placeholder="P-0001" />
+    <div class="row">
+      <div><label>窗口甲</label><input id="win1" value="W1" /></div>
+      <div><label>窗口乙</label><input id="win2" value="W2" /></div>
+    </div>
+    <button class="good" onclick="outboundOne()">单窗口出库</button>
+    <button class="danger" onclick="raceOutbound()">同一凭条并发出库</button>
+    <p class="hint">并发测试会同时发两个 POST /api/outbound；预期一个 200，另一个 409。</p>
+  </section>
+
+  <section>
+    <h2>封存窗：保管员真实开袋检查</h2>
+    <label>item_no</label>
+    <input id="inspectItem" value="I-K1" />
+    <button onclick="planInspection()">先看检查优先级</button>
+    <button class="good" onclick="inspect()">执行一次真实检查</button>
+    <p class="hint">预算和已用次数在轮次 budgets 中；检查结果只回保管员入口。</p>
+  </section>
+
+  <section>
+    <h2>复访窗：登记两选一约束回答</h2>
+    <label>claim_no</label>
+    <input id="revisitClaim" value="C-R" />
+    <div class="row">
+      <div>
+        <label>feature_key</label>
+        <input id="revisitFeature" value="bottom_mark" />
+      </div>
+      <div>
+        <label>binding answer</label>
+        <select id="revisitAnswer"><option>月</option><option>星</option></select>
+      </div>
+    </div>
+    <button onclick="nextQuestion()">生成当时题目</button>
+    <button class="good" onclick="revisit()">登记本轮回答</button>
+    <button class="secondary" onclick="claimRecord()">查看按序笔录</button>
+    <p class="hint">轮次由服务端按已有记录递增；不能指定/补造 round_no，超过失主愿答轮数返回 409。</p>
+  </section>
+
+  <section style="grid-column: 1 / -1;">
+    <h2>结果</h2>
+    <pre id="out">就绪。先点“载入海豚壶示例”。</pre>
+  </section>
+</main>
+
+<script>
+const out = document.getElementById('out');
+function show(value) {
+  out.textContent = typeof value === 'string' ? value : JSON.stringify(value, null, 2);
+}
+async function request(method, url, body) {
+  const opt = { method, headers: {'Content-Type': 'application/json'} };
+  if (body !== undefined) opt.body = JSON.stringify(body);
+  const resp = await fetch(url, opt);
+  const data = await resp.json().catch(() => ({status: resp.status}));
+  show({http_status: resp.status, ...data});
+  return {resp, data};
+}
+function api(url) { return request('GET', url); }
+function roundId() { return encodeURIComponent(document.getElementById('roundId').value.trim()); }
+function seed(reset) { return request('POST', '/api/admin/seed-dolphins', {reset}); }
+function reconcile() { return api(`/api/rounds/${roundId()}/reconcile`); }
+function signDeterminate() { return request('POST', `/api/rounds/${roundId()}/sign-determinate`, {}); }
+function planInspection() {
+  document.getElementById('roundId').value = 'sealed-check';
+  return api('/api/rounds/sealed-check/plan-inspection');
+}
+function inspect() { return request('POST', '/api/inspections', {item_no: document.getElementById('inspectItem').value.trim(), inspector: '保管员', window_id: 'sealed-desk'}); }
+function nextQuestion() {
+  const c = encodeURIComponent(document.getElementById('revisitClaim').value.trim());
+  document.getElementById('roundId').value = 'revisit-answer';
+  return api(`/api/rounds/revisit-answer/next-question?claim_no=${c}`);
+}
+function revisit() {
+  return request('POST', `/api/claims/${encodeURIComponent(document.getElementById('revisitClaim').value.trim())}/revisit`, {
+    feature_key: document.getElementById('revisitFeature').value.trim(),
+    answer: document.getElementById('revisitAnswer').value,
+    window_id: 'revisit-desk'
+  });
+}
+function claimRecord() {
+  const c = encodeURIComponent(document.getElementById('revisitClaim').value.trim());
+  return api(`/api/claims/${c}/record`);
+}
+function setTrack(v) { document.getElementById('trackNo').value = v; return track(); }
+function track() { return api(`/api/track/${encodeURIComponent(document.getElementById('trackNo').value.trim())}`); }
+function signOne() {
+  return request('POST', '/api/vouchers', {
+    claim_no: document.getElementById('signClaim').value.trim(),
+    item_no: document.getElementById('signItem').value.trim() || undefined,
+    window_id: 'sign-desk'
+  });
+}
+function outboundOne() {
+  return request('POST', '/api/outbound', {
+    voucher_no: document.getElementById('voucherNo').value.trim(),
+    window_id: document.getElementById('win1').value.trim()
+  });
+}
+async function raceOutbound() {
+  const voucher_no = document.getElementById('voucherNo').value.trim();
+  const payload = (w) => request('POST', '/api/outbound', {voucher_no, window_id: w});
+  show('两个窗口正在同时提交...');
+  const results = await Promise.allSettled([
+    payload(document.getElementById('win1').value.trim()),
+    payload(document.getElementById('win2').value.trim())
+  ]);
+  const summary = results.map((r, i) => {
+    if (r.status === 'fulfilled') return {window: i === 0 ? 'W1' : 'W2', http_status: r.value.resp.status, body: r.value.data};
+    return {window: i === 0 ? 'W1' : 'W2', rejected: String(r.reason)};
+  });
+  const wins = summary.filter(x => x.http_status === 200).length;
+  show({successful_handoffs: wins, expected: 1, results: summary});
+}
+</script>
+</body>
+</html>
