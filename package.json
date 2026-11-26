@@ -1,0 +1,17 @@
+{
+  "name": "phonics-review-room",
+  "version": "1.0.0",
+  "description": "Offline-tolerant phonics review service with round-level evidence reconciliation",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:module": "node src/server.js",
+    "demo": "node scripts/demo.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
