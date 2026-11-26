@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>街道清扫合作社后台</title>
+  <style>
+    :root { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif; color: #172033; background: #f4f7fb; }
+    body { margin: 0; }
+    header { background: #173b63; color: white; padding: 20px 28px; }
+    header h1 { margin: 0 0 6px; font-size: 24px; }
+    header p { margin: 0; opacity: .82; }
+    main { max-width: 1180px; margin: 24px auto; padding: 0 20px 60px; display: grid; gap: 18px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+    .card { background: white; border: 1px solid #dce5f0; border-radius: 14px; padding: 18px; box-shadow: 0 8px 24px rgba(23,59,99,.06); }
+    h2 { margin-top: 0; font-size: 18px; }
+    button { border: 0; border-radius: 9px; padding: 10px 14px; background: #1769d2; color: white; font-weight: 700; cursor: pointer; margin: 4px 6px 4px 0; }
+    button.secondary { background: #49627d; }
+    button.ok { background: #16803c; }
+    input { padding: 10px 12px; border: 1px solid #bccada; border-radius: 9px; min-width: 220px; }
+    pre { background: #0f1b2d; color: #d7e6ff; padding: 14px; border-radius: 10px; overflow: auto; max-height: 420px; font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+    th, td { border-bottom: 1px solid #e4ebf4; padding: 8px; text-align: left; vertical-align: top; font-size: 14px; }
+    .badge { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+    .resolved { background: #dcfce7; color: #166534; }
+    .open, .missing { background: #fee2e2; color: #991b1b; }
+    .filled { background: #dcfce7; color: #166534; }
+    .muted { color: #66758a; font-size: 13px; }
+    .yes { color: #b91c1c; font-size: 22px; font-weight: 900; }
+    ul { line-height: 1.7; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>街道清扫合作社 · 本机接单后台</h1>
+  <p>一辆车、三个路口、四家店即可重演；时间均为整数分钟。门面锚定原路段米坐标，重新划段不会产生两份活。</p>
+</header>
+<main>
+  <section class="card">
+    <h2>业务员重演入口</h2>
+    <p>会依次演示：拐角第二面欠扫、北门两米结单、扩一米欠第三米、恢复合同后第二米前抬刷、补扫车与原趟迟报不同到达顺序。</p>
+    <button onclick="rehearse('late-first')">重演：原趟迟报先到</button>
+    <button onclick="rehearse('makeup-first')">重演：补扫报告先到</button>
+    <button class="secondary" onclick="resetSeed()">恢复初始示范数据</button>
+    <span id="runStatus" class="muted"></span>
+    <div id="summary"></div>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h2>店主凭投诉号查询</h2>
+      <input id="complaintNo" value="TS-LIFT" placeholder="例如 TS-EXT 或 TS-LIFT" />
+      <button class="ok" onclick="queryComplaint()">查看哪几米由哪次实扫补齐</button>
+      <p class="muted">重启 Node 服务后数据仍在；投诉号、权利区间和实扫来源均持久化。</p>
+      <div id="complaint"></div>
+    </div>
+    <div class="card">
+      <h2>街图方向说明</h2>
+      <ul>
+        <li><b>L12</b>：巷口 I1 → 拐角 I2，右侧是 CURB_12_R。</li>
+        <li><b>L23</b>：拐角 I2 → 北门 I3，右侧是拐角第二面 CURB_23_R。</li>
+        <li><b>L31</b>：北门 I3 → 巷口 I1，右侧是北门菜站 CURB_31_R。</li>
+        <li>反向 L21/L32/L13 的右侧是对面路缘；反向空驶或无下刷位置不计覆盖。</li>
+        <li>I2 拐角路口不允许掉头；逐段要路时服务端只按已回报位置和合法掉头路口规划。</li>
+      </ul>
+      <button class="secondary" onclick="loadGraph()">查看街图 JSON</button>
+      <pre id="graph" style="display:none"></pre>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>最近一次接口原始结果</h2>
+    <pre id="raw">点击重演或查询后显示。</pre>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+function showRaw(data) { $('raw').textContent = JSON.stringify(data, null, 2); }
+async function post(url, body) {
+  const res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body ?? {}) });
+  const data = await res.json();
+  if (!res.ok) throw data;
+  return data;
+}
+async function rehearse(order) {
+  $('runStatus').textContent = '重演中…';
+  try {
+    const data = await post('/api/rehearsal', { arrivalOrder: order });
+    showRaw(data.summary);
+    const s = data.summary;
+    $('runStatus').textContent = s.ok ? '全部断言通过' : '存在失败断言';
+    $('summary').innerHTML = `
+      <p>巷口车过之后，拐角第二面当时是否欠扫：<span class="yes">${s.openingAnswer}</span></p>
+      <table><tbody>
+        <tr><th>到达顺序</th><td>${s.arrivalOrder}</td></tr>
+        <tr><th>补扫趟次</th><td>${s.makeupTripId}</td></tr>
+        <tr><th>投诉号</th><td>${s.complaintNumbers.map(x => x.complaintNo).join('，')}</td></tr>
+      </tbody></table>
+      <table>${Object.entries(s.assertions).map(([k,v]) => `<tr><td>${k}</td><td class="badge ${v?'resolved':'open'}">${v?'通过':'失败'}</td></tr>`).join('')}</table>`;
+    $('complaintNo').value = 'TS-EXT';
+    await queryComplaint();
+  } catch (e) { $('runStatus').textContent = '失败：' + (e.message || e.error); showRaw(e); }
+}
+async function resetSeed() {
+  await post('/api/reset', {});
+  $('runStatus').textContent = '已恢复一辆车、三个路口、四家店。';
+}
+function renderComplaint(c) {
+  const rows = c.claims.flatMap(claim => claim.meters.map(m => `
+    <tr>
+      <td>${claim.id}<div class="muted">${claim.curbId} 合同区间 [${claim.fromM}, ${claim.toM})</div></td>
+      <td>${m.label}</td>
+      <td><span class="badge ${m.status}">${m.status === 'filled' ? '已补齐' : '仍欠'}</span></td>
+      <td>${m.filledBy.length ? m.filledBy.map(f => `<div><b>${f.tripId}</b> / ${f.reportId}<br><span class="muted">${f.carId}，实扫 ${f.sweptAt} 分，收到 ${f.receivedAt} 分${f.timely ? '，期限内' : '，超期补扫'}</span></div>`).join('') : '—'}</td>
+    </tr>`)).join('');
+  return `
+    <p><span class="badge ${c.computedStatus}">${c.computedStatus === 'resolved' ? '已办妥' : '仍欠扫'}</span>
+       <b>${c.complaintNo}</b> · ${c.merchant?.name ?? c.merchantId} · 承诺结束 ${c.promisedEndAt} 分</p>
+    <table><thead><tr><th>权利/投诉项</th><th>米段</th><th>状态</th><th>实扫来源</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+async function queryComplaint() {
+  const no = encodeURIComponent($('complaintNo').value.trim());
+  try {
+    const res = await fetch('/api/owner/complaints/' + no);
+    const data = await res.json();
+    if (!res.ok) throw data;
+    $('complaint').innerHTML = renderComplaint(data);
+    showRaw(data);
+  } catch (e) { $('complaint').innerHTML = `<p class="badge open">${e.message || '查询失败'}</p>`; showRaw(e); }
+}
+async function loadGraph() {
+  const res = await fetch('/api/graph'); const data = await res.json();
+  $('graph').style.display = 'block'; $('graph').textContent = JSON.stringify(data, null, 2);
+}
+</script>
+</body>
+</html>
