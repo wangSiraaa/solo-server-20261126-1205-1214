@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>绣样接力 · 局域网编作台</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>绣样接力编作台</h1>
+      <p class="subtitle">至多四行窄样带 · 每色一根连续线 · 签出针单可离线照做 · 报工版本互斥</p>
+    </div>
+    <div class="top-actions">
+      <span id="health" class="badge muted">连接中…</span>
+      <span class="badge" id="terminalBadge">终端：—</span>
+      <button id="refreshBtn" class="secondary">刷新/重连</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel sidebar">
+      <h2>绣单</h2>
+      <div class="button-stack">
+        <button data-scenario="red-band">载入红带三个验题现场</button>
+        <button data-scenario="three-segments">换入三段新样</button>
+        <button id="resetBtn" class="danger-ghost">清空服务端演示数据</button>
+      </div>
+      <label class="field">
+        <span>选择订单</span>
+        <select id="orderSelect"></select>
+      </label>
+      <details>
+        <summary>新建绣单（JSON）</summary>
+        <textarea id="createJson" spellcheck="false"></textarea>
+        <button id="createOrderBtn" class="secondary">创建绣单</button>
+      </details>
+      <div id="orderList" class="order-list"></div>
+      <section class="note">
+        <h3>本社办规</h3>
+        <p>默认采用<strong>并行小绷</strong>：领取时由服务锁定可合拢的接缝与针路；针单含完整路径、入口、出口和接缝行，可脱离网络照做。</p>
+        <p>未交回工单的已签发针位不得挪动；交回后只释放“当前格 + 未刺余单”，已确认针迹永久保留。</p>
+      </section>
+    </aside>
+
+    <section class="panel board-panel">
+      <div class="board-head">
+        <div>
+          <h2 id="orderTitle">尚未选择绣单</h2>
+          <div id="orderBadges" class="badges"></div>
+        </div>
+        <div class="board-actions">
+          <label class="inline">领绷人 <input id="workerId" value="terminal-worker" /></label>
+        </div>
+      </div>
+
+      <div id="message" class="message" hidden></div>
+      <div id="board" class="board"></div>
+      <div id="seams" class="seams"></div>
+
+      <h3>样段与针单</h3>
+      <div id="segmentCards" class="cards"></div>
+    </section>
+
+    <aside class="panel side-right">
+      <h2>主编改样</h2>
+      <label class="field">
+        <span>目标段</span>
+        <select id="changeTarget"></select>
+      </label>
+      <label class="check"><input type="checkbox" id="straightOnly" /> 改为只能直走（不换行）</label>
+      <label class="field">
+        <span>改样说明</span>
+        <input id="changeNote" value="替换未签发尾段" />
+      </label>
+      <div class="button-row">
+        <button id="saveDraftBtn" class="secondary">保存图样</button>
+        <button id="applyChangeBtn">提交改样申请</button>
+        <button id="restoreTailBtn" class="secondary">还原尾段走法</button>
+      </div>
+      <p class="hint">“保存图样”允许保留不可行草稿并显示不可完；“提交申请”会严格检查旧针锁、接缝、留白、徽记和右端点，不相容则拒绝。</p>
+
+      <h3>换入整组样段</h3>
+      <textarea id="segmentsJson" spellcheck="false"></textarea>
+      <button id="replaceSegmentsBtn" class="secondary">请求换入这些样段</button>
+
+      <h3>双终端互斥实验</h3>
+      <p class="hint">选择一张已签发针单，两个动作都携带相同报工版本同时送达。</p>
+      <label class="field">
+        <span>实验针单</span>
+        <select id="raceTicketSelect"></select>
+      </label>
+      <div class="button-row">
+        <button id="raceBtn">同时：确认下一格 / 交回此格</button>
+      </div>
+      <pre id="raceResult" class="code-out small"></pre>
+
+      <h3>完整针路 / 签发版本</h3>
+      <div class="button-row">
+        <button id="showPathBtn" class="secondary">查询完整针路</button>
+      </div>
+      <pre id="pathOutput" class="code-out"></pre>
+    </aside>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
