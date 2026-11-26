@@ -1,0 +1,17 @@
+{
+  "name": "neighbor-carpool-dispatch",
+  "version": "1.0.0",
+  "description": "Stateful matching, protected transfers and accountable receipts for a community carpool market shuttle.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "demo": "node scripts/demo.mjs",
+    "scenarios": "node scripts/scenarios.mjs",
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
