@@ -1,0 +1,15 @@
+{
+  "name": "co-listening-service",
+  "version": "1.0.0",
+  "description": "Local shared co-listening service for a podcast book club: per-member manifest versions, occurrence-bound discussion points, interval-accurate progress, sync/early room rules, and auditable host authority.",
+  "main": "src/service.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "demo": "node scripts/demo.js",
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
