@@ -1,0 +1,16 @@
+{
+  "name": "repair-joint-service",
+  "version": "1.0.0",
+  "description": "小楼栋报修联办、源头相容性筛选与合同化结案服务（全模拟施工）",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/",
+    "verify": "node scripts/verify-scenario.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

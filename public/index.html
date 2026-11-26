@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>小楼栋报修联办服务</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>小楼栋报修联办服务</h1>
+        <p>滴水/返潮共案、源头相容性筛选、合同化回访结案；施工与加压均为模拟。</p>
+      </div>
+      <div class="toolbar">
+        <button data-seed="baseline">载入基准</button>
+        <button data-seed="withoutBExclusion">无 B 排除证据</button>
+        <button id="seed-retract-b">基准后撤下 B 观察</button>
+        <button data-seed="missingYiRevisit">乙缺约定回访</button>
+        <button id="seed-bing">基准 + 丙临时处置</button>
+        <button id="run-closures" class="primary">运行结案扫描</button>
+        <button id="refresh">刷新</button>
+      </div>
+    </header>
+
+    <section class="policy">
+      <strong>管家制度：</strong>
+      已获入户许可且时段可衔接的相邻户优先合并为一趟共案，发队前定检查次序并逐户取回访结果；
+      若只需确认同一公共管段/支路，优先借用已确认的公区结论，不再额外派队。
+      私人室内、无对外许可的观察只留本单，绝不随邻单复制。
+    </section>
+
+    <main class="layout">
+      <section class="column">
+        <h2>住户报修</h2>
+        <form id="create-ticket" class="card">
+          <div class="form-grid">
+            <label>称呼<input name="residentName" required placeholder="例如：丁" /></label>
+            <label>房号/位置<input name="location" required placeholder="例如：602 厨房顶角" /></label>
+            <label class="wide">现象<input name="symptom" required placeholder="滴水 / 天花板返潮" /></label>
+            <label>许可入户开始<input name="entryStart" type="datetime-local" /></label>
+            <label>许可入户结束<input name="entryEnd" type="datetime-local" /></label>
+            <label>约定回访开始（可选）<input name="revisitStart" type="datetime-local" /></label>
+            <label>约定回访结束（可选）<input name="revisitEnd" type="datetime-local" /></label>
+            <label>合同条款
+              <select name="contractKind">
+                <option value="standard">标准：约定时段干回访 + 维修覆盖</option>
+                <option value="strict_source_exclusion">严格：排除全部相容源头</option>
+                <option value="temporary_dry_once">临时处置：仅一次干回访</option>
+              </select>
+            </label>
+            <label>关联检查点 ID（逗号分隔）<input name="pointIds" placeholder="CP_YI" /></label>
+          </div>
+          <div class="actions"><button class="primary" type="submit">提交报修单</button><span class="hint">整栋楼至多 6 张住户单。</span></div>
+        </form>
+
+        <h2>住户单（上限 6 张）</h2>
+        <div id="tickets" class="cards"></div>
+      </section>
+      <aside class="column side">
+        <h2>管家建议</h2>
+        <div id="policy" class="panel"></div>
+
+        <h2>共案与拆案</h2>
+        <div id="cases" class="cards"></div>
+
+        <h2>维修员下一步</h2>
+        <div id="maintainer-steps" class="panel"></div>
+
+        <h2>维修员模拟操作</h2>
+        <div class="panel">
+          <form id="maintainer-sign-form">
+            <label>签收/确认的住户单 ID<input name="ticketId" value="T1" required /></label>
+            <button type="submit">维修员签收工单</button>
+          </form>
+          <form id="revisit-form">
+            <label>回访住户单 ID<input name="ticketId" value="T2" required /></label>
+            <label>回访业务 ID（重发请保持不变）<input name="revisitId" value="RV_MANUAL_1" required /></label>
+            <label>干湿结果
+              <select name="result"><option value="dry">干</option><option value="wet">湿</option></select>
+            </label>
+            <button type="submit" class="primary">登记回访</button>
+          </form>
+          <form id="repair-form">
+            <label>案件 ID（可选）<input name="caseId" placeholder="CASE_JIA_YI" /></label>
+            <label>住户单 ID（无案件时填）<input name="ticketId" placeholder="T4" /></label>
+            <label>实际修好的源头，逗号分隔<input name="sourceIds" value="A" /></label>
+            <button type="submit">登记模拟维修</button>
+          </form>
+        </div>
+
+        <h2>通知（去重）</h2>
+        <div id="notifications" class="panel"></div>
+
+        <h2>证据借用</h2>
+        <div class="panel">
+          <label>证据 ID <input id="borrow-evidence" value="INS_B_PRESSURE_DRY" /></label>
+          <label>目标单 <input id="borrow-target" value="T4" /></label>
+          <button id="borrow-public">借用公区结论</button>
+          <button id="borrow-ding" class="primary">一键建丁邻单并借用</button>
+          <p class="hint">私人证据可在接口测试中验证为 403；页面不提供复制私人读数。</p>
+        </div>
+      </aside>
+    </main>
+
+    <div id="toast" class="toast" role="status"></div>
+    <script src="/app.js"></script>
+  </body>
+</html>
