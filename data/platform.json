@@ -1,0 +1,3186 @@
+{
+  "schemaVersion": 1,
+  "seededAt": "2026-11-26T09:00:00.000Z",
+  "counters": {},
+  "accounts": [
+    {
+      "id": "ACCT-PLATFORM-CLEARING",
+      "type": "PLATFORM_CLEARING",
+      "ownerId": "PLATFORM",
+      "name": "平台佣金清算（本地模拟）",
+      "balancePoints": 99990
+    },
+    {
+      "id": "ACCT-T-1001",
+      "type": "TENANT",
+      "ownerId": "T-1001",
+      "name": "租客 林一",
+      "balancePoints": 0
+    },
+    {
+      "id": "ACCT-T-3003",
+      "type": "TENANT",
+      "ownerId": "T-3003",
+      "name": "租客 周三",
+      "balancePoints": 0
+    },
+    {
+      "id": "ACCT-S-A",
+      "type": "STORE",
+      "ownerId": "S-A",
+      "name": "甲店模拟账户",
+      "balancePoints": 10
+    },
+    {
+      "id": "ACCT-S-B",
+      "type": "STORE",
+      "ownerId": "S-B",
+      "name": "乙店模拟账户",
+      "balancePoints": 0
+    },
+    {
+      "id": "ACCT-S-C",
+      "type": "STORE",
+      "ownerId": "S-C",
+      "name": "丙店模拟账户",
+      "balancePoints": 0
+    }
+  ],
+  "tenants": [
+    {
+      "id": "T-1001",
+      "name": "林一",
+      "phoneExt": "1001",
+      "accountId": "ACCT-T-1001"
+    },
+    {
+      "id": "T-3003",
+      "name": "周三",
+      "phoneExt": "3003",
+      "accountId": "ACCT-T-3003"
+    }
+  ],
+  "companionProfiles": [
+    {
+      "id": "P-2002",
+      "name": "林二（同住人）",
+      "phoneExt": "2002"
+    },
+    {
+      "id": "P-2003",
+      "name": "林三（同住人）",
+      "phoneExt": "2003"
+    }
+  ],
+  "stores": [
+    {
+      "id": "S-A",
+      "name": "甲店",
+      "businessModel": "FIRST_PROTECTION_AND_RELAY",
+      "accountId": "ACCT-S-A",
+      "clerkIds": [
+        "CLERK-A"
+      ]
+    },
+    {
+      "id": "S-B",
+      "name": "乙店",
+      "businessModel": "SIGNING_ONLY",
+      "accountId": "ACCT-S-B",
+      "clerkIds": [
+        "CLERK-B"
+      ]
+    },
+    {
+      "id": "S-C",
+      "name": "丙店",
+      "businessModel": "RELAY",
+      "accountId": "ACCT-S-C",
+      "clerkIds": [
+        "CLERK-C"
+      ]
+    }
+  ],
+  "agents": [
+    {
+      "id": "AG-A1",
+      "storeId": "S-A",
+      "name": "甲经纪"
+    },
+    {
+      "id": "AG-A2",
+      "storeId": "S-A",
+      "name": "甲店第二经纪"
+    },
+    {
+      "id": "AG-B1",
+      "storeId": "S-B",
+      "name": "乙经纪"
+    },
+    {
+      "id": "AG-C1",
+      "storeId": "S-C",
+      "name": "丙经纪"
+    }
+  ],
+  "clerks": [
+    {
+      "id": "CLERK-A",
+      "storeId": "S-A",
+      "name": "甲店店员"
+    },
+    {
+      "id": "CLERK-B",
+      "storeId": "S-B",
+      "name": "乙店店员"
+    },
+    {
+      "id": "CLERK-C",
+      "storeId": "S-C",
+      "name": "丙店店员"
+    }
+  ],
+  "owners": [
+    {
+      "id": "O-1701",
+      "name": "1701 业主"
+    },
+    {
+      "id": "O-1808",
+      "name": "1808 业主"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "R-1701-E",
+      "unitId": "U-1701",
+      "number": "1701-E",
+      "name": "1701 东屋",
+      "kind": "BEDROOM",
+      "commissionable": true
+    },
+    {
+      "id": "R-1701-W",
+      "unitId": "U-1701",
+      "number": "1701-W",
+      "name": "1701 西屋",
+      "kind": "BEDROOM",
+      "commissionable": true
+    },
+    {
+      "id": "R-1701-L",
+      "unitId": "U-1701",
+      "number": "1701-L",
+      "name": "1701 共用客厅",
+      "kind": "LIVING_ROOM",
+      "commissionable": false
+    },
+    {
+      "id": "R-1808-M",
+      "unitId": "U-1808",
+      "number": "1808-M",
+      "name": "1808 东屋",
+      "kind": "BEDROOM",
+      "commissionable": true,
+      "aliases": [
+        "1808 朝东主卧",
+        "1808 阳光主卧"
+      ]
+    },
+    {
+      "id": "R-1808-S",
+      "unitId": "U-1808",
+      "number": "1808-S",
+      "name": "1808 西屋",
+      "kind": "BEDROOM",
+      "commissionable": true
+    },
+    {
+      "id": "R-1808-L",
+      "unitId": "U-1808",
+      "number": "1808-L",
+      "name": "1808 共用客厅",
+      "kind": "LIVING_ROOM",
+      "commissionable": false
+    }
+  ],
+  "listings": [
+    {
+      "id": "L-1701-WHOLE",
+      "ownerId": "O-1701",
+      "title": "1701 相连东、西屋整套挂牌",
+      "kind": "WHOLE",
+      "roomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "commonAreaIds": [
+        "R-1701-L"
+      ],
+      "viewingPointsByRoom": {
+        "R-1701-E": 4,
+        "R-1701-W": 4
+      },
+      "negotiationPointsByRoom": {},
+      "active": true,
+      "createdAt": "2026-11-26T09:00:00.000Z"
+    },
+    {
+      "id": "L-1701-E",
+      "ownerId": "O-1701",
+      "title": "1701 东屋单独广告（同一物理房间）",
+      "kind": "ROOM",
+      "roomIds": [
+        "R-1701-E"
+      ],
+      "commonAreaIds": [
+        "R-1701-L"
+      ],
+      "viewingPointsByRoom": {
+        "R-1701-E": 4
+      },
+      "negotiationPointsByRoom": {},
+      "active": true,
+      "createdAt": "2026-11-26T09:00:00.000Z"
+    },
+    {
+      "id": "L-1701-W",
+      "ownerId": "O-1701",
+      "title": "1701 西屋单独广告（同一物理房间）",
+      "kind": "ROOM",
+      "roomIds": [
+        "R-1701-W"
+      ],
+      "commonAreaIds": [
+        "R-1701-L"
+      ],
+      "viewingPointsByRoom": {
+        "R-1701-W": 4
+      },
+      "negotiationPointsByRoom": {},
+      "active": true,
+      "createdAt": "2026-11-26T09:00:00.000Z"
+    },
+    {
+      "id": "L-1808-WHOLE",
+      "ownerId": "O-1808",
+      "title": "重叠挂牌一：1808 东屋+西屋整套",
+      "kind": "WHOLE",
+      "roomIds": [
+        "R-1808-M",
+        "R-1808-S"
+      ],
+      "commonAreaIds": [
+        "R-1808-L"
+      ],
+      "viewingPointsByRoom": {
+        "R-1808-M": 4,
+        "R-1808-S": 4
+      },
+      "negotiationPointsByRoom": {
+        "R-1808-M": 2,
+        "R-1808-S": 2
+      },
+      "active": true,
+      "createdAt": "2026-11-26T09:00:00.000Z"
+    },
+    {
+      "id": "L-1808-E-SOLO",
+      "ownerId": "O-1808",
+      "title": "重叠挂牌二：1808 东屋单间",
+      "kind": "ROOM",
+      "roomIds": [
+        "R-1808-M"
+      ],
+      "commonAreaIds": [
+        "R-1808-L"
+      ],
+      "viewingPointsByRoom": {
+        "R-1808-M": 4
+      },
+      "negotiationPointsByRoom": {
+        "R-1808-M": 2
+      },
+      "active": true,
+      "createdAt": "2026-11-26T09:00:00.000Z"
+    },
+    {
+      "id": "L-1808-RENAMED",
+      "ownerId": "O-1808",
+      "title": "重叠挂牌三：改名“阳光主卧”，仍指向 R-1808-M",
+      "kind": "ROOM",
+      "roomIds": [
+        "R-1808-M"
+      ],
+      "commonAreaIds": [
+        "R-1808-L"
+      ],
+      "viewingPointsByRoom": {
+        "R-1808-M": 4
+      },
+      "negotiationPointsByRoom": {
+        "R-1808-M": 2
+      },
+      "active": true,
+      "createdAt": "2026-11-26T09:00:00.000Z"
+    }
+  ],
+  "searchOrders": [
+    {
+      "id": "SO-0-EAST-ONLY",
+      "tenantId": "T-1001",
+      "regime": "FIRST_PROTECTION",
+      "status": "LEASED",
+      "title": "找房单 SO-0-EAST-ONLY",
+      "note": "",
+      "createdAt": "2026-11-26T14:00:57.981Z"
+    },
+    {
+      "id": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "tenantId": "T-1001",
+      "regime": "FIRST_PROTECTION",
+      "status": "LEASED",
+      "title": "找房单 SO-1-BOTH-VIEW-BOTH-SIGN",
+      "note": "",
+      "createdAt": "2026-11-26T14:00:57.991Z"
+    },
+    {
+      "id": "SO-2-WEST-DOORWAY-ONLY",
+      "tenantId": "T-1001",
+      "regime": "FIRST_PROTECTION",
+      "status": "LEASED",
+      "title": "找房单 SO-2-WEST-DOORWAY-ONLY",
+      "note": "",
+      "createdAt": "2026-11-26T14:00:58.001Z"
+    },
+    {
+      "id": "SO-3-FULL-VIEW-WEST-LEASE",
+      "tenantId": "T-1001",
+      "regime": "FIRST_PROTECTION",
+      "status": "LEASED",
+      "title": "找房单 SO-3-FULL-VIEW-WEST-LEASE",
+      "note": "",
+      "createdAt": "2026-11-26T14:00:58.013Z"
+    },
+    {
+      "id": "SO-4-AUTHORIZED-PROXY",
+      "tenantId": "T-1001",
+      "regime": "FIRST_PROTECTION",
+      "status": "LEASED",
+      "title": "找房单 SO-4-AUTHORIZED-PROXY",
+      "note": "",
+      "createdAt": "2026-11-26T14:00:58.021Z"
+    },
+    {
+      "id": "SO-5-OVERLAP-FIRST",
+      "tenantId": "T-3003",
+      "regime": "FIRST_PROTECTION",
+      "status": "LEASED",
+      "title": "找房单 SO-5-OVERLAP-FIRST",
+      "note": "",
+      "createdAt": "2026-11-26T14:00:58.032Z"
+    },
+    {
+      "id": "SO-6-OVERLAP-RELAY",
+      "tenantId": "T-3003",
+      "regime": "RELAY_CONTRIBUTION",
+      "status": "LEASED",
+      "title": "找房单 SO-6-OVERLAP-RELAY",
+      "note": "",
+      "createdAt": "2026-11-26T14:00:58.058Z"
+    }
+  ],
+  "companionMandates": [
+    {
+      "id": "MDT-SO-4",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "tenantId": "T-1001",
+      "personId": "P-2002",
+      "personName": "林二（同住人）",
+      "authority": "VIEWING_PROXY_AND_SITE_CONFIRMATION",
+      "roomIds": null,
+      "validFrom": "2026-11-26T13:00:58.023Z",
+      "validTo": "2026-11-27T14:00:58.023Z",
+      "status": "AUTHORIZED",
+      "createdAt": "2026-11-26T14:00:58.023Z"
+    }
+  ],
+  "storeAuthorizations": [
+    {
+      "id": "AUTH-SO-0-EAST-ONLY",
+      "searchOrderId": "SO-0-EAST-ONLY",
+      "storeId": "S-A",
+      "scopes": [
+        "VIEWING",
+        "NEGOTIATION"
+      ],
+      "roomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "source": "TENANT_GRANT",
+      "sourceId": null,
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:57.982Z",
+      "createdBy": "T-1001"
+    },
+    {
+      "id": "AUTH-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "storeId": "S-A",
+      "scopes": [
+        "VIEWING",
+        "NEGOTIATION"
+      ],
+      "roomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "source": "TENANT_GRANT",
+      "sourceId": null,
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:57.992Z",
+      "createdBy": "T-1001"
+    },
+    {
+      "id": "AUTH-SO-2-WEST-DOORWAY-ONLY",
+      "searchOrderId": "SO-2-WEST-DOORWAY-ONLY",
+      "storeId": "S-A",
+      "scopes": [
+        "VIEWING",
+        "NEGOTIATION"
+      ],
+      "roomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "source": "TENANT_GRANT",
+      "sourceId": null,
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:58.002Z",
+      "createdBy": "T-1001"
+    },
+    {
+      "id": "AUTH-SO-3-FULL-VIEW-WEST-LEASE",
+      "searchOrderId": "SO-3-FULL-VIEW-WEST-LEASE",
+      "storeId": "S-A",
+      "scopes": [
+        "VIEWING",
+        "NEGOTIATION"
+      ],
+      "roomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "source": "TENANT_GRANT",
+      "sourceId": null,
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:58.014Z",
+      "createdBy": "T-1001"
+    },
+    {
+      "id": "AUTH-SO-4-AUTHORIZED-PROXY",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "storeId": "S-A",
+      "scopes": [
+        "VIEWING",
+        "NEGOTIATION"
+      ],
+      "roomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "source": "TENANT_GRANT",
+      "sourceId": null,
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:58.022Z",
+      "createdBy": "T-1001"
+    },
+    {
+      "id": "AUTH-B266D4A2EB",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "storeId": "S-C",
+      "scopes": [
+        "VIEWING"
+      ],
+      "roomIds": [
+        "R-1808-M"
+      ],
+      "source": "HANDOFF",
+      "sourceId": "HND-SO-5-OVERLAP-FIRST",
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:58.042Z",
+      "createdBy": "AG-C1"
+    },
+    {
+      "id": "AUTH-29A95A2C52",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "storeId": "S-C",
+      "scopes": [
+        "VIEWING"
+      ],
+      "roomIds": [
+        "R-1808-S"
+      ],
+      "source": "HANDOFF",
+      "sourceId": "HND-SO-5-OVERLAP-FIRST",
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:58.042Z",
+      "createdBy": "AG-C1"
+    },
+    {
+      "id": "AUTH-CABB61870A",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "storeId": "S-C",
+      "scopes": [
+        "NEGOTIATION"
+      ],
+      "roomIds": [
+        "R-1808-M"
+      ],
+      "source": "HANDOFF",
+      "sourceId": "HND-SO-5-OVERLAP-FIRST",
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:58.042Z",
+      "createdBy": "AG-C1"
+    },
+    {
+      "id": "AUTH-1A1E75B259",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "storeId": "S-C",
+      "scopes": [
+        "NEGOTIATION"
+      ],
+      "roomIds": [
+        "R-1808-S"
+      ],
+      "source": "HANDOFF",
+      "sourceId": "HND-SO-5-OVERLAP-FIRST",
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:58.042Z",
+      "createdBy": "AG-C1"
+    },
+    {
+      "id": "AUTH-4121DD2F16",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "storeId": "S-C",
+      "scopes": [
+        "VIEWING"
+      ],
+      "roomIds": [
+        "R-1808-M"
+      ],
+      "source": "HANDOFF",
+      "sourceId": "HND-SO-6-OVERLAP-RELAY",
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:58.065Z",
+      "createdBy": "AG-C1"
+    },
+    {
+      "id": "AUTH-F57434C202",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "storeId": "S-C",
+      "scopes": [
+        "VIEWING"
+      ],
+      "roomIds": [
+        "R-1808-S"
+      ],
+      "source": "HANDOFF",
+      "sourceId": "HND-SO-6-OVERLAP-RELAY",
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:58.065Z",
+      "createdBy": "AG-C1"
+    },
+    {
+      "id": "AUTH-CFA03A3BF6",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "storeId": "S-C",
+      "scopes": [
+        "NEGOTIATION"
+      ],
+      "roomIds": [
+        "R-1808-M"
+      ],
+      "source": "HANDOFF",
+      "sourceId": "HND-SO-6-OVERLAP-RELAY",
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:58.065Z",
+      "createdBy": "AG-C1"
+    },
+    {
+      "id": "AUTH-81C2C37F96",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "storeId": "S-C",
+      "scopes": [
+        "NEGOTIATION"
+      ],
+      "roomIds": [
+        "R-1808-S"
+      ],
+      "source": "HANDOFF",
+      "sourceId": "HND-SO-6-OVERLAP-RELAY",
+      "status": "ACTIVE",
+      "createdAt": "2026-11-26T14:00:58.065Z",
+      "createdBy": "AG-C1"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "APT-SO-0-EAST-ONLY",
+      "searchOrderId": "SO-0-EAST-ONLY",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "scheduledAt": "2026-11-26T14:00:57.982Z",
+      "plannedSpaceIds": [
+        "R-1701-E",
+        "R-1701-W",
+        "R-1701-L"
+      ],
+      "participantPlan": "TENANT_OR_AUTHORIZED_COMPANION",
+      "status": "COMPLETED_CONFIRMED",
+      "commissionSnapshot": {
+        "viewingPointsByRoom": {
+          "R-1701-E": 4,
+          "R-1701-W": 4
+        },
+        "negotiationPointsByRoom": {}
+      },
+      "createdAt": "2026-11-26T14:00:57.983Z"
+    },
+    {
+      "id": "APT-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "scheduledAt": "2026-11-26T14:00:57.993Z",
+      "plannedSpaceIds": [
+        "R-1701-E",
+        "R-1701-W",
+        "R-1701-L"
+      ],
+      "participantPlan": "TENANT_OR_AUTHORIZED_COMPANION",
+      "status": "COMPLETED_CONFIRMED",
+      "commissionSnapshot": {
+        "viewingPointsByRoom": {
+          "R-1701-E": 4,
+          "R-1701-W": 4
+        },
+        "negotiationPointsByRoom": {}
+      },
+      "createdAt": "2026-11-26T14:00:57.993Z"
+    },
+    {
+      "id": "APT-SO-2-WEST-DOORWAY-ONLY",
+      "searchOrderId": "SO-2-WEST-DOORWAY-ONLY",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "scheduledAt": "2026-11-26T14:00:58.003Z",
+      "plannedSpaceIds": [
+        "R-1701-E",
+        "R-1701-W",
+        "R-1701-L"
+      ],
+      "participantPlan": "TENANT_OR_AUTHORIZED_COMPANION",
+      "status": "COMPLETED_CONFIRMED",
+      "commissionSnapshot": {
+        "viewingPointsByRoom": {
+          "R-1701-E": 4,
+          "R-1701-W": 4
+        },
+        "negotiationPointsByRoom": {}
+      },
+      "createdAt": "2026-11-26T14:00:58.003Z"
+    },
+    {
+      "id": "APT-SO-3-FULL-VIEW-WEST-LEASE",
+      "searchOrderId": "SO-3-FULL-VIEW-WEST-LEASE",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "scheduledAt": "2026-11-26T14:00:58.015Z",
+      "plannedSpaceIds": [
+        "R-1701-E",
+        "R-1701-W",
+        "R-1701-L"
+      ],
+      "participantPlan": "TENANT_OR_AUTHORIZED_COMPANION",
+      "status": "COMPLETED_CONFIRMED",
+      "commissionSnapshot": {
+        "viewingPointsByRoom": {
+          "R-1701-E": 4,
+          "R-1701-W": 4
+        },
+        "negotiationPointsByRoom": {}
+      },
+      "createdAt": "2026-11-26T14:00:58.015Z"
+    },
+    {
+      "id": "APT-SO-4-AUTHORIZED-PROXY",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "scheduledAt": "2026-11-26T14:00:58.024Z",
+      "plannedSpaceIds": [
+        "R-1701-E",
+        "R-1701-W",
+        "R-1701-L"
+      ],
+      "participantPlan": "TENANT_OR_AUTHORIZED_COMPANION",
+      "status": "COMPLETED_CONFIRMED",
+      "commissionSnapshot": {
+        "viewingPointsByRoom": {
+          "R-1701-E": 4,
+          "R-1701-W": 4
+        },
+        "negotiationPointsByRoom": {}
+      },
+      "createdAt": "2026-11-26T14:00:58.024Z"
+    },
+    {
+      "id": "APT-SO-5-OVERLAP-FIRST-A",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "listingId": "L-1808-E-SOLO",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "scheduledAt": "2026-11-26T14:00:58.033Z",
+      "plannedSpaceIds": [
+        "R-1808-M",
+        "R-1808-L"
+      ],
+      "participantPlan": "TENANT_OR_AUTHORIZED_COMPANION",
+      "status": "COMPLETED_CONFIRMED",
+      "commissionSnapshot": {
+        "viewingPointsByRoom": {
+          "R-1808-M": 4
+        },
+        "negotiationPointsByRoom": {
+          "R-1808-M": 2
+        }
+      },
+      "createdAt": "2026-11-26T14:00:58.033Z"
+    },
+    {
+      "id": "APT-SO-5-OVERLAP-FIRST-C-M",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "listingId": "L-1808-RENAMED",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "scheduledAt": "2026-11-26T14:00:58.044Z",
+      "plannedSpaceIds": [
+        "R-1808-M",
+        "R-1808-L"
+      ],
+      "participantPlan": "TENANT_OR_AUTHORIZED_COMPANION",
+      "status": "COMPLETED_CONFIRMED",
+      "commissionSnapshot": {
+        "viewingPointsByRoom": {
+          "R-1808-M": 4
+        },
+        "negotiationPointsByRoom": {
+          "R-1808-M": 2
+        }
+      },
+      "createdAt": "2026-11-26T14:00:58.044Z"
+    },
+    {
+      "id": "APT-SO-5-OVERLAP-FIRST-C-S",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "listingId": "L-1808-WHOLE",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "scheduledAt": "2026-11-26T14:00:58.045Z",
+      "plannedSpaceIds": [
+        "R-1808-S",
+        "R-1808-L"
+      ],
+      "participantPlan": "TENANT_OR_AUTHORIZED_COMPANION",
+      "status": "COMPLETED_CONFIRMED",
+      "commissionSnapshot": {
+        "viewingPointsByRoom": {
+          "R-1808-M": 4,
+          "R-1808-S": 4
+        },
+        "negotiationPointsByRoom": {
+          "R-1808-M": 2,
+          "R-1808-S": 2
+        }
+      },
+      "createdAt": "2026-11-26T14:00:58.045Z"
+    },
+    {
+      "id": "APT-SO-6-OVERLAP-RELAY-A",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "listingId": "L-1808-E-SOLO",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "scheduledAt": "2026-11-26T14:00:58.058Z",
+      "plannedSpaceIds": [
+        "R-1808-M",
+        "R-1808-L"
+      ],
+      "participantPlan": "TENANT_OR_AUTHORIZED_COMPANION",
+      "status": "COMPLETED_CONFIRMED",
+      "commissionSnapshot": {
+        "viewingPointsByRoom": {
+          "R-1808-M": 4
+        },
+        "negotiationPointsByRoom": {
+          "R-1808-M": 2
+        }
+      },
+      "createdAt": "2026-11-26T14:00:58.058Z"
+    },
+    {
+      "id": "APT-SO-6-OVERLAP-RELAY-C-M",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "listingId": "L-1808-RENAMED",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "scheduledAt": "2026-11-26T14:00:58.066Z",
+      "plannedSpaceIds": [
+        "R-1808-M",
+        "R-1808-L"
+      ],
+      "participantPlan": "TENANT_OR_AUTHORIZED_COMPANION",
+      "status": "COMPLETED_CONFIRMED",
+      "commissionSnapshot": {
+        "viewingPointsByRoom": {
+          "R-1808-M": 4
+        },
+        "negotiationPointsByRoom": {
+          "R-1808-M": 2
+        }
+      },
+      "createdAt": "2026-11-26T14:00:58.066Z"
+    },
+    {
+      "id": "APT-SO-6-OVERLAP-RELAY-C-S",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "listingId": "L-1808-WHOLE",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "scheduledAt": "2026-11-26T14:00:58.067Z",
+      "plannedSpaceIds": [
+        "R-1808-S",
+        "R-1808-L"
+      ],
+      "participantPlan": "TENANT_OR_AUTHORIZED_COMPANION",
+      "status": "COMPLETED_CONFIRMED",
+      "commissionSnapshot": {
+        "viewingPointsByRoom": {
+          "R-1808-M": 4,
+          "R-1808-S": 4
+        },
+        "negotiationPointsByRoom": {
+          "R-1808-M": 2,
+          "R-1808-S": 2
+        }
+      },
+      "createdAt": "2026-11-26T14:00:58.067Z"
+    }
+  ],
+  "protections": [
+    {
+      "id": "PRT-SO-0-EAST-ONLY",
+      "searchOrderId": "SO-0-EAST-ONLY",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "promisedStart": "2026-11-26T13:00:57.983Z",
+      "promisedEnd": "2026-11-26T17:00:57.983Z",
+      "roomStates": [
+        {
+          "roomId": "R-1701-E",
+          "status": "FULFILLED",
+          "visitId": "VST-SO-0-EAST-ONLY",
+          "broughtAt": "2026-11-26T14:10:57.984Z",
+          "fulfilledAt": "2026-11-26T14:00:57.985Z"
+        },
+        {
+          "roomId": "R-1701-W",
+          "status": "PENDING",
+          "visitId": null,
+          "broughtAt": null,
+          "fulfilledAt": null
+        }
+      ],
+      "status": "PARTIALLY_FULFILLED",
+      "createdAt": "2026-11-26T14:00:57.983Z",
+      "updatedAt": "2026-11-26T14:00:57.986Z"
+    },
+    {
+      "id": "PRT-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "promisedStart": "2026-11-26T13:00:57.994Z",
+      "promisedEnd": "2026-11-26T17:00:57.994Z",
+      "roomStates": [
+        {
+          "roomId": "R-1701-E",
+          "status": "FULFILLED",
+          "visitId": "VST-SO-1-BOTH-VIEW-BOTH-SIGN",
+          "broughtAt": "2026-11-26T14:10:57.995Z",
+          "fulfilledAt": "2026-11-26T14:00:57.997Z"
+        },
+        {
+          "roomId": "R-1701-W",
+          "status": "FULFILLED",
+          "visitId": "VST-SO-1-BOTH-VIEW-BOTH-SIGN",
+          "broughtAt": "2026-11-26T14:10:57.995Z",
+          "fulfilledAt": "2026-11-26T14:00:57.997Z"
+        }
+      ],
+      "status": "FULFILLED",
+      "createdAt": "2026-11-26T14:00:57.994Z",
+      "updatedAt": "2026-11-26T14:00:57.997Z"
+    },
+    {
+      "id": "PRT-SO-2-WEST-DOORWAY-ONLY",
+      "searchOrderId": "SO-2-WEST-DOORWAY-ONLY",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "promisedStart": "2026-11-26T13:00:58.005Z",
+      "promisedEnd": "2026-11-26T17:00:58.005Z",
+      "roomStates": [
+        {
+          "roomId": "R-1701-E",
+          "status": "FULFILLED",
+          "visitId": "VST-SO-2-WEST-DOORWAY-ONLY",
+          "broughtAt": "2026-11-26T14:10:58.007Z",
+          "fulfilledAt": "2026-11-26T14:00:58.008Z"
+        },
+        {
+          "roomId": "R-1701-W",
+          "status": "PENDING",
+          "visitId": null,
+          "broughtAt": null,
+          "fulfilledAt": null
+        }
+      ],
+      "status": "PARTIALLY_FULFILLED",
+      "createdAt": "2026-11-26T14:00:58.005Z",
+      "updatedAt": "2026-11-26T14:00:58.008Z"
+    },
+    {
+      "id": "PRT-SO-3-FULL-VIEW-WEST-LEASE",
+      "searchOrderId": "SO-3-FULL-VIEW-WEST-LEASE",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "promisedStart": "2026-11-26T13:00:58.016Z",
+      "promisedEnd": "2026-11-26T17:00:58.016Z",
+      "roomStates": [
+        {
+          "roomId": "R-1701-E",
+          "status": "FULFILLED",
+          "visitId": "VST-SO-3-FULL-VIEW-WEST-LEASE",
+          "broughtAt": "2026-11-26T14:10:58.017Z",
+          "fulfilledAt": "2026-11-26T14:00:58.017Z"
+        },
+        {
+          "roomId": "R-1701-W",
+          "status": "FULFILLED",
+          "visitId": "VST-SO-3-FULL-VIEW-WEST-LEASE",
+          "broughtAt": "2026-11-26T14:10:58.017Z",
+          "fulfilledAt": "2026-11-26T14:00:58.017Z"
+        }
+      ],
+      "status": "FULFILLED",
+      "createdAt": "2026-11-26T14:00:58.016Z",
+      "updatedAt": "2026-11-26T14:00:58.017Z"
+    },
+    {
+      "id": "PRT-SO-4-AUTHORIZED-PROXY",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "promisedStart": "2026-11-26T13:00:58.025Z",
+      "promisedEnd": "2026-11-26T17:00:58.025Z",
+      "roomStates": [
+        {
+          "roomId": "R-1701-E",
+          "status": "FULFILLED",
+          "visitId": "VST-SO-4-AUTHORIZED-PROXY",
+          "broughtAt": "2026-11-26T14:10:58.026Z",
+          "fulfilledAt": "2026-11-26T14:00:58.028Z"
+        },
+        {
+          "roomId": "R-1701-W",
+          "status": "FULFILLED",
+          "visitId": "VST-SO-4-AUTHORIZED-PROXY",
+          "broughtAt": "2026-11-26T14:10:58.026Z",
+          "fulfilledAt": "2026-11-26T14:00:58.028Z"
+        }
+      ],
+      "status": "FULFILLED",
+      "createdAt": "2026-11-26T14:00:58.026Z",
+      "updatedAt": "2026-11-26T14:00:58.028Z"
+    },
+    {
+      "id": "PRT-SO-5-OVERLAP-FIRST-A-M",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "listingId": "L-1808-E-SOLO",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "promisedStart": "2026-11-26T13:00:58.034Z",
+      "promisedEnd": "2026-11-26T18:00:58.034Z",
+      "roomStates": [
+        {
+          "roomId": "R-1808-M",
+          "status": "FULFILLED",
+          "visitId": "VST-SO-5-OVERLAP-FIRST-A",
+          "broughtAt": "2026-11-26T14:05:58.035Z",
+          "fulfilledAt": "2026-11-26T14:00:58.037Z"
+        }
+      ],
+      "status": "FULFILLED",
+      "createdAt": "2026-11-26T14:00:58.034Z",
+      "updatedAt": "2026-11-26T14:00:58.038Z"
+    },
+    {
+      "id": "PRT-SO-5-OVERLAP-FIRST-C-S",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "listingId": "L-1808-WHOLE",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "promisedStart": "2026-11-26T13:30:58.047Z",
+      "promisedEnd": "2026-11-26T18:00:58.047Z",
+      "roomStates": [
+        {
+          "roomId": "R-1808-S",
+          "status": "FULFILLED",
+          "visitId": "VST-SO-5-OVERLAP-FIRST-C-S",
+          "broughtAt": "2026-11-26T15:10:58.050Z",
+          "fulfilledAt": "2026-11-26T14:00:58.051Z"
+        }
+      ],
+      "status": "FULFILLED",
+      "createdAt": "2026-11-26T14:00:58.047Z",
+      "updatedAt": "2026-11-26T14:00:58.051Z"
+    },
+    {
+      "id": "PRT-SO-6-OVERLAP-RELAY-A-M",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "listingId": "L-1808-E-SOLO",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "promisedStart": "2026-11-26T13:00:58.060Z",
+      "promisedEnd": "2026-11-26T18:00:58.060Z",
+      "roomStates": [
+        {
+          "roomId": "R-1808-M",
+          "status": "FULFILLED",
+          "visitId": "VST-SO-6-OVERLAP-RELAY-A",
+          "broughtAt": "2026-11-26T14:05:58.061Z",
+          "fulfilledAt": "2026-11-26T14:00:58.062Z"
+        }
+      ],
+      "status": "FULFILLED",
+      "createdAt": "2026-11-26T14:00:58.060Z",
+      "updatedAt": "2026-11-26T14:00:58.062Z"
+    },
+    {
+      "id": "PRT-SO-6-OVERLAP-RELAY-C-S",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "listingId": "L-1808-WHOLE",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "promisedStart": "2026-11-26T13:30:58.068Z",
+      "promisedEnd": "2026-11-26T18:00:58.068Z",
+      "roomStates": [
+        {
+          "roomId": "R-1808-S",
+          "status": "FULFILLED",
+          "visitId": "VST-SO-6-OVERLAP-RELAY-C-S",
+          "broughtAt": "2026-11-26T15:10:58.074Z",
+          "fulfilledAt": "2026-11-26T14:00:58.075Z"
+        }
+      ],
+      "status": "FULFILLED",
+      "createdAt": "2026-11-26T14:00:58.068Z",
+      "updatedAt": "2026-11-26T14:00:58.075Z"
+    }
+  ],
+  "visits": [
+    {
+      "id": "VST-SO-0-EAST-ONLY",
+      "appointmentId": "APT-SO-0-EAST-ONLY",
+      "searchOrderId": "SO-0-EAST-ONLY",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "bookedAgentId": "AG-A1",
+      "agentId": "AG-A1",
+      "participant": {
+        "type": "TENANT",
+        "id": "T-1001"
+      },
+      "occurredAt": "2026-11-26T14:10:57.984Z",
+      "enteredRoomIds": [
+        "R-1701-E"
+      ],
+      "doorwayOnlyRoomIds": [
+        "R-1701-L"
+      ],
+      "notSeenRoomIds": [
+        "R-1701-W"
+      ],
+      "note": "",
+      "agentSignature": {
+        "agentId": "AG-A1",
+        "signedAt": "2026-11-26T14:00:57.984Z"
+      },
+      "clientConfirmation": {
+        "actorId": "T-1001",
+        "role": "TENANT",
+        "decision": "CONFIRMED",
+        "note": "",
+        "confirmedAt": "2026-11-26T14:00:57.985Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:57.984Z"
+    },
+    {
+      "id": "VST-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "appointmentId": "APT-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "bookedAgentId": "AG-A1",
+      "agentId": "AG-A1",
+      "participant": {
+        "type": "TENANT",
+        "id": "T-1001"
+      },
+      "occurredAt": "2026-11-26T14:10:57.995Z",
+      "enteredRoomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "doorwayOnlyRoomIds": [
+        "R-1701-L"
+      ],
+      "notSeenRoomIds": [],
+      "note": "",
+      "agentSignature": {
+        "agentId": "AG-A1",
+        "signedAt": "2026-11-26T14:00:57.995Z"
+      },
+      "clientConfirmation": {
+        "actorId": "T-1001",
+        "role": "TENANT",
+        "decision": "CONFIRMED",
+        "note": "",
+        "confirmedAt": "2026-11-26T14:00:57.997Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:57.995Z"
+    },
+    {
+      "id": "VST-SO-2-WEST-DOORWAY-ONLY",
+      "appointmentId": "APT-SO-2-WEST-DOORWAY-ONLY",
+      "searchOrderId": "SO-2-WEST-DOORWAY-ONLY",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "bookedAgentId": "AG-A1",
+      "agentId": "AG-A1",
+      "participant": {
+        "type": "TENANT",
+        "id": "T-1001"
+      },
+      "occurredAt": "2026-11-26T14:10:58.007Z",
+      "enteredRoomIds": [
+        "R-1701-E"
+      ],
+      "doorwayOnlyRoomIds": [
+        "R-1701-L"
+      ],
+      "notSeenRoomIds": [
+        "R-1701-W"
+      ],
+      "note": "",
+      "agentSignature": {
+        "agentId": "AG-A1",
+        "signedAt": "2026-11-26T14:00:58.007Z"
+      },
+      "clientConfirmation": {
+        "actorId": "T-1001",
+        "role": "TENANT",
+        "decision": "CONFIRMED",
+        "note": "",
+        "confirmedAt": "2026-11-26T14:00:58.008Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:58.007Z"
+    },
+    {
+      "id": "VST-SO-3-FULL-VIEW-WEST-LEASE",
+      "appointmentId": "APT-SO-3-FULL-VIEW-WEST-LEASE",
+      "searchOrderId": "SO-3-FULL-VIEW-WEST-LEASE",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "bookedAgentId": "AG-A1",
+      "agentId": "AG-A1",
+      "participant": {
+        "type": "TENANT",
+        "id": "T-1001"
+      },
+      "occurredAt": "2026-11-26T14:10:58.017Z",
+      "enteredRoomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "doorwayOnlyRoomIds": [
+        "R-1701-L"
+      ],
+      "notSeenRoomIds": [],
+      "note": "",
+      "agentSignature": {
+        "agentId": "AG-A1",
+        "signedAt": "2026-11-26T14:00:58.017Z"
+      },
+      "clientConfirmation": {
+        "actorId": "T-1001",
+        "role": "TENANT",
+        "decision": "CONFIRMED",
+        "note": "",
+        "confirmedAt": "2026-11-26T14:00:58.017Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:58.017Z"
+    },
+    {
+      "id": "VST-SO-4-AUTHORIZED-PROXY",
+      "appointmentId": "APT-SO-4-AUTHORIZED-PROXY",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "listingId": "L-1701-WHOLE",
+      "storeId": "S-A",
+      "bookedAgentId": "AG-A1",
+      "agentId": "AG-A1",
+      "participant": {
+        "type": "AUTHORIZED_COMPANION",
+        "id": "P-2002",
+        "mandateId": "MDT-SO-4",
+        "confirmedByMandate": true
+      },
+      "occurredAt": "2026-11-26T14:10:58.026Z",
+      "enteredRoomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "doorwayOnlyRoomIds": [
+        "R-1701-L"
+      ],
+      "notSeenRoomIds": [],
+      "note": "",
+      "agentSignature": {
+        "agentId": "AG-A1",
+        "signedAt": "2026-11-26T14:00:58.026Z"
+      },
+      "clientConfirmation": {
+        "actorId": "P-2002",
+        "role": "AUTHORIZED_COMPANION",
+        "decision": "CONFIRMED",
+        "note": "",
+        "confirmedAt": "2026-11-26T14:00:58.028Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:58.026Z"
+    },
+    {
+      "id": "VST-SO-5-OVERLAP-FIRST-A",
+      "appointmentId": "APT-SO-5-OVERLAP-FIRST-A",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "listingId": "L-1808-E-SOLO",
+      "storeId": "S-A",
+      "bookedAgentId": "AG-A1",
+      "agentId": "AG-A1",
+      "participant": {
+        "type": "TENANT",
+        "id": "T-3003"
+      },
+      "occurredAt": "2026-11-26T14:05:58.035Z",
+      "enteredRoomIds": [
+        "R-1808-M"
+      ],
+      "doorwayOnlyRoomIds": [
+        "R-1808-L"
+      ],
+      "notSeenRoomIds": [],
+      "note": "",
+      "agentSignature": {
+        "agentId": "AG-A1",
+        "signedAt": "2026-11-26T14:00:58.035Z"
+      },
+      "clientConfirmation": {
+        "actorId": "T-3003",
+        "role": "TENANT",
+        "decision": "CONFIRMED",
+        "note": "",
+        "confirmedAt": "2026-11-26T14:00:58.037Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:58.035Z"
+    },
+    {
+      "id": "VST-SO-5-OVERLAP-FIRST-C-M",
+      "appointmentId": "APT-SO-5-OVERLAP-FIRST-C-M",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "listingId": "L-1808-RENAMED",
+      "storeId": "S-C",
+      "bookedAgentId": "AG-C1",
+      "agentId": "AG-C1",
+      "participant": {
+        "type": "TENANT",
+        "id": "T-3003"
+      },
+      "occurredAt": "2026-11-26T14:50:58.047Z",
+      "enteredRoomIds": [
+        "R-1808-M"
+      ],
+      "doorwayOnlyRoomIds": [
+        "R-1808-L"
+      ],
+      "notSeenRoomIds": [],
+      "note": "",
+      "agentSignature": {
+        "agentId": "AG-C1",
+        "signedAt": "2026-11-26T14:00:58.047Z"
+      },
+      "clientConfirmation": {
+        "actorId": "T-3003",
+        "role": "TENANT",
+        "decision": "CONFIRMED",
+        "note": "",
+        "confirmedAt": "2026-11-26T14:00:58.048Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:58.047Z"
+    },
+    {
+      "id": "VST-SO-5-OVERLAP-FIRST-C-S",
+      "appointmentId": "APT-SO-5-OVERLAP-FIRST-C-S",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "listingId": "L-1808-WHOLE",
+      "storeId": "S-C",
+      "bookedAgentId": "AG-C1",
+      "agentId": "AG-C1",
+      "participant": {
+        "type": "TENANT",
+        "id": "T-3003"
+      },
+      "occurredAt": "2026-11-26T15:10:58.050Z",
+      "enteredRoomIds": [
+        "R-1808-S"
+      ],
+      "doorwayOnlyRoomIds": [
+        "R-1808-L"
+      ],
+      "notSeenRoomIds": [],
+      "note": "",
+      "agentSignature": {
+        "agentId": "AG-C1",
+        "signedAt": "2026-11-26T14:00:58.050Z"
+      },
+      "clientConfirmation": {
+        "actorId": "T-3003",
+        "role": "TENANT",
+        "decision": "CONFIRMED",
+        "note": "",
+        "confirmedAt": "2026-11-26T14:00:58.051Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:58.050Z"
+    },
+    {
+      "id": "VST-SO-6-OVERLAP-RELAY-A",
+      "appointmentId": "APT-SO-6-OVERLAP-RELAY-A",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "listingId": "L-1808-E-SOLO",
+      "storeId": "S-A",
+      "bookedAgentId": "AG-A1",
+      "agentId": "AG-A1",
+      "participant": {
+        "type": "TENANT",
+        "id": "T-3003"
+      },
+      "occurredAt": "2026-11-26T14:05:58.061Z",
+      "enteredRoomIds": [
+        "R-1808-M"
+      ],
+      "doorwayOnlyRoomIds": [
+        "R-1808-L"
+      ],
+      "notSeenRoomIds": [],
+      "note": "",
+      "agentSignature": {
+        "agentId": "AG-A1",
+        "signedAt": "2026-11-26T14:00:58.061Z"
+      },
+      "clientConfirmation": {
+        "actorId": "T-3003",
+        "role": "TENANT",
+        "decision": "CONFIRMED",
+        "note": "",
+        "confirmedAt": "2026-11-26T14:00:58.062Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:58.061Z"
+    },
+    {
+      "id": "VST-SO-6-OVERLAP-RELAY-C-M",
+      "appointmentId": "APT-SO-6-OVERLAP-RELAY-C-M",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "listingId": "L-1808-RENAMED",
+      "storeId": "S-C",
+      "bookedAgentId": "AG-C1",
+      "agentId": "AG-C1",
+      "participant": {
+        "type": "TENANT",
+        "id": "T-3003"
+      },
+      "occurredAt": "2026-11-26T14:50:58.070Z",
+      "enteredRoomIds": [
+        "R-1808-M"
+      ],
+      "doorwayOnlyRoomIds": [
+        "R-1808-L"
+      ],
+      "notSeenRoomIds": [],
+      "note": "",
+      "agentSignature": {
+        "agentId": "AG-C1",
+        "signedAt": "2026-11-26T14:00:58.070Z"
+      },
+      "clientConfirmation": {
+        "actorId": "T-3003",
+        "role": "TENANT",
+        "decision": "CONFIRMED",
+        "note": "",
+        "confirmedAt": "2026-11-26T14:00:58.072Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:58.070Z"
+    },
+    {
+      "id": "VST-SO-6-OVERLAP-RELAY-C-S",
+      "appointmentId": "APT-SO-6-OVERLAP-RELAY-C-S",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "listingId": "L-1808-WHOLE",
+      "storeId": "S-C",
+      "bookedAgentId": "AG-C1",
+      "agentId": "AG-C1",
+      "participant": {
+        "type": "TENANT",
+        "id": "T-3003"
+      },
+      "occurredAt": "2026-11-26T15:10:58.074Z",
+      "enteredRoomIds": [
+        "R-1808-S"
+      ],
+      "doorwayOnlyRoomIds": [
+        "R-1808-L"
+      ],
+      "notSeenRoomIds": [],
+      "note": "",
+      "agentSignature": {
+        "agentId": "AG-C1",
+        "signedAt": "2026-11-26T14:00:58.074Z"
+      },
+      "clientConfirmation": {
+        "actorId": "T-3003",
+        "role": "TENANT",
+        "decision": "CONFIRMED",
+        "note": "",
+        "confirmedAt": "2026-11-26T14:00:58.075Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:58.074Z"
+    }
+  ],
+  "contributions": [
+    {
+      "id": "WC-55D15CE385",
+      "searchOrderId": "SO-0-EAST-ONLY",
+      "roomId": "R-1701-E",
+      "type": "VIEWING",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-0-EAST-ONLY",
+      "appointmentId": "APT-SO-0-EAST-ONLY",
+      "listingId": "L-1701-WHOLE",
+      "occurredAt": "2026-11-26T14:10:57.984Z",
+      "confirmedAt": "2026-11-26T14:00:57.985Z"
+    },
+    {
+      "id": "WC-3DC8EFBDB0",
+      "searchOrderId": "SO-0-EAST-ONLY",
+      "roomId": "R-1701-E",
+      "type": "NEGOTIATION",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-0-EAST-ONLY",
+      "occurredAt": "2026-11-26T14:25:57.988Z",
+      "confirmedAt": "2026-11-26T14:00:57.989Z",
+      "effective": true
+    },
+    {
+      "id": "WC-DF9FD25E63",
+      "searchOrderId": "SO-0-EAST-ONLY",
+      "roomId": "R-1701-W",
+      "type": "NEGOTIATION",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-0-EAST-ONLY",
+      "occurredAt": "2026-11-26T14:25:57.988Z",
+      "confirmedAt": "2026-11-26T14:00:57.989Z",
+      "effective": true
+    },
+    {
+      "id": "WC-8A1DA3455B",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "roomId": "R-1701-E",
+      "type": "VIEWING",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "appointmentId": "APT-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "listingId": "L-1701-WHOLE",
+      "occurredAt": "2026-11-26T14:10:57.995Z",
+      "confirmedAt": "2026-11-26T14:00:57.997Z"
+    },
+    {
+      "id": "WC-F14613039D",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "roomId": "R-1701-W",
+      "type": "VIEWING",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "appointmentId": "APT-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "listingId": "L-1701-WHOLE",
+      "occurredAt": "2026-11-26T14:10:57.995Z",
+      "confirmedAt": "2026-11-26T14:00:57.997Z"
+    },
+    {
+      "id": "WC-0C875FB581",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "roomId": "R-1701-E",
+      "type": "NEGOTIATION",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "occurredAt": "2026-11-26T14:25:57.997Z",
+      "confirmedAt": "2026-11-26T14:00:57.998Z",
+      "effective": true
+    },
+    {
+      "id": "WC-65928E5749",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "roomId": "R-1701-W",
+      "type": "NEGOTIATION",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "occurredAt": "2026-11-26T14:25:57.997Z",
+      "confirmedAt": "2026-11-26T14:00:57.998Z",
+      "effective": true
+    },
+    {
+      "id": "WC-31989F6490",
+      "searchOrderId": "SO-2-WEST-DOORWAY-ONLY",
+      "roomId": "R-1701-E",
+      "type": "VIEWING",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-2-WEST-DOORWAY-ONLY",
+      "appointmentId": "APT-SO-2-WEST-DOORWAY-ONLY",
+      "listingId": "L-1701-WHOLE",
+      "occurredAt": "2026-11-26T14:10:58.007Z",
+      "confirmedAt": "2026-11-26T14:00:58.008Z"
+    },
+    {
+      "id": "WC-DFB7E03C97",
+      "searchOrderId": "SO-2-WEST-DOORWAY-ONLY",
+      "roomId": "R-1701-E",
+      "type": "NEGOTIATION",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-2-WEST-DOORWAY-ONLY",
+      "occurredAt": "2026-11-26T14:25:58.009Z",
+      "confirmedAt": "2026-11-26T14:00:58.010Z",
+      "effective": true
+    },
+    {
+      "id": "WC-0125872EAE",
+      "searchOrderId": "SO-2-WEST-DOORWAY-ONLY",
+      "roomId": "R-1701-W",
+      "type": "NEGOTIATION",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-2-WEST-DOORWAY-ONLY",
+      "occurredAt": "2026-11-26T14:25:58.009Z",
+      "confirmedAt": "2026-11-26T14:00:58.010Z",
+      "effective": true
+    },
+    {
+      "id": "WC-230A413ACE",
+      "searchOrderId": "SO-3-FULL-VIEW-WEST-LEASE",
+      "roomId": "R-1701-E",
+      "type": "VIEWING",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-3-FULL-VIEW-WEST-LEASE",
+      "appointmentId": "APT-SO-3-FULL-VIEW-WEST-LEASE",
+      "listingId": "L-1701-WHOLE",
+      "occurredAt": "2026-11-26T14:10:58.017Z",
+      "confirmedAt": "2026-11-26T14:00:58.017Z"
+    },
+    {
+      "id": "WC-D2279D3BB5",
+      "searchOrderId": "SO-3-FULL-VIEW-WEST-LEASE",
+      "roomId": "R-1701-W",
+      "type": "VIEWING",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-3-FULL-VIEW-WEST-LEASE",
+      "appointmentId": "APT-SO-3-FULL-VIEW-WEST-LEASE",
+      "listingId": "L-1701-WHOLE",
+      "occurredAt": "2026-11-26T14:10:58.017Z",
+      "confirmedAt": "2026-11-26T14:00:58.017Z"
+    },
+    {
+      "id": "WC-A4B17AF654",
+      "searchOrderId": "SO-3-FULL-VIEW-WEST-LEASE",
+      "roomId": "R-1701-W",
+      "type": "NEGOTIATION",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-3-FULL-VIEW-WEST-LEASE",
+      "occurredAt": "2026-11-26T14:25:58.018Z",
+      "confirmedAt": "2026-11-26T14:00:58.019Z",
+      "effective": true
+    },
+    {
+      "id": "WC-ACE5D6E1E4",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "roomId": "R-1701-E",
+      "type": "VIEWING",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-4-AUTHORIZED-PROXY",
+      "appointmentId": "APT-SO-4-AUTHORIZED-PROXY",
+      "listingId": "L-1701-WHOLE",
+      "occurredAt": "2026-11-26T14:10:58.026Z",
+      "confirmedAt": "2026-11-26T14:00:58.028Z"
+    },
+    {
+      "id": "WC-64F37B34B6",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "roomId": "R-1701-W",
+      "type": "VIEWING",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-4-AUTHORIZED-PROXY",
+      "appointmentId": "APT-SO-4-AUTHORIZED-PROXY",
+      "listingId": "L-1701-WHOLE",
+      "occurredAt": "2026-11-26T14:10:58.026Z",
+      "confirmedAt": "2026-11-26T14:00:58.028Z"
+    },
+    {
+      "id": "WC-8B086DDA49",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "roomId": "R-1701-E",
+      "type": "NEGOTIATION",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-4-AUTHORIZED-PROXY",
+      "occurredAt": "2026-11-26T14:25:58.029Z",
+      "confirmedAt": "2026-11-26T14:00:58.030Z",
+      "effective": true
+    },
+    {
+      "id": "WC-2885077C68",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "roomId": "R-1701-W",
+      "type": "NEGOTIATION",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-4-AUTHORIZED-PROXY",
+      "occurredAt": "2026-11-26T14:25:58.029Z",
+      "confirmedAt": "2026-11-26T14:00:58.030Z",
+      "effective": true
+    },
+    {
+      "id": "WC-17A640EB86",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "roomId": "R-1808-M",
+      "type": "VIEWING",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-5-OVERLAP-FIRST-A",
+      "appointmentId": "APT-SO-5-OVERLAP-FIRST-A",
+      "listingId": "L-1808-E-SOLO",
+      "occurredAt": "2026-11-26T14:05:58.035Z",
+      "confirmedAt": "2026-11-26T14:00:58.037Z"
+    },
+    {
+      "id": "WC-7E38905E6A",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "roomId": "R-1808-M",
+      "type": "VIEWING",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-5-OVERLAP-FIRST-C-M",
+      "appointmentId": "APT-SO-5-OVERLAP-FIRST-C-M",
+      "listingId": "L-1808-RENAMED",
+      "occurredAt": "2026-11-26T14:50:58.047Z",
+      "confirmedAt": "2026-11-26T14:00:58.048Z"
+    },
+    {
+      "id": "WC-0B832373D6",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "roomId": "R-1808-S",
+      "type": "VIEWING",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-5-OVERLAP-FIRST-C-S",
+      "appointmentId": "APT-SO-5-OVERLAP-FIRST-C-S",
+      "listingId": "L-1808-WHOLE",
+      "occurredAt": "2026-11-26T15:10:58.050Z",
+      "confirmedAt": "2026-11-26T14:00:58.051Z"
+    },
+    {
+      "id": "WC-19A2FCA494",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "roomId": "R-1808-M",
+      "type": "NEGOTIATION",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-5-OVERLAP-FIRST-C",
+      "occurredAt": "2026-11-26T15:30:58.053Z",
+      "confirmedAt": "2026-11-26T14:00:58.055Z",
+      "effective": true
+    },
+    {
+      "id": "WC-E40F2C9507",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "roomId": "R-1808-S",
+      "type": "NEGOTIATION",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-5-OVERLAP-FIRST-C",
+      "occurredAt": "2026-11-26T15:30:58.053Z",
+      "confirmedAt": "2026-11-26T14:00:58.055Z",
+      "effective": true
+    },
+    {
+      "id": "WC-3D913D4F2E",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "roomId": "R-1808-M",
+      "type": "VIEWING",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-6-OVERLAP-RELAY-A",
+      "appointmentId": "APT-SO-6-OVERLAP-RELAY-A",
+      "listingId": "L-1808-E-SOLO",
+      "occurredAt": "2026-11-26T14:05:58.061Z",
+      "confirmedAt": "2026-11-26T14:00:58.062Z"
+    },
+    {
+      "id": "WC-A7FCBBE865",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "roomId": "R-1808-M",
+      "type": "VIEWING",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-6-OVERLAP-RELAY-C-M",
+      "appointmentId": "APT-SO-6-OVERLAP-RELAY-C-M",
+      "listingId": "L-1808-RENAMED",
+      "occurredAt": "2026-11-26T14:50:58.070Z",
+      "confirmedAt": "2026-11-26T14:00:58.072Z"
+    },
+    {
+      "id": "WC-42E19B6170",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "roomId": "R-1808-S",
+      "type": "VIEWING",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "sourceType": "VISIT",
+      "sourceId": "VST-SO-6-OVERLAP-RELAY-C-S",
+      "appointmentId": "APT-SO-6-OVERLAP-RELAY-C-S",
+      "listingId": "L-1808-WHOLE",
+      "occurredAt": "2026-11-26T15:10:58.074Z",
+      "confirmedAt": "2026-11-26T14:00:58.075Z"
+    },
+    {
+      "id": "WC-337E3C0A42",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "roomId": "R-1808-M",
+      "type": "NEGOTIATION",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-6-OVERLAP-RELAY-C",
+      "occurredAt": "2026-11-26T15:30:58.076Z",
+      "confirmedAt": "2026-11-26T14:00:58.077Z",
+      "effective": true
+    },
+    {
+      "id": "WC-600B67A2D2",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "roomId": "R-1808-S",
+      "type": "NEGOTIATION",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "sourceType": "NEGOTIATION",
+      "sourceId": "NEG-SO-6-OVERLAP-RELAY-C",
+      "occurredAt": "2026-11-26T15:30:58.076Z",
+      "confirmedAt": "2026-11-26T14:00:58.077Z",
+      "effective": true
+    }
+  ],
+  "negotiations": [
+    {
+      "id": "NEG-SO-0-EAST-ONLY",
+      "searchOrderId": "SO-0-EAST-ONLY",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "roomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "kind": "TERM_AGREED",
+      "terms": {
+        "monthlyRentPoints": 1701,
+        "note": "仅接通议价记录；本演示不另设计点"
+      },
+      "note": "",
+      "occurredAt": "2026-11-26T14:25:57.988Z",
+      "status": "CONFIRMED",
+      "tenantConfirmation": {
+        "tenantId": "T-1001",
+        "confirmedAt": "2026-11-26T14:00:57.989Z"
+      },
+      "createdAt": "2026-11-26T14:00:57.988Z"
+    },
+    {
+      "id": "NEG-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "roomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "kind": "TERM_AGREED",
+      "terms": {
+        "monthlyRentPoints": 1701,
+        "note": "仅接通议价记录；本演示不另设计点"
+      },
+      "note": "",
+      "occurredAt": "2026-11-26T14:25:57.997Z",
+      "status": "CONFIRMED",
+      "tenantConfirmation": {
+        "tenantId": "T-1001",
+        "confirmedAt": "2026-11-26T14:00:57.998Z"
+      },
+      "createdAt": "2026-11-26T14:00:57.997Z"
+    },
+    {
+      "id": "NEG-SO-2-WEST-DOORWAY-ONLY",
+      "searchOrderId": "SO-2-WEST-DOORWAY-ONLY",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "roomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "kind": "TERM_AGREED",
+      "terms": {
+        "monthlyRentPoints": 1701,
+        "note": "仅接通议价记录；本演示不另设计点"
+      },
+      "note": "",
+      "occurredAt": "2026-11-26T14:25:58.009Z",
+      "status": "CONFIRMED",
+      "tenantConfirmation": {
+        "tenantId": "T-1001",
+        "confirmedAt": "2026-11-26T14:00:58.010Z"
+      },
+      "createdAt": "2026-11-26T14:00:58.009Z"
+    },
+    {
+      "id": "NEG-SO-3-FULL-VIEW-WEST-LEASE",
+      "searchOrderId": "SO-3-FULL-VIEW-WEST-LEASE",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "roomIds": [
+        "R-1701-W"
+      ],
+      "kind": "TERM_AGREED",
+      "terms": {
+        "monthlyRentPoints": 1701,
+        "note": "仅接通议价记录；本演示不另设计点"
+      },
+      "note": "",
+      "occurredAt": "2026-11-26T14:25:58.018Z",
+      "status": "CONFIRMED",
+      "tenantConfirmation": {
+        "tenantId": "T-1001",
+        "confirmedAt": "2026-11-26T14:00:58.019Z"
+      },
+      "createdAt": "2026-11-26T14:00:58.018Z"
+    },
+    {
+      "id": "NEG-SO-4-AUTHORIZED-PROXY",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "storeId": "S-A",
+      "agentId": "AG-A1",
+      "roomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "kind": "TERM_AGREED",
+      "terms": {
+        "monthlyRentPoints": 1701,
+        "note": "仅接通议价记录；本演示不另设计点"
+      },
+      "note": "",
+      "occurredAt": "2026-11-26T14:25:58.029Z",
+      "status": "CONFIRMED",
+      "tenantConfirmation": {
+        "tenantId": "T-1001",
+        "confirmedAt": "2026-11-26T14:00:58.030Z"
+      },
+      "createdAt": "2026-11-26T14:00:58.029Z"
+    },
+    {
+      "id": "NEG-SO-5-OVERLAP-FIRST-C",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "roomIds": [
+        "R-1808-M",
+        "R-1808-S"
+      ],
+      "kind": "TERM_AGREED",
+      "terms": {},
+      "note": "",
+      "occurredAt": "2026-11-26T15:30:58.053Z",
+      "status": "CONFIRMED",
+      "tenantConfirmation": {
+        "tenantId": "T-3003",
+        "confirmedAt": "2026-11-26T14:00:58.055Z"
+      },
+      "createdAt": "2026-11-26T14:00:58.053Z"
+    },
+    {
+      "id": "NEG-SO-6-OVERLAP-RELAY-C",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "storeId": "S-C",
+      "agentId": "AG-C1",
+      "roomIds": [
+        "R-1808-M",
+        "R-1808-S"
+      ],
+      "kind": "TERM_AGREED",
+      "terms": {},
+      "note": "",
+      "occurredAt": "2026-11-26T15:30:58.076Z",
+      "status": "CONFIRMED",
+      "tenantConfirmation": {
+        "tenantId": "T-3003",
+        "confirmedAt": "2026-11-26T14:00:58.077Z"
+      },
+      "createdAt": "2026-11-26T14:00:58.076Z"
+    }
+  ],
+  "handoffs": [
+    {
+      "id": "HND-SO-5-OVERLAP-FIRST",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "fromStoreId": "S-A",
+      "toStoreId": "S-C",
+      "items": [
+        {
+          "roomId": "R-1808-M",
+          "workType": "VIEWING",
+          "sourceId": "VST-SO-5-OVERLAP-FIRST-A",
+          "action": "INHERIT_FUTURE",
+          "note": "继承东屋已看事实，C 将复看"
+        },
+        {
+          "roomId": "R-1808-S",
+          "workType": "VIEWING",
+          "sourceId": null,
+          "action": "INHERIT_FUTURE",
+          "note": "由 C 新看西屋"
+        },
+        {
+          "roomId": "R-1808-M",
+          "workType": "NEGOTIATION",
+          "sourceId": null,
+          "action": "INHERIT_FUTURE",
+          "note": ""
+        },
+        {
+          "roomId": "R-1808-S",
+          "workType": "NEGOTIATION",
+          "sourceId": null,
+          "action": "INHERIT_FUTURE",
+          "note": ""
+        }
+      ],
+      "tenantConfirmation": {
+        "actorId": "T-3003",
+        "confirmedAt": "2026-11-26T14:00:58.041Z"
+      },
+      "receiverConfirmation": {
+        "actorId": "AG-C1",
+        "storeId": "S-C",
+        "acceptedAt": "2026-11-26T14:00:58.042Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:58.040Z",
+      "confirmedAt": "2026-11-26T14:00:58.042Z"
+    },
+    {
+      "id": "HND-SO-6-OVERLAP-RELAY",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "fromStoreId": "S-A",
+      "toStoreId": "S-C",
+      "items": [
+        {
+          "roomId": "R-1808-M",
+          "workType": "VIEWING",
+          "sourceId": "VST-SO-6-OVERLAP-RELAY-A",
+          "action": "INHERIT_FUTURE",
+          "note": "继承东屋已看事实，C 将复看"
+        },
+        {
+          "roomId": "R-1808-S",
+          "workType": "VIEWING",
+          "sourceId": null,
+          "action": "INHERIT_FUTURE",
+          "note": "由 C 新看西屋"
+        },
+        {
+          "roomId": "R-1808-M",
+          "workType": "NEGOTIATION",
+          "sourceId": null,
+          "action": "INHERIT_FUTURE",
+          "note": ""
+        },
+        {
+          "roomId": "R-1808-S",
+          "workType": "NEGOTIATION",
+          "sourceId": null,
+          "action": "INHERIT_FUTURE",
+          "note": ""
+        }
+      ],
+      "tenantConfirmation": {
+        "actorId": "T-3003",
+        "confirmedAt": "2026-11-26T14:00:58.064Z"
+      },
+      "receiverConfirmation": {
+        "actorId": "AG-C1",
+        "storeId": "S-C",
+        "acceptedAt": "2026-11-26T14:00:58.065Z"
+      },
+      "status": "CONFIRMED",
+      "createdAt": "2026-11-26T14:00:58.063Z",
+      "confirmedAt": "2026-11-26T14:00:58.065Z"
+    }
+  ],
+  "splitAgreements": [],
+  "leases": [
+    {
+      "id": "LSE-SO-0-EAST-ONLY",
+      "searchOrderId": "SO-0-EAST-ONLY",
+      "listingId": "L-1701-WHOLE",
+      "signingStoreId": "S-B",
+      "signingAgentId": "AG-B1",
+      "tenantId": "T-1001",
+      "signedRoomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "wholeSet": true,
+      "signedAt": "2026-11-26T14:40:57.990Z",
+      "tenantSignature": {
+        "actorId": "T-1001",
+        "signedAt": "2026-11-26T14:00:57.990Z"
+      },
+      "storeSignature": {
+        "storeId": "S-B",
+        "agentId": "AG-B1",
+        "signedAt": "2026-11-26T14:00:57.990Z"
+      },
+      "status": "SIGNED",
+      "createdAt": "2026-11-26T14:00:57.990Z"
+    },
+    {
+      "id": "LSE-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "listingId": "L-1701-WHOLE",
+      "signingStoreId": "S-B",
+      "signingAgentId": "AG-B1",
+      "tenantId": "T-1001",
+      "signedRoomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "wholeSet": true,
+      "signedAt": "2026-11-26T14:40:57.999Z",
+      "tenantSignature": {
+        "actorId": "T-1001",
+        "signedAt": "2026-11-26T14:00:57.999Z"
+      },
+      "storeSignature": {
+        "storeId": "S-B",
+        "agentId": "AG-B1",
+        "signedAt": "2026-11-26T14:00:57.999Z"
+      },
+      "status": "SIGNED",
+      "createdAt": "2026-11-26T14:00:57.999Z"
+    },
+    {
+      "id": "LSE-SO-2-WEST-DOORWAY-ONLY",
+      "searchOrderId": "SO-2-WEST-DOORWAY-ONLY",
+      "listingId": "L-1701-WHOLE",
+      "signingStoreId": "S-B",
+      "signingAgentId": "AG-B1",
+      "tenantId": "T-1001",
+      "signedRoomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "wholeSet": true,
+      "signedAt": "2026-11-26T14:40:58.011Z",
+      "tenantSignature": {
+        "actorId": "T-1001",
+        "signedAt": "2026-11-26T14:00:58.011Z"
+      },
+      "storeSignature": {
+        "storeId": "S-B",
+        "agentId": "AG-B1",
+        "signedAt": "2026-11-26T14:00:58.011Z"
+      },
+      "status": "SIGNED",
+      "createdAt": "2026-11-26T14:00:58.011Z"
+    },
+    {
+      "id": "LSE-SO-3-FULL-VIEW-WEST-LEASE",
+      "searchOrderId": "SO-3-FULL-VIEW-WEST-LEASE",
+      "listingId": "L-1701-WHOLE",
+      "signingStoreId": "S-B",
+      "signingAgentId": "AG-B1",
+      "tenantId": "T-1001",
+      "signedRoomIds": [
+        "R-1701-W"
+      ],
+      "wholeSet": false,
+      "signedAt": "2026-11-26T14:40:58.021Z",
+      "tenantSignature": {
+        "actorId": "T-1001",
+        "signedAt": "2026-11-26T14:00:58.021Z"
+      },
+      "storeSignature": {
+        "storeId": "S-B",
+        "agentId": "AG-B1",
+        "signedAt": "2026-11-26T14:00:58.021Z"
+      },
+      "status": "SIGNED",
+      "createdAt": "2026-11-26T14:00:58.021Z"
+    },
+    {
+      "id": "LSE-SO-4-AUTHORIZED-PROXY",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "listingId": "L-1701-WHOLE",
+      "signingStoreId": "S-B",
+      "signingAgentId": "AG-B1",
+      "tenantId": "T-1001",
+      "signedRoomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "wholeSet": true,
+      "signedAt": "2026-11-26T14:40:58.031Z",
+      "tenantSignature": {
+        "actorId": "T-1001",
+        "signedAt": "2026-11-26T14:00:58.031Z"
+      },
+      "storeSignature": {
+        "storeId": "S-B",
+        "agentId": "AG-B1",
+        "signedAt": "2026-11-26T14:00:58.031Z"
+      },
+      "status": "SIGNED",
+      "createdAt": "2026-11-26T14:00:58.031Z"
+    },
+    {
+      "id": "LSE-SO-5-OVERLAP-FIRST",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "listingId": "L-1808-WHOLE",
+      "signingStoreId": "S-B",
+      "signingAgentId": "AG-B1",
+      "tenantId": "T-3003",
+      "signedRoomIds": [
+        "R-1808-M",
+        "R-1808-S"
+      ],
+      "wholeSet": true,
+      "signedAt": "2026-11-26T16:00:58.056Z",
+      "tenantSignature": {
+        "actorId": "T-3003",
+        "signedAt": "2026-11-26T14:00:58.056Z"
+      },
+      "storeSignature": {
+        "storeId": "S-B",
+        "agentId": "AG-B1",
+        "signedAt": "2026-11-26T14:00:58.056Z"
+      },
+      "status": "SIGNED",
+      "createdAt": "2026-11-26T14:00:58.056Z"
+    },
+    {
+      "id": "LSE-SO-6-OVERLAP-RELAY",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "listingId": "L-1808-WHOLE",
+      "signingStoreId": "S-B",
+      "signingAgentId": "AG-B1",
+      "tenantId": "T-3003",
+      "signedRoomIds": [
+        "R-1808-M",
+        "R-1808-S"
+      ],
+      "wholeSet": true,
+      "signedAt": "2026-11-26T16:00:58.079Z",
+      "tenantSignature": {
+        "actorId": "T-3003",
+        "signedAt": "2026-11-26T14:00:58.079Z"
+      },
+      "storeSignature": {
+        "storeId": "S-B",
+        "agentId": "AG-B1",
+        "signedAt": "2026-11-26T14:00:58.079Z"
+      },
+      "status": "SIGNED",
+      "createdAt": "2026-11-26T14:00:58.079Z"
+    }
+  ],
+  "commissionCases": [
+    {
+      "id": "CASE-F92B1FF086",
+      "leaseId": "LSE-SO-0-EAST-ONLY",
+      "searchOrderId": "SO-0-EAST-ONLY",
+      "roomId": "R-1701-E",
+      "listingId": "L-1701-WHOLE",
+      "regime": "FIRST_PROTECTION",
+      "viewingPoints": 4,
+      "negotiationPoints": 0,
+      "totalPoints": 4,
+      "viewingBasis": "VALID_FIRST_PROTECTION",
+      "negotiationBasis": "NO_NEGOTIATION_POINTS",
+      "status": "PAYABLE",
+      "createdAt": "2026-11-26T14:00:57.990Z"
+    },
+    {
+      "id": "CASE-EC87080DF9",
+      "leaseId": "LSE-SO-0-EAST-ONLY",
+      "searchOrderId": "SO-0-EAST-ONLY",
+      "roomId": "R-1701-W",
+      "listingId": "L-1701-WHOLE",
+      "regime": "FIRST_PROTECTION",
+      "viewingPoints": 0,
+      "negotiationPoints": 0,
+      "totalPoints": 0,
+      "viewingBasis": "NO_CONFIRMED_ENTRY",
+      "negotiationBasis": "NO_NEGOTIATION_POINTS",
+      "status": "ZERO_POINTS",
+      "createdAt": "2026-11-26T14:00:57.990Z"
+    },
+    {
+      "id": "CASE-6815793C54",
+      "leaseId": "LSE-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "roomId": "R-1701-E",
+      "listingId": "L-1701-WHOLE",
+      "regime": "FIRST_PROTECTION",
+      "viewingPoints": 4,
+      "negotiationPoints": 0,
+      "totalPoints": 4,
+      "viewingBasis": "VALID_FIRST_PROTECTION",
+      "negotiationBasis": "NO_NEGOTIATION_POINTS",
+      "status": "PAYABLE",
+      "createdAt": "2026-11-26T14:00:57.999Z"
+    },
+    {
+      "id": "CASE-34C54541D9",
+      "leaseId": "LSE-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "roomId": "R-1701-W",
+      "listingId": "L-1701-WHOLE",
+      "regime": "FIRST_PROTECTION",
+      "viewingPoints": 4,
+      "negotiationPoints": 0,
+      "totalPoints": 4,
+      "viewingBasis": "VALID_FIRST_PROTECTION",
+      "negotiationBasis": "NO_NEGOTIATION_POINTS",
+      "status": "PAYABLE",
+      "createdAt": "2026-11-26T14:00:57.999Z"
+    },
+    {
+      "id": "CASE-EF5DAFD088",
+      "leaseId": "LSE-SO-2-WEST-DOORWAY-ONLY",
+      "searchOrderId": "SO-2-WEST-DOORWAY-ONLY",
+      "roomId": "R-1701-E",
+      "listingId": "L-1701-WHOLE",
+      "regime": "FIRST_PROTECTION",
+      "viewingPoints": 4,
+      "negotiationPoints": 0,
+      "totalPoints": 4,
+      "viewingBasis": "VALID_FIRST_PROTECTION",
+      "negotiationBasis": "NO_NEGOTIATION_POINTS",
+      "status": "PAYABLE",
+      "createdAt": "2026-11-26T14:00:58.011Z"
+    },
+    {
+      "id": "CASE-38FB0C8740",
+      "leaseId": "LSE-SO-2-WEST-DOORWAY-ONLY",
+      "searchOrderId": "SO-2-WEST-DOORWAY-ONLY",
+      "roomId": "R-1701-W",
+      "listingId": "L-1701-WHOLE",
+      "regime": "FIRST_PROTECTION",
+      "viewingPoints": 0,
+      "negotiationPoints": 0,
+      "totalPoints": 0,
+      "viewingBasis": "NO_CONFIRMED_ENTRY",
+      "negotiationBasis": "NO_NEGOTIATION_POINTS",
+      "status": "ZERO_POINTS",
+      "createdAt": "2026-11-26T14:00:58.011Z"
+    },
+    {
+      "id": "CASE-9C4F4FBBBD",
+      "leaseId": "LSE-SO-3-FULL-VIEW-WEST-LEASE",
+      "searchOrderId": "SO-3-FULL-VIEW-WEST-LEASE",
+      "roomId": "R-1701-W",
+      "listingId": "L-1701-WHOLE",
+      "regime": "FIRST_PROTECTION",
+      "viewingPoints": 4,
+      "negotiationPoints": 0,
+      "totalPoints": 4,
+      "viewingBasis": "VALID_FIRST_PROTECTION",
+      "negotiationBasis": "NO_NEGOTIATION_POINTS",
+      "status": "PAYABLE",
+      "createdAt": "2026-11-26T14:00:58.021Z"
+    },
+    {
+      "id": "CASE-E91988E457",
+      "leaseId": "LSE-SO-4-AUTHORIZED-PROXY",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "roomId": "R-1701-E",
+      "listingId": "L-1701-WHOLE",
+      "regime": "FIRST_PROTECTION",
+      "viewingPoints": 4,
+      "negotiationPoints": 0,
+      "totalPoints": 4,
+      "viewingBasis": "VALID_FIRST_PROTECTION",
+      "negotiationBasis": "NO_NEGOTIATION_POINTS",
+      "status": "PAYABLE",
+      "createdAt": "2026-11-26T14:00:58.031Z"
+    },
+    {
+      "id": "CASE-CB773036A7",
+      "leaseId": "LSE-SO-4-AUTHORIZED-PROXY",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "roomId": "R-1701-W",
+      "listingId": "L-1701-WHOLE",
+      "regime": "FIRST_PROTECTION",
+      "viewingPoints": 4,
+      "negotiationPoints": 0,
+      "totalPoints": 4,
+      "viewingBasis": "VALID_FIRST_PROTECTION",
+      "negotiationBasis": "NO_NEGOTIATION_POINTS",
+      "status": "PAYABLE",
+      "createdAt": "2026-11-26T14:00:58.031Z"
+    },
+    {
+      "id": "CASE-8832632260",
+      "leaseId": "LSE-SO-5-OVERLAP-FIRST",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "roomId": "R-1808-M",
+      "listingId": "L-1808-WHOLE",
+      "regime": "FIRST_PROTECTION",
+      "viewingPoints": 4,
+      "negotiationPoints": 2,
+      "totalPoints": 6,
+      "viewingBasis": "VALID_FIRST_PROTECTION",
+      "negotiationBasis": "LAST_EFFECTIVE_NEGOTIATOR",
+      "status": "PAYABLE",
+      "createdAt": "2026-11-26T14:00:58.056Z"
+    },
+    {
+      "id": "CASE-B7F8C3B3A3",
+      "leaseId": "LSE-SO-5-OVERLAP-FIRST",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "roomId": "R-1808-S",
+      "listingId": "L-1808-WHOLE",
+      "regime": "FIRST_PROTECTION",
+      "viewingPoints": 4,
+      "negotiationPoints": 2,
+      "totalPoints": 6,
+      "viewingBasis": "VALID_FIRST_PROTECTION",
+      "negotiationBasis": "LAST_EFFECTIVE_NEGOTIATOR",
+      "status": "PAYABLE",
+      "createdAt": "2026-11-26T14:00:58.056Z"
+    },
+    {
+      "id": "CASE-73E381C1AA",
+      "leaseId": "LSE-SO-6-OVERLAP-RELAY",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "roomId": "R-1808-M",
+      "listingId": "L-1808-WHOLE",
+      "regime": "RELAY_CONTRIBUTION",
+      "viewingPoints": 4,
+      "negotiationPoints": 2,
+      "totalPoints": 6,
+      "viewingBasis": "EQUAL_SPLIT_PER_DISTINCT_RELAY_STORE",
+      "negotiationBasis": "EQUAL_SPLIT_NEGOTIATION",
+      "status": "PAYABLE",
+      "createdAt": "2026-11-26T14:00:58.079Z"
+    },
+    {
+      "id": "CASE-06A3DBF4A1",
+      "leaseId": "LSE-SO-6-OVERLAP-RELAY",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "roomId": "R-1808-S",
+      "listingId": "L-1808-WHOLE",
+      "regime": "RELAY_CONTRIBUTION",
+      "viewingPoints": 4,
+      "negotiationPoints": 2,
+      "totalPoints": 6,
+      "viewingBasis": "EQUAL_SPLIT_PER_DISTINCT_RELAY_STORE",
+      "negotiationBasis": "EQUAL_SPLIT_NEGOTIATION",
+      "status": "PAYABLE",
+      "createdAt": "2026-11-26T14:00:58.079Z"
+    }
+  ],
+  "commissionItems": [
+    {
+      "id": "ITEM-FFD5FF3AD1",
+      "caseId": "CASE-F92B1FF086",
+      "leaseId": "LSE-SO-0-EAST-ONLY",
+      "searchOrderId": "SO-0-EAST-ONLY",
+      "roomId": "R-1701-E",
+      "commissionType": "VIEWING",
+      "payeeStoreId": "S-A",
+      "points": 4,
+      "reason": "VALID_FIRST_PROTECTION",
+      "basis": "VALID_FIRST_PROTECTION",
+      "sourceIds": [
+        "PRT-SO-0-EAST-ONLY",
+        "VST-SO-0-EAST-ONLY",
+        "VST-SO-0-EAST-ONLY"
+      ],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:57.990Z"
+    },
+    {
+      "id": "ITEM-22A37F4DEC",
+      "caseId": "CASE-6815793C54",
+      "leaseId": "LSE-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "roomId": "R-1701-E",
+      "commissionType": "VIEWING",
+      "payeeStoreId": "S-A",
+      "points": 4,
+      "reason": "VALID_FIRST_PROTECTION",
+      "basis": "VALID_FIRST_PROTECTION",
+      "sourceIds": [
+        "PRT-SO-1-BOTH-VIEW-BOTH-SIGN",
+        "VST-SO-1-BOTH-VIEW-BOTH-SIGN",
+        "VST-SO-1-BOTH-VIEW-BOTH-SIGN"
+      ],
+      "status": "WITHDRAWN",
+      "settlementId": "STL-SO-1-A-8",
+      "createdAt": "2026-11-26T14:00:57.999Z",
+      "withdrawnAt": "2026-11-26T14:00:58.000Z"
+    },
+    {
+      "id": "ITEM-F1DADDB16C",
+      "caseId": "CASE-34C54541D9",
+      "leaseId": "LSE-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "searchOrderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "roomId": "R-1701-W",
+      "commissionType": "VIEWING",
+      "payeeStoreId": "S-A",
+      "points": 4,
+      "reason": "VALID_FIRST_PROTECTION",
+      "basis": "VALID_FIRST_PROTECTION",
+      "sourceIds": [
+        "PRT-SO-1-BOTH-VIEW-BOTH-SIGN",
+        "VST-SO-1-BOTH-VIEW-BOTH-SIGN",
+        "VST-SO-1-BOTH-VIEW-BOTH-SIGN"
+      ],
+      "status": "WITHDRAWN",
+      "settlementId": "STL-SO-1-A-8",
+      "createdAt": "2026-11-26T14:00:57.999Z",
+      "withdrawnAt": "2026-11-26T14:00:58.000Z"
+    },
+    {
+      "id": "ITEM-46ED4DF245",
+      "caseId": "CASE-EF5DAFD088",
+      "leaseId": "LSE-SO-2-WEST-DOORWAY-ONLY",
+      "searchOrderId": "SO-2-WEST-DOORWAY-ONLY",
+      "roomId": "R-1701-E",
+      "commissionType": "VIEWING",
+      "payeeStoreId": "S-A",
+      "points": 4,
+      "reason": "VALID_FIRST_PROTECTION",
+      "basis": "VALID_FIRST_PROTECTION",
+      "sourceIds": [
+        "PRT-SO-2-WEST-DOORWAY-ONLY",
+        "VST-SO-2-WEST-DOORWAY-ONLY",
+        "VST-SO-2-WEST-DOORWAY-ONLY"
+      ],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:58.011Z"
+    },
+    {
+      "id": "ITEM-408E814F77",
+      "caseId": "CASE-9C4F4FBBBD",
+      "leaseId": "LSE-SO-3-FULL-VIEW-WEST-LEASE",
+      "searchOrderId": "SO-3-FULL-VIEW-WEST-LEASE",
+      "roomId": "R-1701-W",
+      "commissionType": "VIEWING",
+      "payeeStoreId": "S-A",
+      "points": 4,
+      "reason": "VALID_FIRST_PROTECTION",
+      "basis": "VALID_FIRST_PROTECTION",
+      "sourceIds": [
+        "PRT-SO-3-FULL-VIEW-WEST-LEASE",
+        "VST-SO-3-FULL-VIEW-WEST-LEASE",
+        "VST-SO-3-FULL-VIEW-WEST-LEASE"
+      ],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:58.021Z"
+    },
+    {
+      "id": "ITEM-9159E411F2",
+      "caseId": "CASE-E91988E457",
+      "leaseId": "LSE-SO-4-AUTHORIZED-PROXY",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "roomId": "R-1701-E",
+      "commissionType": "VIEWING",
+      "payeeStoreId": "S-A",
+      "points": 4,
+      "reason": "VALID_FIRST_PROTECTION",
+      "basis": "VALID_FIRST_PROTECTION",
+      "sourceIds": [
+        "PRT-SO-4-AUTHORIZED-PROXY",
+        "VST-SO-4-AUTHORIZED-PROXY",
+        "VST-SO-4-AUTHORIZED-PROXY"
+      ],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:58.031Z"
+    },
+    {
+      "id": "ITEM-809F97EB9A",
+      "caseId": "CASE-CB773036A7",
+      "leaseId": "LSE-SO-4-AUTHORIZED-PROXY",
+      "searchOrderId": "SO-4-AUTHORIZED-PROXY",
+      "roomId": "R-1701-W",
+      "commissionType": "VIEWING",
+      "payeeStoreId": "S-A",
+      "points": 4,
+      "reason": "VALID_FIRST_PROTECTION",
+      "basis": "VALID_FIRST_PROTECTION",
+      "sourceIds": [
+        "PRT-SO-4-AUTHORIZED-PROXY",
+        "VST-SO-4-AUTHORIZED-PROXY",
+        "VST-SO-4-AUTHORIZED-PROXY"
+      ],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:58.031Z"
+    },
+    {
+      "id": "ITEM-A40BD6FBE0",
+      "caseId": "CASE-8832632260",
+      "leaseId": "LSE-SO-5-OVERLAP-FIRST",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "roomId": "R-1808-M",
+      "commissionType": "VIEWING",
+      "payeeStoreId": "S-A",
+      "points": 4,
+      "reason": "VALID_FIRST_PROTECTION",
+      "basis": "VALID_FIRST_PROTECTION",
+      "sourceIds": [
+        "PRT-SO-5-OVERLAP-FIRST-A-M",
+        "VST-SO-5-OVERLAP-FIRST-A",
+        "VST-SO-5-OVERLAP-FIRST-A"
+      ],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:58.056Z"
+    },
+    {
+      "id": "ITEM-07634C1AB5",
+      "caseId": "CASE-8832632260",
+      "leaseId": "LSE-SO-5-OVERLAP-FIRST",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "roomId": "R-1808-M",
+      "commissionType": "NEGOTIATION",
+      "payeeStoreId": "S-C",
+      "points": 2,
+      "reason": "LAST_EFFECTIVE_NEGOTIATOR",
+      "basis": "LAST_EFFECTIVE_NEGOTIATOR",
+      "sourceIds": [
+        "NEG-SO-5-OVERLAP-FIRST-C"
+      ],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:58.056Z"
+    },
+    {
+      "id": "ITEM-287E94B0C6",
+      "caseId": "CASE-B7F8C3B3A3",
+      "leaseId": "LSE-SO-5-OVERLAP-FIRST",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "roomId": "R-1808-S",
+      "commissionType": "VIEWING",
+      "payeeStoreId": "S-C",
+      "points": 4,
+      "reason": "VALID_FIRST_PROTECTION",
+      "basis": "VALID_FIRST_PROTECTION",
+      "sourceIds": [
+        "PRT-SO-5-OVERLAP-FIRST-C-S",
+        "VST-SO-5-OVERLAP-FIRST-C-S",
+        "VST-SO-5-OVERLAP-FIRST-C-S"
+      ],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:58.056Z"
+    },
+    {
+      "id": "ITEM-265D1A0160",
+      "caseId": "CASE-B7F8C3B3A3",
+      "leaseId": "LSE-SO-5-OVERLAP-FIRST",
+      "searchOrderId": "SO-5-OVERLAP-FIRST",
+      "roomId": "R-1808-S",
+      "commissionType": "NEGOTIATION",
+      "payeeStoreId": "S-C",
+      "points": 2,
+      "reason": "LAST_EFFECTIVE_NEGOTIATOR",
+      "basis": "LAST_EFFECTIVE_NEGOTIATOR",
+      "sourceIds": [
+        "NEG-SO-5-OVERLAP-FIRST-C"
+      ],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:58.056Z"
+    },
+    {
+      "id": "ITEM-503B2CF898",
+      "caseId": "CASE-73E381C1AA",
+      "leaseId": "LSE-SO-6-OVERLAP-RELAY",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "roomId": "R-1808-M",
+      "commissionType": "VIEWING",
+      "payeeStoreId": "S-A",
+      "points": 2,
+      "reason": "EQUAL_RELAY_VIEWING_SHARE",
+      "basis": "EQUAL_SPLIT_PER_DISTINCT_RELAY_STORE",
+      "sourceIds": [
+        "VST-SO-6-OVERLAP-RELAY-A"
+      ],
+      "status": "WITHDRAWN",
+      "settlementId": "STL-SO-6-OVERLAP-RELAY-A",
+      "createdAt": "2026-11-26T14:00:58.079Z",
+      "withdrawnAt": "2026-11-26T14:00:58.081Z"
+    },
+    {
+      "id": "ITEM-7F89B0124C",
+      "caseId": "CASE-73E381C1AA",
+      "leaseId": "LSE-SO-6-OVERLAP-RELAY",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "roomId": "R-1808-M",
+      "commissionType": "VIEWING",
+      "payeeStoreId": "S-C",
+      "points": 2,
+      "reason": "EQUAL_RELAY_VIEWING_SHARE",
+      "basis": "EQUAL_SPLIT_PER_DISTINCT_RELAY_STORE",
+      "sourceIds": [
+        "VST-SO-6-OVERLAP-RELAY-C-M"
+      ],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:58.079Z"
+    },
+    {
+      "id": "ITEM-3025ECE795",
+      "caseId": "CASE-73E381C1AA",
+      "leaseId": "LSE-SO-6-OVERLAP-RELAY",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "roomId": "R-1808-M",
+      "commissionType": "NEGOTIATION",
+      "payeeStoreId": "S-C",
+      "points": 2,
+      "reason": "EQUAL_RELAY_NEGOTIATION_SHARE",
+      "basis": "EQUAL_SPLIT_NEGOTIATION",
+      "sourceIds": [],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:58.079Z"
+    },
+    {
+      "id": "ITEM-589488A981",
+      "caseId": "CASE-06A3DBF4A1",
+      "leaseId": "LSE-SO-6-OVERLAP-RELAY",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "roomId": "R-1808-S",
+      "commissionType": "VIEWING",
+      "payeeStoreId": "S-C",
+      "points": 4,
+      "reason": "EQUAL_RELAY_VIEWING_SHARE",
+      "basis": "EQUAL_SPLIT_PER_DISTINCT_RELAY_STORE",
+      "sourceIds": [
+        "VST-SO-6-OVERLAP-RELAY-C-S"
+      ],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:58.079Z"
+    },
+    {
+      "id": "ITEM-4F40D8F66B",
+      "caseId": "CASE-06A3DBF4A1",
+      "leaseId": "LSE-SO-6-OVERLAP-RELAY",
+      "searchOrderId": "SO-6-OVERLAP-RELAY",
+      "roomId": "R-1808-S",
+      "commissionType": "NEGOTIATION",
+      "payeeStoreId": "S-C",
+      "points": 2,
+      "reason": "EQUAL_RELAY_NEGOTIATION_SHARE",
+      "basis": "EQUAL_SPLIT_NEGOTIATION",
+      "sourceIds": [],
+      "status": "PAYABLE",
+      "settlementId": null,
+      "createdAt": "2026-11-26T14:00:58.079Z"
+    }
+  ],
+  "settlements": [
+    {
+      "id": "STL-SO-1-A-8",
+      "idempotencyKey": "REQ-SO-1-A-8",
+      "storeId": "S-A",
+      "accountId": "ACCT-S-A",
+      "itemIds": [
+        "ITEM-22A37F4DEC",
+        "ITEM-F1DADDB16C"
+      ],
+      "totalPoints": 8,
+      "status": "PAID",
+      "paidAt": "2026-11-26T14:00:58.000Z",
+      "ledgerEntryIds": [
+        "LED-439F9A2475",
+        "LED-D5A5F550AA"
+      ]
+    },
+    {
+      "id": "STL-SO-6-OVERLAP-RELAY-A",
+      "idempotencyKey": "REQ-SO-6-OVERLAP-RELAY-A",
+      "storeId": "S-A",
+      "accountId": "ACCT-S-A",
+      "itemIds": [
+        "ITEM-503B2CF898"
+      ],
+      "totalPoints": 2,
+      "status": "PAID",
+      "paidAt": "2026-11-26T14:00:58.081Z",
+      "ledgerEntryIds": [
+        "LED-F04ACE1A3C",
+        "LED-B44B9F94CD"
+      ]
+    }
+  ],
+  "ledgerEntries": [
+    {
+      "id": "LED-439F9A2475",
+      "accountId": "ACCT-PLATFORM-CLEARING",
+      "deltaPoints": -8,
+      "balanceAfterPoints": 99992,
+      "referenceType": "SETTLEMENT_CLEARING_DEBIT",
+      "referenceId": "STL-SO-1-A-8",
+      "idempotencyKey": "REQ-SO-1-A-8",
+      "createdAt": "2026-11-26T14:00:58.000Z"
+    },
+    {
+      "id": "LED-D5A5F550AA",
+      "accountId": "ACCT-S-A",
+      "deltaPoints": 8,
+      "balanceAfterPoints": 8,
+      "referenceType": "SETTLEMENT_STORE_CREDIT",
+      "referenceId": "STL-SO-1-A-8",
+      "idempotencyKey": "REQ-SO-1-A-8",
+      "createdAt": "2026-11-26T14:00:58.000Z"
+    },
+    {
+      "id": "LED-F04ACE1A3C",
+      "accountId": "ACCT-PLATFORM-CLEARING",
+      "deltaPoints": -2,
+      "balanceAfterPoints": 99990,
+      "referenceType": "SETTLEMENT_CLEARING_DEBIT",
+      "referenceId": "STL-SO-6-OVERLAP-RELAY-A",
+      "idempotencyKey": "REQ-SO-6-OVERLAP-RELAY-A",
+      "createdAt": "2026-11-26T14:00:58.081Z"
+    },
+    {
+      "id": "LED-B44B9F94CD",
+      "accountId": "ACCT-S-A",
+      "deltaPoints": 2,
+      "balanceAfterPoints": 10,
+      "referenceType": "SETTLEMENT_STORE_CREDIT",
+      "referenceId": "STL-SO-6-OVERLAP-RELAY-A",
+      "idempotencyKey": "REQ-SO-6-OVERLAP-RELAY-A",
+      "createdAt": "2026-11-26T14:00:58.081Z"
+    }
+  ],
+  "idempotencyRecords": [
+    {
+      "key": "REQ-SO-1-A-8",
+      "requestHash": "550ee93d46f57480d1409d8eb71595801e480fa363bc49921c001b30560f9d9a",
+      "resourceType": "SETTLEMENT",
+      "resourceId": "STL-SO-1-A-8",
+      "createdAt": "2026-11-26T14:00:58.000Z"
+    },
+    {
+      "key": "REQ-SO-6-OVERLAP-RELAY-A",
+      "requestHash": "32fdba9028289473d15230aabe3b8d925a3cd1e37ae9daeb49be682e864c8afa",
+      "resourceType": "SETTLEMENT",
+      "resourceId": "STL-SO-6-OVERLAP-RELAY-A",
+      "createdAt": "2026-11-26T14:00:58.081Z"
+    }
+  ],
+  "demoSummary": {
+    "generatedAt": "2026-11-26T14:00:58.085Z",
+    "rule": "Only CONFIRMED entry into a commissionable independent room earns viewing credit. Doorway-only shared spaces never count. Commission cases are unique per lease+physical room; listings pointing at one room never duplicate the pool.",
+    "openingEastOnlyWholeLease": {
+      "orderId": "SO-0-EAST-ONLY",
+      "leaseId": "LSE-SO-0-EAST-ONLY",
+      "signedRoomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "items": [
+        {
+          "roomId": "R-1701-E",
+          "type": "VIEWING",
+          "storeId": "S-A",
+          "points": 4,
+          "status": "PAYABLE"
+        }
+      ],
+      "storeAPoints": 4
+    },
+    "required": {
+      "case1BothViewedBothSigned": {
+        "orderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+        "leaseId": "LSE-SO-1-BOTH-VIEW-BOTH-SIGN",
+        "signedRoomIds": [
+          "R-1701-E",
+          "R-1701-W"
+        ],
+        "items": [
+          {
+            "roomId": "R-1701-E",
+            "type": "VIEWING",
+            "storeId": "S-A",
+            "points": 4,
+            "status": "WITHDRAWN"
+          },
+          {
+            "roomId": "R-1701-W",
+            "type": "VIEWING",
+            "storeId": "S-A",
+            "points": 4,
+            "status": "WITHDRAWN"
+          }
+        ],
+        "storeAPoints": 8,
+        "extraction": {
+          "settlementId": "STL-SO-1-A-8",
+          "totalPoints": 8,
+          "storeBalanceAfter": 8,
+          "replayReturnedSameSettlement": true,
+          "replayMarked": true,
+          "duplicateWithoutIdempotencyBlocked": true,
+          "duplicateError": {
+            "status": 409,
+            "code": "COMMISSION_ITEM_ALREADY_WITHDRAWN",
+            "message": "佣金明细 ITEM-22A37F4DEC 已提取，不能再次支付",
+            "details": {
+              "itemId": "ITEM-22A37F4DEC",
+              "settlementId": "STL-SO-1-A-8"
+            }
+          }
+        }
+      },
+      "case2WestOnlySharedLivingRoom": {
+        "orderId": "SO-2-WEST-DOORWAY-ONLY",
+        "leaseId": "LSE-SO-2-WEST-DOORWAY-ONLY",
+        "signedRoomIds": [
+          "R-1701-E",
+          "R-1701-W"
+        ],
+        "items": [
+          {
+            "roomId": "R-1701-E",
+            "type": "VIEWING",
+            "storeId": "S-A",
+            "points": 4,
+            "status": "PAYABLE"
+          }
+        ],
+        "storeAPoints": 4
+      },
+      "case3WestOnlyLease": {
+        "orderId": "SO-3-FULL-VIEW-WEST-LEASE",
+        "leaseId": "LSE-SO-3-FULL-VIEW-WEST-LEASE",
+        "signedRoomIds": [
+          "R-1701-W"
+        ],
+        "items": [
+          {
+            "roomId": "R-1701-W",
+            "type": "VIEWING",
+            "storeId": "S-A",
+            "points": 4,
+            "status": "PAYABLE"
+          }
+        ],
+        "storeAPoints": 4
+      }
+    },
+    "authorizedProxy": {
+      "orderId": "SO-4-AUTHORIZED-PROXY",
+      "leaseId": "LSE-SO-4-AUTHORIZED-PROXY",
+      "signedRoomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "items": [
+        {
+          "roomId": "R-1701-E",
+          "type": "VIEWING",
+          "storeId": "S-A",
+          "points": 4,
+          "status": "PAYABLE"
+        },
+        {
+          "roomId": "R-1701-W",
+          "type": "VIEWING",
+          "storeId": "S-A",
+          "points": 4,
+          "status": "PAYABLE"
+        }
+      ],
+      "storeAPoints": 8
+    },
+    "overlap": {
+      "firstProtection": {
+        "orderId": "SO-5-OVERLAP-FIRST",
+        "regime": "FIRST_PROTECTION",
+        "protectionConflictWhenCUsesThirdListingForSameRoom": {
+          "status": 409,
+          "code": "PROTECTION_CONFLICT",
+          "message": "同一找房单、同一物理房间已有有效首带保护；不同挂牌指向同一房间也不能重复保护",
+          "details": {
+            "conflicts": [
+              {
+                "roomId": "R-1808-M",
+                "existingProtectionId": "PRT-SO-5-OVERLAP-FIRST-A-M",
+                "status": "FULFILLED"
+              }
+            ]
+          }
+        },
+        "items": [
+          {
+            "id": "ITEM-A40BD6FBE0",
+            "roomId": "R-1808-M",
+            "type": "VIEWING",
+            "storeId": "S-A",
+            "points": 4,
+            "basis": "VALID_FIRST_PROTECTION",
+            "status": "PAYABLE"
+          },
+          {
+            "id": "ITEM-07634C1AB5",
+            "roomId": "R-1808-M",
+            "type": "NEGOTIATION",
+            "storeId": "S-C",
+            "points": 2,
+            "basis": "LAST_EFFECTIVE_NEGOTIATOR",
+            "status": "PAYABLE"
+          },
+          {
+            "id": "ITEM-287E94B0C6",
+            "roomId": "R-1808-S",
+            "type": "VIEWING",
+            "storeId": "S-C",
+            "points": 4,
+            "basis": "VALID_FIRST_PROTECTION",
+            "status": "PAYABLE"
+          },
+          {
+            "id": "ITEM-265D1A0160",
+            "roomId": "R-1808-S",
+            "type": "NEGOTIATION",
+            "storeId": "S-C",
+            "points": 2,
+            "basis": "LAST_EFFECTIVE_NEGOTIATOR",
+            "status": "PAYABLE"
+          }
+        ],
+        "totals": {
+          "A": 4,
+          "B": 0,
+          "C": 8
+        }
+      },
+      "relayContribution": {
+        "orderId": "SO-6-OVERLAP-RELAY",
+        "regime": "RELAY_CONTRIBUTION",
+        "protectionConflictWhenCUsesThirdListingForSameRoom": {
+          "status": 409,
+          "code": "PROTECTION_CONFLICT",
+          "message": "同一找房单、同一物理房间已有有效首带保护；不同挂牌指向同一房间也不能重复保护",
+          "details": {
+            "conflicts": [
+              {
+                "roomId": "R-1808-M",
+                "existingProtectionId": "PRT-SO-6-OVERLAP-RELAY-A-M",
+                "status": "FULFILLED"
+              }
+            ]
+          }
+        },
+        "items": [
+          {
+            "id": "ITEM-503B2CF898",
+            "roomId": "R-1808-M",
+            "type": "VIEWING",
+            "storeId": "S-A",
+            "points": 2,
+            "basis": "EQUAL_SPLIT_PER_DISTINCT_RELAY_STORE",
+            "status": "PAYABLE"
+          },
+          {
+            "id": "ITEM-7F89B0124C",
+            "roomId": "R-1808-M",
+            "type": "VIEWING",
+            "storeId": "S-C",
+            "points": 2,
+            "basis": "EQUAL_SPLIT_PER_DISTINCT_RELAY_STORE",
+            "status": "PAYABLE"
+          },
+          {
+            "id": "ITEM-3025ECE795",
+            "roomId": "R-1808-M",
+            "type": "NEGOTIATION",
+            "storeId": "S-C",
+            "points": 2,
+            "basis": "EQUAL_SPLIT_NEGOTIATION",
+            "status": "PAYABLE"
+          },
+          {
+            "id": "ITEM-589488A981",
+            "roomId": "R-1808-S",
+            "type": "VIEWING",
+            "storeId": "S-C",
+            "points": 4,
+            "basis": "EQUAL_SPLIT_PER_DISTINCT_RELAY_STORE",
+            "status": "PAYABLE"
+          },
+          {
+            "id": "ITEM-4F40D8F66B",
+            "roomId": "R-1808-S",
+            "type": "NEGOTIATION",
+            "storeId": "S-C",
+            "points": 2,
+            "basis": "EQUAL_SPLIT_NEGOTIATION",
+            "status": "PAYABLE"
+          }
+        ],
+        "totals": {
+          "A": 2,
+          "B": 0,
+          "C": 10
+        },
+        "duplicateSettlement": {
+          "settlementId": "STL-SO-6-OVERLAP-RELAY-A",
+          "totalPoints": 2,
+          "storeBalanceAfter": 10,
+          "replayReturnedSameSettlement": true,
+          "replayMarked": true,
+          "duplicateWithoutIdempotencyBlocked": true,
+          "duplicateError": {
+            "status": 409,
+            "code": "COMMISSION_ITEM_ALREADY_WITHDRAWN",
+            "message": "佣金明细 ITEM-503B2CF898 已提取，不能再次支付",
+            "details": {
+              "itemId": "ITEM-503B2CF898",
+              "settlementId": "STL-SO-6-OVERLAP-RELAY-A"
+            }
+          }
+        }
+      }
+    },
+    "queryExamples": {
+      "tenant": "GET /tenants/T-1001/trace/SO-1-BOTH-VIEW-BOTH-SIGN",
+      "storeA": "GET /stores/S-A/trace/SO-1-BOTH-VIEW-BOTH-SIGN",
+      "byLeaseId": "GET /trace/LSE-SO-1-BOTH-VIEW-BOTH-SIGN?as=store&actorId=S-B",
+      "settlement": "GET /settlements/STL-SO-1-A-8"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "shared-rental-viewing-commission",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Persistent viewing confirmation, relay handoff and commission extraction service for shared rentals.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "demo": "node scripts/demo.js",
+    "test": "node --test test/domain.test.js test/http.test.js test/restart-process.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

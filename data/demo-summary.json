@@ -1,0 +1,282 @@
+{
+  "generatedAt": "2026-11-26T14:00:58.085Z",
+  "rule": "Only CONFIRMED entry into a commissionable independent room earns viewing credit. Doorway-only shared spaces never count. Commission cases are unique per lease+physical room; listings pointing at one room never duplicate the pool.",
+  "openingEastOnlyWholeLease": {
+    "orderId": "SO-0-EAST-ONLY",
+    "leaseId": "LSE-SO-0-EAST-ONLY",
+    "signedRoomIds": [
+      "R-1701-E",
+      "R-1701-W"
+    ],
+    "items": [
+      {
+        "roomId": "R-1701-E",
+        "type": "VIEWING",
+        "storeId": "S-A",
+        "points": 4,
+        "status": "PAYABLE"
+      }
+    ],
+    "storeAPoints": 4
+  },
+  "required": {
+    "case1BothViewedBothSigned": {
+      "orderId": "SO-1-BOTH-VIEW-BOTH-SIGN",
+      "leaseId": "LSE-SO-1-BOTH-VIEW-BOTH-SIGN",
+      "signedRoomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "items": [
+        {
+          "roomId": "R-1701-E",
+          "type": "VIEWING",
+          "storeId": "S-A",
+          "points": 4,
+          "status": "WITHDRAWN"
+        },
+        {
+          "roomId": "R-1701-W",
+          "type": "VIEWING",
+          "storeId": "S-A",
+          "points": 4,
+          "status": "WITHDRAWN"
+        }
+      ],
+      "storeAPoints": 8,
+      "extraction": {
+        "settlementId": "STL-SO-1-A-8",
+        "totalPoints": 8,
+        "storeBalanceAfter": 8,
+        "replayReturnedSameSettlement": true,
+        "replayMarked": true,
+        "duplicateWithoutIdempotencyBlocked": true,
+        "duplicateError": {
+          "status": 409,
+          "code": "COMMISSION_ITEM_ALREADY_WITHDRAWN",
+          "message": "佣金明细 ITEM-22A37F4DEC 已提取，不能再次支付",
+          "details": {
+            "itemId": "ITEM-22A37F4DEC",
+            "settlementId": "STL-SO-1-A-8"
+          }
+        }
+      }
+    },
+    "case2WestOnlySharedLivingRoom": {
+      "orderId": "SO-2-WEST-DOORWAY-ONLY",
+      "leaseId": "LSE-SO-2-WEST-DOORWAY-ONLY",
+      "signedRoomIds": [
+        "R-1701-E",
+        "R-1701-W"
+      ],
+      "items": [
+        {
+          "roomId": "R-1701-E",
+          "type": "VIEWING",
+          "storeId": "S-A",
+          "points": 4,
+          "status": "PAYABLE"
+        }
+      ],
+      "storeAPoints": 4
+    },
+    "case3WestOnlyLease": {
+      "orderId": "SO-3-FULL-VIEW-WEST-LEASE",
+      "leaseId": "LSE-SO-3-FULL-VIEW-WEST-LEASE",
+      "signedRoomIds": [
+        "R-1701-W"
+      ],
+      "items": [
+        {
+          "roomId": "R-1701-W",
+          "type": "VIEWING",
+          "storeId": "S-A",
+          "points": 4,
+          "status": "PAYABLE"
+        }
+      ],
+      "storeAPoints": 4
+    }
+  },
+  "authorizedProxy": {
+    "orderId": "SO-4-AUTHORIZED-PROXY",
+    "leaseId": "LSE-SO-4-AUTHORIZED-PROXY",
+    "signedRoomIds": [
+      "R-1701-E",
+      "R-1701-W"
+    ],
+    "items": [
+      {
+        "roomId": "R-1701-E",
+        "type": "VIEWING",
+        "storeId": "S-A",
+        "points": 4,
+        "status": "PAYABLE"
+      },
+      {
+        "roomId": "R-1701-W",
+        "type": "VIEWING",
+        "storeId": "S-A",
+        "points": 4,
+        "status": "PAYABLE"
+      }
+    ],
+    "storeAPoints": 8
+  },
+  "overlap": {
+    "firstProtection": {
+      "orderId": "SO-5-OVERLAP-FIRST",
+      "regime": "FIRST_PROTECTION",
+      "protectionConflictWhenCUsesThirdListingForSameRoom": {
+        "status": 409,
+        "code": "PROTECTION_CONFLICT",
+        "message": "同一找房单、同一物理房间已有有效首带保护；不同挂牌指向同一房间也不能重复保护",
+        "details": {
+          "conflicts": [
+            {
+              "roomId": "R-1808-M",
+              "existingProtectionId": "PRT-SO-5-OVERLAP-FIRST-A-M",
+              "status": "FULFILLED"
+            }
+          ]
+        }
+      },
+      "items": [
+        {
+          "id": "ITEM-A40BD6FBE0",
+          "roomId": "R-1808-M",
+          "type": "VIEWING",
+          "storeId": "S-A",
+          "points": 4,
+          "basis": "VALID_FIRST_PROTECTION",
+          "status": "PAYABLE"
+        },
+        {
+          "id": "ITEM-07634C1AB5",
+          "roomId": "R-1808-M",
+          "type": "NEGOTIATION",
+          "storeId": "S-C",
+          "points": 2,
+          "basis": "LAST_EFFECTIVE_NEGOTIATOR",
+          "status": "PAYABLE"
+        },
+        {
+          "id": "ITEM-287E94B0C6",
+          "roomId": "R-1808-S",
+          "type": "VIEWING",
+          "storeId": "S-C",
+          "points": 4,
+          "basis": "VALID_FIRST_PROTECTION",
+          "status": "PAYABLE"
+        },
+        {
+          "id": "ITEM-265D1A0160",
+          "roomId": "R-1808-S",
+          "type": "NEGOTIATION",
+          "storeId": "S-C",
+          "points": 2,
+          "basis": "LAST_EFFECTIVE_NEGOTIATOR",
+          "status": "PAYABLE"
+        }
+      ],
+      "totals": {
+        "A": 4,
+        "B": 0,
+        "C": 8
+      }
+    },
+    "relayContribution": {
+      "orderId": "SO-6-OVERLAP-RELAY",
+      "regime": "RELAY_CONTRIBUTION",
+      "protectionConflictWhenCUsesThirdListingForSameRoom": {
+        "status": 409,
+        "code": "PROTECTION_CONFLICT",
+        "message": "同一找房单、同一物理房间已有有效首带保护；不同挂牌指向同一房间也不能重复保护",
+        "details": {
+          "conflicts": [
+            {
+              "roomId": "R-1808-M",
+              "existingProtectionId": "PRT-SO-6-OVERLAP-RELAY-A-M",
+              "status": "FULFILLED"
+            }
+          ]
+        }
+      },
+      "items": [
+        {
+          "id": "ITEM-503B2CF898",
+          "roomId": "R-1808-M",
+          "type": "VIEWING",
+          "storeId": "S-A",
+          "points": 2,
+          "basis": "EQUAL_SPLIT_PER_DISTINCT_RELAY_STORE",
+          "status": "PAYABLE"
+        },
+        {
+          "id": "ITEM-7F89B0124C",
+          "roomId": "R-1808-M",
+          "type": "VIEWING",
+          "storeId": "S-C",
+          "points": 2,
+          "basis": "EQUAL_SPLIT_PER_DISTINCT_RELAY_STORE",
+          "status": "PAYABLE"
+        },
+        {
+          "id": "ITEM-3025ECE795",
+          "roomId": "R-1808-M",
+          "type": "NEGOTIATION",
+          "storeId": "S-C",
+          "points": 2,
+          "basis": "EQUAL_SPLIT_NEGOTIATION",
+          "status": "PAYABLE"
+        },
+        {
+          "id": "ITEM-589488A981",
+          "roomId": "R-1808-S",
+          "type": "VIEWING",
+          "storeId": "S-C",
+          "points": 4,
+          "basis": "EQUAL_SPLIT_PER_DISTINCT_RELAY_STORE",
+          "status": "PAYABLE"
+        },
+        {
+          "id": "ITEM-4F40D8F66B",
+          "roomId": "R-1808-S",
+          "type": "NEGOTIATION",
+          "storeId": "S-C",
+          "points": 2,
+          "basis": "EQUAL_SPLIT_NEGOTIATION",
+          "status": "PAYABLE"
+        }
+      ],
+      "totals": {
+        "A": 2,
+        "B": 0,
+        "C": 10
+      },
+      "duplicateSettlement": {
+        "settlementId": "STL-SO-6-OVERLAP-RELAY-A",
+        "totalPoints": 2,
+        "storeBalanceAfter": 10,
+        "replayReturnedSameSettlement": true,
+        "replayMarked": true,
+        "duplicateWithoutIdempotencyBlocked": true,
+        "duplicateError": {
+          "status": 409,
+          "code": "COMMISSION_ITEM_ALREADY_WITHDRAWN",
+          "message": "佣金明细 ITEM-503B2CF898 已提取，不能再次支付",
+          "details": {
+            "itemId": "ITEM-503B2CF898",
+            "settlementId": "STL-SO-6-OVERLAP-RELAY-A"
+          }
+        }
+      }
+    }
+  },
+  "queryExamples": {
+    "tenant": "GET /tenants/T-1001/trace/SO-1-BOTH-VIEW-BOTH-SIGN",
+    "storeA": "GET /stores/S-A/trace/SO-1-BOTH-VIEW-BOTH-SIGN",
+    "byLeaseId": "GET /trace/LSE-SO-1-BOTH-VIEW-BOTH-SIGN?as=store&actorId=S-B",
+    "settlement": "GET /settlements/STL-SO-1-A-8"
+  }
+}
